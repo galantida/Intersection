@@ -38,7 +38,7 @@ namespace gameLogic
 
             // one or more pedals are pressed
             car.pedals = 0;
-            switch (car.shifter)
+            switch ((int)car.shifter)
             {
                 case 1: // forward
                     {

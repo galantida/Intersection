@@ -48,35 +48,17 @@ namespace gameLogic
 
                 // get desired direction
                 Vector2 desiredDirection = getDirection(waypoint); // this is the correct vector to my waypoint
-                float cross = crossProduct(car.direction, desiredDirection);
+
+                float steering = VectorMath.angleBetween(desiredDirection, car.velocity);
+
+                if ((steering > -5f) && (steering < 5f)) car.velocity = desiredDirection * car.velocity.Length();
+                else car.steering -= steering  / 2;
+                
+
+                
 
 
-                car.steering = 0;
-
-                //float buffer = 0.1f;
-                //if ((cross < buffer) && (cross > -buffer))
-                if (cross == 0.0f)
-                {
-                    // already traveling the right direction
-                    car.steering = 0;
-                }
-                else if (cross == -0.0f)
-                {
-                    // turn around
-                    car.steering = -1;
-
-                }
-                else if (cross < 0.0f)
-                {
-                    // turn left
-                    car.steering = 1;
-                }
-                else if (cross > 0.0f)
-                {
-                    // turn right
-                    car.steering = -1;
-                }
-
+               
 
                 // reached the detination
                 if (Vector2.Distance(car.location, exit.location) < 32)
@@ -103,6 +85,7 @@ namespace gameLogic
                 }
                 else if (distance > 0)
                 {
+                    // keep trying
 
                 }
 
@@ -133,25 +116,20 @@ namespace gameLogic
             return bestWaypoint; // set way point
         }
 
+        public Vector2 desiredDirection()
+        {
+            return getDirection(waypoint); // this is the correct vector to my waypoint
+        }
+
 
         public Vector2 getDirection(Vector2 destination)
         {
             // get direction of way point from cars location
-            Vector2 b = car.location - destination;
+            //Vector2 b = car.location - destination;
+            Vector2 b = destination - car.location;
             Vector2 destinationDirection = new Vector2(b.X, b.Y);
             destinationDirection.Normalize();
             return destinationDirection;
-        }
-
-        public static float toRotation(Vector2 direction)
-        {
-            // shortest roation off of X axis
-            return (float)Math.Atan2(direction.Y, direction.X); // not used yet
-        }
-
-        public static float crossProduct(Vector2 vector1, Vector2 vector2)
-        {
-            return vector1.X * vector2.Y - vector1.Y * vector2.X;
         }
     }
 }

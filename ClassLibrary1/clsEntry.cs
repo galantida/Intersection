@@ -41,7 +41,7 @@ namespace gameLogic
                         //Vector2 carVelocity = direction * (base.world.rnd.Next(5) * 0.03f);
                         clsExit exit = randomExit();
                         clsCar car = world.createCar(randomSpawnLocation(), this.direction, new Vector2(0,0));
-                        clsAI ai = new clsAI(car, exit);
+                        clsAI ai = new clsAI(car, exit, world);
                         world.drivers.Add(ai);
                         break;
                 }

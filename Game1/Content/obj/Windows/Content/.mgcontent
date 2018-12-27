@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/car.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/entry.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/exit.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/File.spritefont</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/gear.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/grass.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/intersection.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/road.png</File>
+    <File>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/shoulder.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>

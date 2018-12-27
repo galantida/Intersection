@@ -46,6 +46,12 @@ namespace gameLogic
                 Vector2 existingDirection = new Vector2(direction.X, direction.Y);
 
                 handling = 0.002f;
+
+                // validate steering input
+                if (steering > 1) steering = 1;
+                if (steering < -1) steering = -1;
+
+                // steer
                 float rotation = (handling * steering) * deltaTime;
 
                 //if (float.IsNaN(rotation)) rotation = 0;

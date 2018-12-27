@@ -46,14 +46,14 @@ namespace Game1
                 {
                     clsCar c = (clsCar)g;
                     text.Add("----------");
-                    text.Add("Location : " + c.location);
-                    text.Add("Mass : " + c.mass);
-                    text.Add("Velocity : " + c.velocity);
-                    text.Add("Direction : " + c.direction);
-                    text.Add("pedals : " + c.pedals);
+                    //text.Add("Location : " + c.location);
+                    //text.Add("Mass : " + c.mass);
+                    //text.Add("Velocity : " + c.velocity);
+                    //text.Add("Direction : " + c.direction);
+                    //text.Add("pedals : " + c.pedals);
                     text.Add("Steering : " + c.steering);
-                    text.Add("Shifter : " + c.shifter);
-                    text.Add("Speed : " + c.velocity.Length());
+                    //text.Add("Shifter : " + c.shifter);
+                    //text.Add("Speed : " + c.velocity.Length());
                 }
 
             }
