@@ -61,6 +61,8 @@ namespace Game1
             topLeft = new Vector2(0, 0);
             this.squares = world.squares;
 
+            /*
+
             // lines
             int x = 0;
             int y = 0;
@@ -80,6 +82,7 @@ namespace Game1
 
                 }
             }
+            */
 
 
         }

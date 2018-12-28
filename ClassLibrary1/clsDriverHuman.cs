@@ -13,23 +13,23 @@ namespace gameLogic
     {
         // inputs and outputs
         private clsInput input;
-        public clsGamePieceCar car;
 
-        public clsDriverHuman(clsGamePieceCar car, clsInput input)
+        public clsDriverHuman(clsInput input)
         {
-            this.car = car;
             this.input = input;
         }
 
-        public void update()
+        public void update(clsGamePieceCar car)
         {
-            pedals(car.velocity.Length());
-            steeringWheel();
+            pedals(car);
+            steeringWheel(car);
         }
 
         // convert user input to gas and break petal control 
-        void pedals(float velocityMegnitude)
+        void pedals(clsGamePieceCar car)
         {
+            float velocityMegnitude = car.velocity.Length();
+
             // has the car stopped and they let up on gas and break pedal put it in neutral
             if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
             {
@@ -62,7 +62,7 @@ namespace gameLogic
 
         }
 
-        void steeringWheel()
+        void steeringWheel(clsGamePieceCar car)
         {
             car.steering = 0;
             if (input.left || input.right)

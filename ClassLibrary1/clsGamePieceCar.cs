@@ -18,7 +18,7 @@ namespace gameLogic
         public float breaking = 0.5f; // creates additional drag on the dirtion of force
         public float handling = 0.01f; // .05 was good
         public float weight = 1000;
-        public float topSpeed = 0.1f; // .2 was good
+        public float topSpeed = 0.2f; // .2 was good
         public float rollingResistance = 0.01f; // default resistance caused by the wheels
 
         // inputs
@@ -29,85 +29,78 @@ namespace gameLogic
         // car status
         public Vector2 direction { get; set; }
 
+        // driver either AI or HUman
+        public intDriver driver;
 
-        public clsGamePieceCar(clsWorld world, Vector2 location, Vector2 direction, Vector2 velocity) :base(world, location, velocity)
+
+        public clsGamePieceCar(intDriver driver, Vector2 location, Vector2 direction, Vector2 velocity) :base(location, velocity)
         {
+            this.driver = driver;
             base.gamePieceType = GamePieceType.car;
             base.mass = this.weight;
             this.direction = direction; // car direction
         }
 
-        new public void update()
+        new public void update(clsWorld world)
         {
             float deltaTime = stopWatch.ElapsedMilliseconds; // using the base stopwatch
             if (deltaTime > 10)
             {
+                // update AI
+                driver.update(this);
 
+                /**************************************** 
+                        steering and direction
+                ****************************************/
+
+                // change facing direction based on steering wheel position
+                handling = 0.002f;
+                Vector2 existingDirection = new Vector2(direction.X, direction.Y);
+                float rotation = (handling * steering) * deltaTime;
+                if (rotation != 0) direction = existingDirection.Rotate(rotation);
                
-                    /**************************************** 
-                            steering and direction
+
+                /**************************************** 
+                        acceleration and force
                     ****************************************/
-
-                    // change facing direction based on steering wheel position
-                    Vector2 existingDirection = new Vector2(direction.X, direction.Y);
-
-                    handling = 0.002f;
-
-                    // validate steering input
-                    //if (steering > 1) steering = 1;
-                    //if (steering < -1) steering = -1;
-                    float rotation = (handling * steering) * deltaTime;
-
-                    //if (float.IsNaN(rotation)) rotation = 0;
-                    //if (float.IsPositiveInfinity(rotation) || float.IsNegativeInfinity(rotation)) rotation = 0;
-                    if (rotation != 0)
+                if (pedals > 0)
+                {
+                    if (this.velocity.Length() < this.topSpeed)
                     {
-                        direction = existingDirection.Rotate(rotation);
+                        // add force based on acceleration and transmission direction
+                        this.applyForce((direction * shifter) * acceleration, deltaTime);
                     }
+                    else 
+                    {
+                        // top speed
+                        Vector2 newVelocity = velocity;
+                        newVelocity.Normalize();
+                        newVelocity *= topSpeed;
+                        velocity = newVelocity;
+                    }
+                }
 
                
 
-                    /**************************************** 
-                            acceleration and force
-                     ****************************************/
-                    if (pedals == 1)
-                    {
-                        if (this.velocity.Length() < this.topSpeed)
-                        {
-                            // add force based on acceleration and transmission direction
-                            this.applyForce((direction * shifter) * acceleration, deltaTime);
-                        }
-                        else 
-                        {
-                            // top speed
-                            Vector2 newVelocity = velocity;
-                            newVelocity.Normalize();
-                            newVelocity *= topSpeed;
-                            velocity = newVelocity;
-                        }
-                    }
-
-               
-
-                    /**************************************** 
-                            breaking and resistance
-                     ****************************************/
-                    float totalResistance = rollingResistance;
-                    if (pedals == -1) totalResistance += breaking;
-                    applyResistance(totalResistance, deltaTime);
+                /**************************************** 
+                        breaking and resistance
+                    ****************************************/
+                float totalResistance = rollingResistance;
+                if (pedals == -1) totalResistance += breaking;
+                applyResistance(totalResistance, deltaTime);
 
 
-                    // alter velocity direction based on facing direction
-                    Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing momentium
-                    if (shifter == 1) velocity = direction * existingVelocity.Length();
-                    else velocity = -direction * existingVelocity.Length();
+                // alter velocity direction based on facing direction
+                Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing momentium
+                if (shifter == 1) velocity = direction * existingVelocity.Length();
+                else velocity = -direction * existingVelocity.Length();
                 
 
 
                 // went off the map
                 //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);
 
-                base.update();
+                base.update(world);
             }
         }
     }

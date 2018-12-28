@@ -19,12 +19,10 @@ namespace gameLogic
         public Vector2 velocity { get; set; }
 
         // general object
-        protected clsWorld world;
         protected Stopwatch stopWatch = new Stopwatch();
 
-        public clsBaseGamePiece(clsWorld world, Vector2 location, Vector2 velocity, float mass = 1000.0f)
+        public clsBaseGamePiece(Vector2 location, Vector2 velocity, float mass = 1000.0f)
         {
-            this.world = world;
             this.location = location;
             this.velocity = velocity;
             this.mass = mass;
@@ -32,7 +30,7 @@ namespace gameLogic
             stopWatch.Start();
         }
 
-        public void update()
+        protected void update(clsWorld world)
         {
             float deltaTime = stopWatch.ElapsedMilliseconds;
             if (deltaTime > 10)
@@ -56,14 +54,6 @@ namespace gameLogic
                 this.velocity -= resistanceDirection * (resistance / mass) * deltaTime;
             }
             else velocity = new Vector2(0, 0);
-        }
-
-        public Vector2 squareCoordinate
-        {
-            get
-            {
-                return world.worldLocationToSquareCoordinate(this.location);
-            }
         }
     }
 }

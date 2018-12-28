@@ -18,61 +18,47 @@ namespace gameLogic
         public long nextSpawnTime { get; set; }
         public Vector2 direction { get; set; }
 
-        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
+        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(location,new Vector2(0,0), 0)
         {
             this.gamePieceType = GamePieceType.entry;
             this.direction = direction;
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;
-            this.nextSpawnTime = base.world.rnd.Next(maxSpawnTime);
+            this.nextSpawnTime = world.rnd.Next(maxSpawnTime);
         }
 
 
-        new public void update()
+        new public void update(clsWorld world)
         {
             if (stopWatch.ElapsedMilliseconds > nextSpawnTime) 
             {
-                nextSpawnTime = base.world.rnd.Next(maxSpawnTime);
+                nextSpawnTime = world.rnd.Next(maxSpawnTime);
 
                 switch (this.spawnType)
                 {
                     case GamePieceType.car:
                         //Vector2 carVelocity = direction * (base.world.rnd.Next(5) * 0.03f);
-                        clsGamePieceExit exit = randomExit();
-                        clsGamePieceCar car = world.createCar(this.squareCoordinate, this.direction, new Vector2(0,0));
-                        car.location = randomizeVector(car.location); // renadomizes car location slightly
-                        clsDriverAI ai = new clsDriverAI(car, exit, world);
-                        world.drivers.Add(ai);
+                        clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
+                        clsDriverAI ai = new clsDriverAI(world, exit.location);
+                        clsGamePieceCar car = world.createCar(ai, world.worldLocationToSquareCoordinate(this.location), this.direction, new Vector2(0,0));
+
+
+                        car.location = randomizeVector(world, car.location); // renadomizes car location slightly
+
+
                         break;
                 }
 
-                base.update();
+                base.update(world);
             }
         }
 
-        private clsGamePieceExit randomExit()
-        {
-            List<clsGamePieceExit> exits = new List<clsGamePieceExit>();
-            foreach (intGamePiece gamePiece in world.gamePieces)
-            {
-                if (gamePiece.gamePieceType == GamePieceType.exit)
-                {
-                    if (Vector2.Distance(gamePiece.squareCoordinate, this.squareCoordinate) > 5)
-                    {
-                        exits.Add((clsGamePieceExit)gamePiece);
-                    }
-                }
-            }
-
-            return exits[base.world.rnd.Next(exits.Count())];
-        }
-
-        private Vector2 randomizeVector(Vector2 location)
+        private Vector2 randomizeVector(clsWorld world, Vector2 location)
         {
             int variant = 10;
-            float modX = base.world.rnd.Next(variant * 2) -variant;
-            float modY = base.world.rnd.Next(variant * 2) -variant;
+            float modX = world.rnd.Next(variant * 2) -variant;
+            float modY = world.rnd.Next(variant * 2) -variant;
             return new Vector2(location.X + modX, location.Y + modY);
         }
     }

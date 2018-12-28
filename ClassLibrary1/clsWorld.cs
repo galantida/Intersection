@@ -16,8 +16,6 @@ namespace gameLogic
 
         public clsInput input; // human input
 
-        public List<intDriver> drivers = new List<intDriver>();
-
         public float squareSize;
 
 
@@ -37,16 +35,10 @@ namespace gameLogic
 
         public void update()
         {
-            // process each driver
-            for (int t = 0; t < drivers.Count; t++)
-            {
-                drivers[t].update();
-            }
-
             // process each game piece
             for (int t = 0; t < gamePieces.Count; t++)
             {
-                gamePieces[t].update();
+                gamePieces[t].update(this);
             }
         }
 
@@ -122,10 +114,10 @@ namespace gameLogic
             gamePieces = new List<intGamePiece>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 1000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 1000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 1000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 1000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 10000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 10000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 10000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 10000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -134,9 +126,8 @@ namespace gameLogic
             createExit(new Vector2(0, 6));
 
             // create human drivable car
-            clsGamePieceCar car = createCar(new Vector2(6, 6), new Vector2(-1, 0), new Vector2(0, 0));
-            clsDriverHuman human = new clsDriverHuman(car, input);
-            drivers.Add(human);
+            clsDriverHuman human = new clsDriverHuman(input);
+            clsGamePieceCar car = createCar(human, new Vector2(4, 4), new Vector2(-1, 0), new Vector2(0, 0));
         }
 
         public void removeGamePiece(intGamePiece gamePiece)
@@ -284,11 +275,27 @@ namespace gameLogic
             return exit;
         }
 
-        public clsGamePieceCar createCar(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
+        public clsGamePieceCar createCar(intDriver driver, Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
         {
-            clsGamePieceCar car = new clsGamePieceCar(this, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
+            clsGamePieceCar car = new clsGamePieceCar(driver, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
             gamePieces.Add(car);
             return car;
+        }
+
+        public List<intGamePiece> getGamePieces(GamePieceType gamePieceType)
+        {
+            List<intGamePiece> gamePieces = new List<intGamePiece>();
+            foreach (intGamePiece gamePiece in this.gamePieces)
+            {
+                if (gamePiece.gamePieceType == gamePieceType) gamePieces.Add(gamePiece);
+            }
+            return gamePieces;
+        }
+
+        public intGamePiece getRandomGamePiece(GamePieceType gamePieceType)
+        {
+            List<intGamePiece> gamePieces = getGamePieces(gamePieceType);
+            return gamePieces[this.rnd.Next(gamePieces.Count())];
         }
     }
     

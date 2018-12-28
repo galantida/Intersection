@@ -12,41 +12,44 @@ namespace gameLogic
 {
     public class clsDriverAI : intDriver
     {
-        // inputs and outputs
-        public clsGamePieceCar car;
-
-
         protected Stopwatch stopWatch = new Stopwatch();
 
         // AI instructions
-        public clsGamePieceExit exit { get; set; }
+        //public clsGamePieceExit exit { get; set; }
         private clsWorld world { get; set; }
-
-        // path
+        public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
 
-        public clsDriverAI(clsGamePieceCar car, clsGamePieceExit exit, clsWorld world)
+        // driver differences
+        float speed;
+
+
+        public clsDriverAI(clsWorld world, Vector2 destination)
         {
-            this.car = car;
-            this.exit = exit;
             this.world = world;
-            this.route = new clsRoute(world.findShortestPath(car.squareCoordinate, exit.squareCoordinate));
+            this.destination = destination;
+            this.route = null;
+
+            this.speed = 1;
+
             stopWatch.Start();
         }
 
-        public void update()
+        public void update(clsGamePieceCar car)
         {
             float deltaTime = stopWatch.ElapsedMilliseconds; // using the base stopwatch
             if (deltaTime > 100)
             {
+                if (route == null) calculateShortestRoute(car.location, destination);
+
                 Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
                 // acceleration
                 car.shifter = 1;
-                car.pedals = 1;
+                car.pedals = speed;
 
                 // get desired direction
-                Vector2 desiredDirection = getDirection(wayPointWorldLocation); // this is the correct vector to my waypoint
+                Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
 
                 // how much are we off
                 float steering = VectorMath.angleBetween(desiredDirection, car.velocity);
@@ -59,9 +62,10 @@ namespace gameLogic
 
 
                 // reached the destination
-                if (Vector2.Distance(car.location, exit.location) < 32)
+                if (Vector2.Distance(car.location, destination) < 32)
                 {
-                    exit.removeGamePiece(car);
+                    world.removeGamePiece(car);
+                    //exit.removeGamePiece(car);
                 }
                 
 
@@ -79,7 +83,8 @@ namespace gameLogic
                     catch(Exception ex)
                     {
                         // must be at exit remove car
-                        exit.removeGamePiece(car);
+                        //exit.removeGamePiece(car);
+                        world.removeGamePiece(car);
                     }
                 }
                 else if (distance > 0)
@@ -93,7 +98,7 @@ namespace gameLogic
         }
 
 
-        public Vector2 getDirection(Vector2 destinationLocation)
+        public Vector2 getDirection(clsGamePieceCar car, Vector2 destinationLocation)
         {
             // get direction of way point from cars location
             //Vector2 b = car.location - destination;
@@ -101,6 +106,14 @@ namespace gameLogic
             Vector2 destinationDirection = new Vector2(b.X, b.Y);
             destinationDirection.Normalize();
             return destinationDirection;
+        }
+
+        public void calculateShortestRoute(Vector2 fromLocation, Vector2 toLocation)
+        {
+            Vector2 carSquareCoordinate = world.worldLocationToSquareCoordinate(fromLocation);
+            Vector2 exitSquareCoordinate = world.worldLocationToSquareCoordinate(toLocation);
+
+            this.route = new clsRoute(world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
         }
     }
 }
