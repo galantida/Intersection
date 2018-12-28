@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsEntry : clsBaseGamePiece, intGamePiece
+    public class clsGamePieceEntry : clsBaseGamePiece, intGamePiece
     {
         // object specific 
         public int maxSpawnTime { get; set; }
@@ -18,7 +18,7 @@ namespace gameLogic
         public long nextSpawnTime { get; set; }
         public Vector2 direction { get; set; }
 
-        public clsEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
+        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
         {
             this.gamePieceType = GamePieceType.entry;
             this.direction = direction;
@@ -39,9 +39,10 @@ namespace gameLogic
                 {
                     case GamePieceType.car:
                         //Vector2 carVelocity = direction * (base.world.rnd.Next(5) * 0.03f);
-                        clsExit exit = randomExit();
-                        clsCar car = world.createCar(randomSpawnLocation(), this.direction, new Vector2(0,0));
-                        clsAI ai = new clsAI(car, exit, world);
+                        clsGamePieceExit exit = randomExit();
+                        clsGamePieceCar car = world.createCar(this.squareCoordinate, this.direction, new Vector2(0,0));
+                        car.location = randomizeVector(car.location); // renadomizes car location slightly
+                        clsDriverAI ai = new clsDriverAI(car, exit, world);
                         world.drivers.Add(ai);
                         break;
                 }
@@ -50,16 +51,16 @@ namespace gameLogic
             }
         }
 
-        private clsExit randomExit()
+        private clsGamePieceExit randomExit()
         {
-            List<clsExit> exits = new List<clsExit>();
+            List<clsGamePieceExit> exits = new List<clsGamePieceExit>();
             foreach (intGamePiece gamePiece in world.gamePieces)
             {
                 if (gamePiece.gamePieceType == GamePieceType.exit)
                 {
                     if (Vector2.Distance(gamePiece.squareCoordinate, this.squareCoordinate) > 5)
                     {
-                        exits.Add((clsExit)gamePiece);
+                        exits.Add((clsGamePieceExit)gamePiece);
                     }
                 }
             }
@@ -67,7 +68,7 @@ namespace gameLogic
             return exits[base.world.rnd.Next(exits.Count())];
         }
 
-        private Vector2 randomSpawnLocation()
+        private Vector2 randomizeVector(Vector2 location)
         {
             int variant = 10;
             float modX = base.world.rnd.Next(variant * 2) -variant;

@@ -9,13 +9,13 @@ namespace gameLogic
 {
 
     // ussed to convert humnan input into car input
-    public class clsHuman : intDriver
+    public class clsDriverHuman : intDriver
     {
         // inputs and outputs
         private clsInput input;
-        public clsCar car;
+        public clsGamePieceCar car;
 
-        public clsHuman(clsCar car, clsInput input)
+        public clsDriverHuman(clsGamePieceCar car, clsInput input)
         {
             this.car = car;
             this.input = input;

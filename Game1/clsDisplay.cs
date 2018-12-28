@@ -114,7 +114,10 @@ namespace Game1
                         break;
                     }
                 }
-                if (!found) sprites.Remove(sprites[s]);
+                if (!found)
+                {
+                    sprites.Remove(sprites[s]);
+                }
             }
 
 

@@ -13,7 +13,7 @@ namespace gameLogic
 
         public clsGame(clsInput input)
         {
-            world = new clsWorld(14, input);
+            world = new clsWorld(14, 64, input);
         }
 
         public void update()

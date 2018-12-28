@@ -10,11 +10,11 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsExit : clsBaseGamePiece, intGamePiece
+    public class clsGamePieceExit : clsBaseGamePiece, intGamePiece
     {
         public Vector2 direction { get; set; }
 
-        public clsExit(clsWorld world, Vector2 location, Vector2 direction) : base(world, location, new Vector2(0, 0), 0)
+        public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 direction) : base(world, location, new Vector2(0, 0), 0)
         {
             this.gamePieceType = GamePieceType.exit;
             this.direction = direction;

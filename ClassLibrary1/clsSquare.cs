@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    // square is the AI chnager
+    // square is the AI changer
     // direction
     // speed
     // stop , stop temp, yeild, lane chnage, no lane change
@@ -16,6 +16,10 @@ namespace gameLogic
     {
         public List<Vector2> directions;
 
+        public clsSquare()
+        {
+            directions = new List<Vector2>();
+        }
         public clsSquare(bool east, bool west, bool north, bool south)
         {
             directions = new List<Vector2>();

@@ -44,7 +44,7 @@ namespace Game1
             foreach (intGamePiece g in this.gamePieces)
             {if (g.gamePieceType == GamePieceType.car)
                 {
-                    clsCar c = (clsCar)g;
+                    clsGamePieceCar c = (clsGamePieceCar)g;
                     text.Add("----------");
                     //text.Add("Location : " + c.location);
                     //text.Add("Mass : " + c.mass);
@@ -70,8 +70,8 @@ namespace Game1
             {
                 try
                 {
-                    clsAI ai = (clsAI)driver;
-                    lines.Add(new clsWaypointLine(ai.car.location, ai.waypoint));
+                    clsDriverAI ai = (clsDriverAI)driver;
+                    lines.Add(new clsWaypointLine(ai.car.location, world.squareCoordinateToWorldLocation(ai.route.currentWaypoint)));
                     x += 25;
                     y += 25;
                 }

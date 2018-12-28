@@ -8,11 +8,13 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
+    // the physical piece which is unaware of its location on the board
+
     public abstract class clsBaseGamePiece
     {
         // interface fields
         public GamePieceType gamePieceType { get; set; }
-        public Vector2 location { get; set; }
+        public Vector2 location { get; set; } // pixel location
         public float mass { get; set; }
         public Vector2 velocity { get; set; }
 
@@ -60,22 +62,7 @@ namespace gameLogic
         {
             get
             {
-                int x = (int)(location.X / 64);
-                int y = (int)(location.Y / 64);
-                return new Vector2(x,y);
-            }
-            set
-            {
-                location = (value * 64) + new Vector2(32,32);
-            }
-        }
-
-        public clsSquare square
-        {
-            get
-            {
-                Vector2 squareCoordinate = this.squareCoordinate;
-                return world.squares[(int)squareCoordinate.X, (int)squareCoordinate.Y];
+                return world.worldLocationToSquareCoordinate(this.location);
             }
         }
     }

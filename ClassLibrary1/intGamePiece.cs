@@ -13,11 +13,11 @@ namespace gameLogic
     {
         GamePieceType gamePieceType { get; set; }
         Vector2 location { get; set; }
+        Vector2 squareCoordinate { get; }
         Vector2 velocity { get; set; }
         float mass { get; set; }
         Vector2 direction { get; set; }
 
-        Vector2 squareCoordinate { get; set; }
         void update();
     }
 }
