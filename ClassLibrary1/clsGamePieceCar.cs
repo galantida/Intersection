@@ -55,14 +55,17 @@ namespace gameLogic
 
                 // change facing direction based on steering wheel position
                 handling = 0.002f;
-                Vector2 existingDirection = new Vector2(direction.X, direction.Y);
-                float rotation = (handling * steering) * deltaTime;
-                if (rotation != 0) direction = existingDirection.Rotate(rotation);
+                Vector2 existingDirection = new Vector2(direction.X, direction.Y); // copy existing direction
+                float rotation = (handling * steering) * deltaTime; // calculate new car rotation based on handling steering wheel and time
+                if (rotation != 0)
+                {
+                    direction = existingDirection.Rotate(rotation); // rotate car
+                }
                
 
                 /**************************************** 
                         acceleration and force
-                    ****************************************/
+                ****************************************/
                 if (pedals > 0)
                 {
                     if (this.velocity.Length() < this.topSpeed)
@@ -84,21 +87,15 @@ namespace gameLogic
 
                 /**************************************** 
                         breaking and resistance
-                    ****************************************/
-                float totalResistance = rollingResistance;
-                if (pedals == -1) totalResistance += breaking;
+                ****************************************/
+                float totalResistance = rollingResistance; // standard rolling resistance
+                if (pedals < 0)
+                {
+                    // add resistance direction adn transmission are irrelevant
+                    totalResistance += breaking;
+                }
+                // resistance is always applied
                 applyResistance(totalResistance, deltaTime);
-
-
-                // alter velocity direction based on facing direction
-                Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing momentium
-                if (shifter == 1) velocity = direction * existingVelocity.Length();
-                else velocity = -direction * existingVelocity.Length();
-                
-
-
-                // went off the map
-                //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);
 
                 base.update(world);
             }
