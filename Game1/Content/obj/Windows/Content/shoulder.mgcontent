@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/shoulder.png</SourceFile>
-  <SourceTime>2018-10-07T13:26:46-04:00</SourceTime>
-  <DestFile>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/bin/Windows/Content/shoulder.xnb</DestFile>
-  <DestTime>2018-12-27T10:03:56.6124727-05:00</DestTime>
+  <SourceFile>C:/Users/dave/Documents/Github/Intersection/Game1/Content/shoulder.png</SourceFile>
+  <SourceTime>2018-12-29T16:41:54.5720811-05:00</SourceTime>
+  <DestFile>C:/Users/dave/Documents/Github/Intersection/Game1/Content/bin/Windows/Content/shoulder.xnb</DestFile>
+  <DestTime>2018-12-29T19:40:28.9158421-05:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
+  <ImporterTime>2018-09-23T17:55:52-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-12-08T11:35:54-05:00</ProcessorTime>
+  <ProcessorTime>2018-09-23T17:55:52-04:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

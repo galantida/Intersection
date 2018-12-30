@@ -39,7 +39,7 @@ namespace Game1
             // filter game pieces and tiles down to viewable items 
             this.gamePieces = world.gamePieces;
 
-            // over lay
+            // overlay
             text = new List<string>();
             foreach (intGamePiece g in this.gamePieces)
             {if (g.gamePieceType == GamePieceType.car)
@@ -48,12 +48,12 @@ namespace Game1
                     text.Add("----------");
                     //text.Add("Location : " + c.location);
                     //text.Add("Mass : " + c.mass);
-                    //text.Add("Velocity : " + c.velocity);
                     //text.Add("Direction : " + c.direction);
-                    //text.Add("pedals : " + c.pedals);
-                    text.Add("Steering : " + c.steering);
-                    //text.Add("Shifter : " + c.shifter);
-                    //text.Add("Speed : " + c.velocity.Length());
+                    text.Add("Steering : " + c.steeringWheel);
+                    text.Add("Shifter : " + c.shifter);
+                    text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
+                    text.Add("Break Pedal : " + c.breakPedal);
+                    text.Add("Speed : " + c.speed);
                 }
 
             }

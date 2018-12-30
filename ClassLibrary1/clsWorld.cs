@@ -12,7 +12,7 @@ namespace gameLogic
         public List<intGamePiece> gamePieces;
         public clsSquare[,] squares;
 
-        public Random rnd;
+        public Random random;
 
         public clsInput input; // human input
 
@@ -24,7 +24,7 @@ namespace gameLogic
             this.squareSize = squareSize;
 
             // randomize
-            rnd = new Random();
+            random = new Random();
 
             this.input = input;
 
@@ -295,7 +295,7 @@ namespace gameLogic
         public intGamePiece getRandomGamePiece(GamePieceType gamePieceType)
         {
             List<intGamePiece> gamePieces = getGamePieces(gamePieceType);
-            return gamePieces[this.rnd.Next(gamePieces.Count())];
+            return gamePieces[this.random.Next(gamePieces.Count())];
         }
     }
     

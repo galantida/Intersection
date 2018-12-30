@@ -25,7 +25,7 @@ namespace gameLogic
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;
-            this.nextSpawnTime = world.rnd.Next(maxSpawnTime);
+            this.nextSpawnTime = world.random.Next(maxSpawnTime);
         }
 
 
@@ -33,7 +33,7 @@ namespace gameLogic
         {
             if (stopWatch.ElapsedMilliseconds > nextSpawnTime) 
             {
-                nextSpawnTime = world.rnd.Next(maxSpawnTime);
+                nextSpawnTime = world.random.Next(maxSpawnTime);
 
                 switch (this.spawnType)
                 {
@@ -42,11 +42,7 @@ namespace gameLogic
                         clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
                         clsDriverAI ai = new clsDriverAI(world, exit.location);
                         clsGamePieceCar car = world.createCar(ai, world.worldLocationToSquareCoordinate(this.location), this.direction, new Vector2(0,0));
-
-
                         car.location = randomizeVector(world, car.location); // renadomizes car location slightly
-
-
                         break;
                 }
 
@@ -57,8 +53,8 @@ namespace gameLogic
         private Vector2 randomizeVector(clsWorld world, Vector2 location)
         {
             int variant = 10;
-            float modX = world.rnd.Next(variant * 2) -variant;
-            float modY = world.rnd.Next(variant * 2) -variant;
+            float modX = world.random.Next(variant * 2) -variant;
+            float modY = world.random.Next(variant * 2) -variant;
             return new Vector2(location.X + modX, location.Y + modY);
         }
     }

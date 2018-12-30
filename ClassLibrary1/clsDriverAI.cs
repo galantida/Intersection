@@ -19,9 +19,15 @@ namespace gameLogic
         private clsWorld world { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
+        public float speedLimit { get; set; }
 
         // driver differences
-        float speed;
+        //float acceleratorAmount;
+        //float speedVariance;
+
+        
+
+
 
 
         public clsDriverAI(clsWorld world, Vector2 destination)
@@ -30,7 +36,14 @@ namespace gameLogic
             this.destination = destination;
             this.route = null;
 
-            this.speed = 1;
+            // driver differences
+            //speedVariance = world.random.Next(10) / 
+
+            // inputs
+            speedLimit = 0.25f;
+
+            //this.acceleratorAmount = (float)(world.random.Next(100) / 100.0);
+            //this.acceleratorAmount = 1;
 
             stopWatch.Start();
         }
@@ -45,8 +58,17 @@ namespace gameLogic
                 Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
                 // acceleration
-                car.shifter = 1;
-                car.pedals = speed;
+                if (car.speed < speedLimit)
+                {
+                    car.shifter = ShifterPosition.drive;
+                    car.acceleratorPedal = 1;
+                    car.breakPedal = 0;
+                }
+                else
+                {
+                    car.acceleratorPedal = 0;
+                    car.breakPedal = 1;
+                }
 
                 // get desired direction
                 Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
@@ -56,7 +78,7 @@ namespace gameLogic
                 if (double.IsNaN(steering)) steering = 0;
 
                 // redirect the velocity
-                car.steering = steering / -45;
+                car.steeringWheel = steering / -45;
                 //if ((steering > -5f) && (steering < 5f)) car.velocity = desiredDirection * car.velocity.Length();
                 //else car.steering -= steering / 2;
 

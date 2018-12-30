@@ -13,6 +13,7 @@ namespace gameLogic
     {
         // inputs and outputs
         private clsInput input;
+        private float keyMode = 1; // 1 for forward and -1 for reverse and 0 for neutral
 
         public clsDriverHuman(clsInput input)
         {
@@ -30,46 +31,49 @@ namespace gameLogic
         {
             float velocityMegnitude = car.velocity.Length();
 
-            // has the car stopped and they let up on gas and break pedal put it in neutral
-            if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
+            switch (keyMode)
             {
-                car.shifter = 0;
+                case 0:
+                    {
+                        if (input.forward)
+                        {
+                            keyMode = 1;
+                            car.shifter = ShifterPosition.drive; // drive
+                        }
+                        if (input.backward)
+                        {
+                            keyMode = -1;
+                            car.shifter = ShifterPosition.reverse; // reverse
+                        }
+                        if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
+                        {
+                            car.shifter = ShifterPosition.neutral; // neutral
+                        }
+                        break;
+                    }
+                case 1:
+                    {
+                        if (input.forward) car.acceleratorPedal = 1;
+                        if (input.backward) car.breakPedal = 1;
+                        break;
+                    }
+                case -1:
+                    {
+                        if (input.forward) car.breakPedal = 1;
+                        if (input.backward) car.acceleratorPedal = 1; 
+                        break;
+                    }
             }
-
-            // one or more pedals are pressed
-            car.pedals = 0;
-            switch ((int)car.shifter)
-            {
-                case 1: // forward
-                    {
-                        if (input.forward) car.pedals = 1; // accelerate forward
-                        else if (input.backward) car.pedals = -1; // stop
-                        break;
-                    }
-                case 0: // stationary
-                    {
-                        if (input.forward) car.shifter = 1; // drive
-                        if (input.backward) car.shifter = -1; // reverse
-                        break;
-                    }
-                case -1: // reverse
-                    {
-                        if (input.forward) car.pedals = -1; // accelerate backwards
-                        else if (input.backward) car.pedals = 1; // stop
-                        break;
-                    }
-            }
-
         }
 
         void steeringWheel(clsGamePieceCar car)
         {
-            car.steering = 0;
+            car.steeringWheel = 0;
             if (input.left || input.right)
             {
-                car.steering = -1;
-                if (input.right) car.steering = 1;
-                if (car.shifter == -1) car.steering = -car.steering;
+                car.steeringWheel = -1;
+                if (input.right) car.steeringWheel = 1;
+                if (car.shifter == ShifterPosition.reverse) car.steeringWheel = -car.steeringWheel; // flip the left right keys if we are going backwards
             }
         }
     }
