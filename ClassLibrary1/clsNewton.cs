@@ -7,11 +7,16 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    class clsNewton
+    public class clsNewton
     {
         public clsNewton()
         {
 
+        }
+
+        public static Vector2 location(Vector2 force, Vector2 location, Vector2 velocity, float mass, float surfaceArea, float delta)
+        {
+            return location += clsNewton.velocity(force, velocity, mass, surfaceArea) * delta;
         }
 
         public static Vector2 velocity(Vector2 force, Vector2 velocity, float mass, float surfaceArea)
