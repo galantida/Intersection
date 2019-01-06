@@ -13,23 +13,46 @@ namespace gameLogic
 
     public class clsGamePieceCar : clsBaseGamePiece, intGamePiece
     {
-        // specifications
+        // car specifications
         private float acceleration = 0.2f; // force to add in the direction of the transmissions
         private float breaking = 0.5f; // creates additional drag on the dirtion of force
         private float handling = 0.01f; // .05 was good
         private float weight = 3000; // weight in pounds
-        private float topSpeed = .25f; // .2 was good
         private float rollingResistance = 0.01f; // default resistance caused by the wheels
 
+        // car inputs
+        public float acceleratorPedal {
+            get
+            {
+                return _acceleratorPedal;
+            }
+            set
+            {
+                _acceleratorPedal = value;
+                if (_acceleratorPedal > 1) _acceleratorPedal = 1;
+                else if (_acceleratorPedal < 0) _acceleratorPedal = 0;
+            }
+        }
+        private float _acceleratorPedal;
 
-        // inputs
-        public float acceleratorPedal { get; set; }
-        public float breakPedal { get; set; }
+        public float breakPedal
+        {
+            get
+            {
+                return _breakPedal;
+            }
+            set
+            {
+                _breakPedal = value;
+                if (_breakPedal > 1) _breakPedal = 1;
+                else if (_breakPedal < 0) _breakPedal = 0;
+            }
+        }
+        private float _breakPedal;
+
         public float steeringWheel { get; set; }
         public ShifterPosition shifter { get; set; }
-        // driver either AI or HUman
-        public intDriver driver;
-
+        public intDriver driver { get; set; } // driver either AI or HUman
 
         // car status
         public Vector2 direction { get; set; }
@@ -37,7 +60,7 @@ namespace gameLogic
         {
             get
             {
-                return base.velocity.Length();
+                return base.velocity.Length() * 100; // speed in mile per hour
             }
         }
 
@@ -55,7 +78,7 @@ namespace gameLogic
             float deltaTime = stopWatch.ElapsedMilliseconds; // using the base stopwatch
             if (deltaTime > 10)
             {
-                // update AI
+                // update this car base on the drivers input
                 driver.update(this);
 
                 /**************************************** 
@@ -81,7 +104,7 @@ namespace gameLogic
                         acceleration and force
                 ****************************************/
                 // only accelerate if pedal ispressed
-                if (acceleratorPedal > 0)
+                if (_acceleratorPedal > 0)
                 {
                     // add force based on the shifter postion, acceleration amount and direction the car is facing
                     this.applyForce((direction * ((int)shifter - 1)) * acceleration, deltaTime);
@@ -94,7 +117,7 @@ namespace gameLogic
                 float totalResistance = rollingResistance; // standard rolling resistance
 
                 // only break if the pedal is pressed
-                if (breakPedal > 0)
+                if (_breakPedal > 0)
                 {
                     // add resistance direction adn transmission are irrelevant
                     totalResistance += breaking;

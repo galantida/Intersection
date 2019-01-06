@@ -12,7 +12,7 @@ namespace gameLogic
     public class clsRoute
     {
         public List<Vector2> waypoints;
-        private int currentWaypointIndex = 0;
+        private int currentWaypointIndex = 1;
 
         public clsRoute(List<Vector2> waypoints)
         {

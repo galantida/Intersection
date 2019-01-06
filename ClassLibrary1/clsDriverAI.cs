@@ -15,36 +15,29 @@ namespace gameLogic
         protected Stopwatch stopWatch = new Stopwatch();
 
         // AI instructions
-        //public clsGamePieceExit exit { get; set; }
         private clsWorld world { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
         public float speedLimit { get; set; }
 
-        // driver differences
-        //float acceleratorAmount;
-        //float speedVariance;
-
-        
-
-
+        // driver spped differences
+        float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
+        float speedComplianceVariationPercentage; // faster or slower than normal. (e.g. 10% slower than normal)
 
 
         public clsDriverAI(clsWorld world, Vector2 destination)
         {
+            // inputs
             this.world = world;
             this.destination = destination;
             this.route = null;
+            speedLimit = 25f;
 
             // driver differences
-            //speedVariance = world.random.Next(10) / 
+            speedRangePercentage = (world.random.Next(10) - 5) / 100.0f;  
+            speedComplianceVariationPercentage = (world.random.Next(10) - 5) / 100.0f; 
 
-            // inputs
-            speedLimit = 0.25f;
-
-            //this.acceleratorAmount = (float)(world.random.Next(100) / 100.0);
-            //this.acceleratorAmount = 1;
-
+            // start
             stopWatch.Start();
         }
 
@@ -57,17 +50,31 @@ namespace gameLogic
 
                 Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
+
                 // acceleration
-                if (car.speed < speedLimit)
+                var range = speedRangePercentage * speedLimit;
+                var compliance = speedComplianceVariationPercentage * speedLimit;
+                var maxSpeed = speedLimit + compliance + range;
+                var minSpeed = speedLimit + compliance - range;
+
+
+                if (car.speed < minSpeed)
                 {
+                    // increase acceleration
                     car.shifter = ShifterPosition.drive;
-                    car.acceleratorPedal = 1;
+                    car.acceleratorPedal += 0.1f;
                     car.breakPedal = 0;
                 }
-                else
+                else if (car.speed > maxSpeed)
                 {
+                    // increase breaking
                     car.acceleratorPedal = 0;
-                    car.breakPedal = 1;
+                    car.breakPedal += 0.1f;
+                } else
+                {
+                    // no change in pedals
+                    car.acceleratorPedal = 0;
+                    car.breakPedal = 0;
                 }
 
                 // get desired direction
