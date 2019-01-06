@@ -55,6 +55,7 @@
     <Compile Include="clsGameMath.cs" />
     <Compile Include="clsDriverHuman.cs" />
     <Compile Include="clsInput.cs" />
+    <Compile Include="clsNewton.cs" />
     <Compile Include="clsRoute.cs" />
     <Compile Include="clsSquare.cs" />
     <Compile Include="clsWorld.cs" />

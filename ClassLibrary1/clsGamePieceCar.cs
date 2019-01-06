@@ -14,7 +14,7 @@ namespace gameLogic
     public class clsGamePieceCar : clsBaseGamePiece, intGamePiece
     {
         // car specifications
-        private float acceleration = 0.2f; // force to add in the direction of the transmissions
+        private float acceleration = 2.0f; // force to add in the direction of the transmissions
         private float breaking = 0.5f; // creates additional drag on the dirtion of force
         private float handling = 0.01f; // .05 was good
         private float weight = 3000; // weight in pounds
@@ -114,17 +114,20 @@ namespace gameLogic
                 /**************************************** 
                         breaking and resistance
                 ****************************************/
-                float totalResistance = rollingResistance; // standard rolling resistance
+                float totalFriction = rollingResistance; // standard rolling resistance
 
                 // only break if the pedal is pressed
                 if (_breakPedal > 0)
                 {
                     // add resistance direction adn transmission are irrelevant
-                    totalResistance += breaking;
+                    totalFriction += breaking;
                 }
 
-                // resistance is always applied
-                applyResistance(totalResistance, deltaTime);
+                // friction is always applied
+                applyFriction(totalFriction, deltaTime);
+                
+
+                
 
 
                 // went off the map
