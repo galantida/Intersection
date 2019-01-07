@@ -13,7 +13,7 @@ namespace gameLogic
     {
         // inputs and outputs
         private clsInput input;
-        private float keyMode = 1; // 1 for forward and -1 for reverse and 0 for neutral
+        //private float keyMode = 1; // 1 for forward and -1 for reverse and 0 for neutral
 
         public clsDriverHuman(clsInput input)
         {
@@ -31,36 +31,40 @@ namespace gameLogic
         {
             float velocityMegnitude = car.velocity.Length();
 
-            switch (keyMode)
+            switch (car.shifter)
             {
-                case 0:
+                case ShifterPosition.neutral:
                     {
-                        if (input.forward)
-                        {
-                            keyMode = 1;
-                            car.shifter = ShifterPosition.drive; // drive
-                        }
-                        if (input.backward)
-                        {
-                            keyMode = -1;
-                            car.shifter = ShifterPosition.reverse; // reverse
-                        }
+                        if (input.forward) car.shifter = ShifterPosition.drive; // drive
+                        if (input.backward) car.shifter = ShifterPosition.reverse; // reverse
+                        break;
+                    }
+                case ShifterPosition.drive:
+                    {
+                        if (input.forward) car.acceleratorPedal = 1;
+                        else car.acceleratorPedal = 0;
+
+                        if (input.backward) car.breakPedal = 1;
+                        else car.breakPedal = 0;
+
                         if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
                         {
                             car.shifter = ShifterPosition.neutral; // neutral
                         }
                         break;
                     }
-                case 1:
-                    {
-                        if (input.forward) car.acceleratorPedal = 1;
-                        if (input.backward) car.breakPedal = 1;
-                        break;
-                    }
-                case -1:
+                case ShifterPosition.reverse:
                     {
                         if (input.forward) car.breakPedal = 1;
-                        if (input.backward) car.acceleratorPedal = 1; 
+                        else car.breakPedal = 0;
+
+                        if (input.backward) car.acceleratorPedal = 1;
+                        else car.acceleratorPedal = 0;
+
+                        if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
+                        {
+                            car.shifter = ShifterPosition.neutral; // neutral
+                        }
                         break;
                     }
             }

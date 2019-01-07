@@ -14,11 +14,10 @@ namespace gameLogic
     public class clsGamePieceCar : clsBaseGamePiece, intGamePiece
     {
         // car specifications
-        private float acceleration = 2.0f; // force to add in the direction of the transmissions
-        private float breaking = 0.5f; // creates additional drag on the dirtion of force
-        private float handling = 0.01f; // .05 was good
-        private float weight = 3000; // weight in pounds
-        private float rollingResistance = 0.01f; // default resistance caused by the wheels
+        private float acceleration = 0.002f; // force to add in the direction of the transmissions
+        private float breaking = 1.0f; // creates additional Friction Coefficient
+        private float handling = 0.1f; // .05 was good
+        //private float weight = 1.0f; // 3000 weight in pounds
 
         // car inputs
         public float acceleratorPedal {
@@ -60,7 +59,7 @@ namespace gameLogic
         {
             get
             {
-                return base.velocity.Length() * 100; // speed in mile per hour
+                return base.velocity.Length(); // speed in mile per hour
             }
         }
 
@@ -69,8 +68,9 @@ namespace gameLogic
         {
             this.driver = driver;
             base.gamePieceType = GamePieceType.car;
-            base.mass = this.weight / 3;
+            base.mass = 0.002f;
             this.direction = direction; // car direction
+            this.shifter = ShifterPosition.neutral;
         }
 
         new public void update(clsWorld world)
@@ -104,36 +104,29 @@ namespace gameLogic
                         acceleration and force
                 ****************************************/
                 // only accelerate if pedal ispressed
+                Vector2 addedForce = new Vector2(0, 0);
                 if (_acceleratorPedal > 0)
                 {
                     // add force based on the shifter postion, acceleration amount and direction the car is facing
-                    this.applyForce((direction * ((int)shifter - 1)) * acceleration, deltaTime);
+                    addedForce = direction * ((int)shifter - 1) * acceleration;
                 }
                 
 
                 /**************************************** 
                         breaking and resistance
                 ****************************************/
-                float totalFriction = rollingResistance; // standard rolling resistance
-
                 // only break if the pedal is pressed
+                float addedFrictionCoefficient = 0;
                 if (_breakPedal > 0)
                 {
                     // add resistance direction adn transmission are irrelevant
-                    totalFriction += breaking;
+                    addedFrictionCoefficient = breaking;
                 }
-
-                // friction is always applied
-                applyFriction(totalFriction, deltaTime);
-                
-
-                
-
 
                 // went off the map
                 //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);
 
-                base.update(world);
+                base.update(addedForce, 0, addedFrictionCoefficient);
             }
         }
     }

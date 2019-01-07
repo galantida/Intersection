@@ -114,10 +114,10 @@ namespace gameLogic
             gamePieces = new List<intGamePiece>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 10000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 10000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 10000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 10000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 1000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 1000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 1000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 1000);
 
             // create exit points
             createExit(new Vector2(7, 0));

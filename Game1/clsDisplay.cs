@@ -79,7 +79,7 @@ namespace Game1
             int y = 10;
             foreach (string textString in camera.text)
             {
-                spriteBatch.DrawString(spriteFont, textString, new Vector2(10, y), Color.Black);
+                spriteBatch.DrawString(spriteFont, textString, new Vector2(10, y), Color.White);
                 y += 16;
             }
         }

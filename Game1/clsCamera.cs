@@ -54,6 +54,9 @@ namespace Game1
                     text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     text.Add("Break Pedal : " + c.breakPedal);
                     text.Add("Speed : " + c.speed);
+                    text.Add("Drag : " + c.drag);
+                    text.Add("Static Friction : " + c.staticFriction);
+                    text.Add("Kinetic Friction : " + c.kineticFriction);
                 }
 
             }

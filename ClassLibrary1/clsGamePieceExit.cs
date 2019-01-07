@@ -29,7 +29,7 @@ namespace gameLogic
                 // maybe remove cars
                 // maybe calculate score
 
-                base.update(world);
+                base.update(new Vector2(0,0));
             }
         }
 

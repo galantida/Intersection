@@ -3,75 +3,108 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
     public class clsNewton
     {
-        public clsNewton()
-        {
+        public Vector2 location { get; set; }
+        public Vector2 velocity { get; set; }
+        public float mass { get; set; } // for acceleration and friction calucations
+        public float surfaceArea { get; set; } // for wind resistance calulcations
+        public float kineticFrictionCoefficient { get; set; }
+        public float kineticFriction { get; set; }
+        public float staticFrictionCoefficient { get; set; }
+        public float staticFriction { get; set; }
+        public float dragCoefficient { get; set; }
+        public float drag { get; set; }
 
+        protected Stopwatch stopWatch = new Stopwatch();
+
+        public clsNewton(Vector2 location, Vector2 velocity, float mass, float surfaceArea = 1)
+        {
+            this.location = location;
+            this.velocity = velocity;
+            this.mass = mass;
+            this.surfaceArea = surfaceArea;
+            this.kineticFrictionCoefficient = 0.4f; // rubber on dry pavment
+            this.staticFrictionCoefficient = 0.5f; // rubber on dry pavment
+            this.dragCoefficient = 0.47f; // air a sea level
         }
 
-        public static Vector2 location(Vector2 force, Vector2 location, Vector2 velocity, float mass, float surfaceArea, float delta)
+        public void update(Vector2 addedForce, float addedDragCoefficent = 0, float addedFrictionCoefficient = 0)
         {
-            return location += clsNewton.velocity(force, velocity, mass, surfaceArea) * delta;
-        }
-
-        public static Vector2 velocity(Vector2 force, Vector2 velocity, float mass, float surfaceArea)
-        {
-            Vector2 newVelocity = new Vector2(0,0);
-            float weight = clsNewton.weight(mass);
-            bool moving = true;
-
-            // is it already moving
-            if (velocity.Length() == 0)
+            float deltaTime = stopWatch.ElapsedMilliseconds;
+            if (deltaTime > 10)
             {
-                // has enough force been applied to get it moving
-                if (force.Length() <= staticFrictionResistance(weight)) moving = false;
-            }
+                float weight = this.weight();
+                bool moving = true;
 
-            if (moving)
-            {
-                newVelocity = (velocity + acceleration(mass, force)) - airResistance(newVelocity, surfaceArea) - kineticFrictionResistance(newVelocity, weight); 
-            }
+                // is it already moving
+                if (velocity.Length() == 0)
+                {
+                    // did we apply enough force to get it moving
+                    if (addedForce.Length() <= staticFrictionResistance(addedFrictionCoefficient)) moving = false;
+                }
 
-            return newVelocity;
+                if (moving)
+                {
+                    accelerate(addedForce);
+                    decelerate(airResistance(addedDragCoefficent));
+                    decelerate(kineticFrictionResistance(addedFrictionCoefficient));
+
+
+                    location += velocity * deltaTime;
+                }
+                stopWatch.Restart(); // reset update timer
+            }
         }
 
-        public static float weight(float mass, float gravity = 1) // assume earth
+        public float weight(float gravity = 1) // assume earth
         {
             // mass - kg
             return mass * gravity;
         }
 
-        public static Vector2 acceleration(float mass, Vector2 force)
+        public void accelerate(Vector2 force)
         {
-            return Vector2.Divide(force, mass);
+            velocity += Vector2.Divide(force, mass);
         }
 
-        public static Vector2 airResistance(Vector2 velocity, float surfaceArea, float density = 1.225f, float dragCoefficent = 0.47f)
+        public void decelerate(float force)
+        {
+            Vector2 direction = new Vector2(velocity.X, velocity.Y);
+            direction.Normalize();
+            direction *= force;
+            velocity += Vector2.Divide(-direction, mass);
+        }
+
+        public float airResistance(float density = 1.225f, float addedDragoefficient = 0)
         {
             // denisty of material - 1.225 kg air at sea level
             // surfaceArea = units?
             // dragCoeffecient - cube:1.05, sphere:0.47, half sphere:0.42, cone:0.50, steamline:0.04;
-            return (velocity * velocity) * ((density * surfaceArea * dragCoefficent) / 2);
+            drag = (velocity.Length() * velocity.Length()) * ((density * surfaceArea * dragCoefficient) / 2);
+            return drag;
         }
 
-        public static float staticFrictionResistance(float weight, float staitcFrictionCoefficient = 0.5f)
+        public float staticFrictionResistance(float gravity = 1, float addedFrictionCoefficient = 0)
         {
             // ice & wood (.05)
             // ice & steel (.03)
             // rubber on concrete (.60-.85)
             // rubber on wet concrete (.45-.75)
-            return weight * staitcFrictionCoefficient;
+            staticFriction = weight(1) * (this.staticFrictionCoefficient + addedFrictionCoefficient);
+            return staticFriction;
         }
 
-        public static Vector2 kineticFrictionResistance(Vector2 velocity, float weight, float kineticFrictionCoefficient = 0.4f)
+        public float kineticFrictionResistance(float gravity = 1, float addedFrictionCoefficient = 0)
         {
             // rubber on ice (.15)
-            return velocity * (weight * kineticFrictionCoefficient);
+            kineticFriction = velocity.Length() * (weight(1) * (kineticFrictionCoefficient + addedFrictionCoefficient));
+            return kineticFriction;
         }
     }
 }

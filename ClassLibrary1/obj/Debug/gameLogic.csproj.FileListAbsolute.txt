@@ -40,4 +40,3 @@ C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.cs
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.pdb
-C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csprojAssemblyReference.cache

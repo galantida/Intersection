@@ -46,7 +46,7 @@ namespace gameLogic
                         break;
                 }
 
-                base.update(world);
+                base.update(new Vector2(0,0));
             }
         }
 

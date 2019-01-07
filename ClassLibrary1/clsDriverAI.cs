@@ -50,7 +50,7 @@ namespace gameLogic
 
                 Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
-
+                /*
                 // acceleration
                 var range = speedRangePercentage * speedLimit;
                 var compliance = speedComplianceVariationPercentage * speedLimit;
@@ -76,6 +76,10 @@ namespace gameLogic
                     car.acceleratorPedal = 0;
                     car.breakPedal = 0;
                 }
+                */
+
+                car.shifter = ShifterPosition.drive;
+                car.acceleratorPedal = 1; // this for debug 
 
                 // get desired direction
                 Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
@@ -94,7 +98,6 @@ namespace gameLogic
                 if (Vector2.Distance(car.location, destination) < 32)
                 {
                     world.removeGamePiece(car);
-                    //exit.removeGamePiece(car);
                 }
                 
 
@@ -112,7 +115,6 @@ namespace gameLogic
                     catch(Exception ex)
                     {
                         // must be at exit remove car
-                        //exit.removeGamePiece(car);
                         world.removeGamePiece(car);
                     }
                 }
