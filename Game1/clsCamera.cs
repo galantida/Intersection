@@ -44,7 +44,7 @@ namespace Game1
             foreach (intGamePiece g in this.gamePieces)
             {if (g.gamePieceType == GamePieceType.car)
                 {
-                    clsGamePieceCar c = (clsGamePieceCar)g;
+                    clsCarObject c = (clsCarObject)g;
                     text.Add("----------");
                     //text.Add("Location : " + c.location);
                     //text.Add("Mass : " + c.mass);
@@ -54,9 +54,10 @@ namespace Game1
                     text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     text.Add("Break Pedal : " + c.breakPedal);
                     text.Add("Speed : " + c.speed);
-                    text.Add("Drag : " + c.drag);
-                    text.Add("Static Friction : " + c.staticFriction);
-                    text.Add("Kinetic Friction : " + c.kineticFriction);
+                    text.Add("Location : " + c.location.X + "," + c.location.Y);
+                    text.Add("Drag Coefficient: " + c.dragCoefficient.totalValue);
+                    text.Add("Static Friction Coefficient: " + c.staticFrictionCoefficient.totalValue);
+                    text.Add("Kinetic Friction Coefficient: " + c.kineticFrictionCoefficient.totalValue);
                 }
 
             }

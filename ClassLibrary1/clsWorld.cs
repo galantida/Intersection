@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
 namespace gameLogic
@@ -12,11 +13,14 @@ namespace gameLogic
         public List<intGamePiece> gamePieces;
         public clsSquare[,] squares;
 
-        public Random random;
+        public Random random; 
 
         public clsInput input; // human input
 
-        public float squareSize;
+        public float squareSize { get; set; }
+
+        private Stopwatch _currentTime = new Stopwatch();
+        public float lastUpdate { get; set; }
 
 
         public clsWorld(long squaresWide, float squareSize, clsInput input)
@@ -31,6 +35,17 @@ namespace gameLogic
             // create the map
             loadSquares(squaresWide);
             loadGamePieces();
+
+            // start processing
+            _currentTime.Start();
+        }
+
+        public float currentTime
+        {
+            get
+            {
+                return _currentTime.ElapsedMilliseconds;
+            }
         }
 
         public void update()
@@ -38,7 +53,7 @@ namespace gameLogic
             // process each game piece
             for (int t = 0; t < gamePieces.Count; t++)
             {
-                gamePieces[t].update(this);
+                gamePieces[t].update();
             }
         }
 
@@ -114,10 +129,10 @@ namespace gameLogic
             gamePieces = new List<intGamePiece>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 1000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 1000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 1000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 1000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 10000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 10000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 10000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 10000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -127,7 +142,7 @@ namespace gameLogic
 
             // create human drivable car
             clsDriverHuman human = new clsDriverHuman(input);
-            clsGamePieceCar car = createCar(human, new Vector2(4, 4), new Vector2(-1, 0), new Vector2(0, 0));
+            clsCarObject car = createCar(human, new Vector2(1, 4), new Vector2(1, 0), new Vector2(-1, 0));
         }
 
         public void removeGamePiece(intGamePiece gamePiece)
@@ -275,9 +290,9 @@ namespace gameLogic
             return exit;
         }
 
-        public clsGamePieceCar createCar(intDriver driver, Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
+        public clsCarObject createCar(intDriver driver, Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
         {
-            clsGamePieceCar car = new clsGamePieceCar(driver, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
+            clsCarObject car = new clsCarObject(this, driver, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
             gamePieces.Add(car);
             return car;
         }

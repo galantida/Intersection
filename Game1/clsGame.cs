@@ -10,20 +10,18 @@ namespace Game1
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class clsGame : Game
     {
         // global graphic opbjects
-        clsGame game;
         clsScreen screen;
         clsInput input;
+        public clsWorld world;
 
-        public Game1()
+        public clsGame()
         {
             input = new clsInput();
-            game = new clsGame(input);
-            screen = new clsScreen(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, game);
-            
-
+            world = new clsWorld(14, 64, input);
+            screen = new clsScreen(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
         }
 
         /// <summary>
@@ -80,7 +78,7 @@ namespace Game1
         protected override void Update(GameTime gameTime)
         {
             KeyBoardInput();
-            game.update();
+            world.update();
             screen.update();
             base.Update(gameTime);
         }
@@ -95,8 +93,21 @@ namespace Game1
             base.Draw(gameTime);
         }
 
+        private float lastMouseX = 0;
+        private float lastMouseY = 0;
+
         public clsInput KeyBoardInput()
         {
+            MouseState state = Mouse.GetState();
+
+            float curMouseX = state.X;
+            input.x = lastMouseX - state.X;
+            lastMouseX = curMouseX;
+
+            float curMouseY = state.Y;
+            input.y = lastMouseY - state.Y;
+            lastMouseY = curMouseY;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Up)) input.forward = true;
@@ -116,5 +127,7 @@ namespace Game1
 
             return input;
         }
+
+        
     }
 }

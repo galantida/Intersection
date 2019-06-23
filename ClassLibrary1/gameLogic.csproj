@@ -48,21 +48,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsDriverAI.cs" />
-    <Compile Include="clsBaseGamePiece.cs" />
-    <Compile Include="clsGame.cs" />
-    <Compile Include="clsGamePieceCar.cs" />
-    <Compile Include="clsGamePieceExit.cs" />
+    <Compile Include="worldObjects\clsBaseObject.cs" />
+    <Compile Include="worldObjects\clsCar.cs" />
+    <Compile Include="worldObjects\clsExit.cs" />
     <Compile Include="clsGameMath.cs" />
     <Compile Include="clsDriverHuman.cs" />
     <Compile Include="clsInput.cs" />
-    <Compile Include="clsNewton.cs" />
+    <Compile Include="worldObjects\clsNewtonObject.cs" />
+    <Compile Include="worldObjects\clsNewtonProperty.cs" />
     <Compile Include="clsRoute.cs" />
     <Compile Include="clsSquare.cs" />
     <Compile Include="clsWorld.cs" />
     <Compile Include="intDriver.cs" />
     <Compile Include="intGamePiece.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="clsGamePieceEntry.cs" />
+    <Compile Include="worldObjects\clsEntry.cs" />
     <Compile Include="VectorMath.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

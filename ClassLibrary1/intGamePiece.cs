@@ -18,6 +18,6 @@ namespace gameLogic
         float mass { get; set; }
         Vector2 direction { get; set; }
 
-        void update(clsWorld world);
+        void update();
     }
 }

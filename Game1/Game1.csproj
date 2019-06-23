@@ -47,7 +47,7 @@
     <Compile Include="clsScreen.cs" />
     <Compile Include="clsSprite.cs" />
     <Compile Include="clsTile.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="clsGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

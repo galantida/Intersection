@@ -12,5 +12,8 @@ namespace gameLogic
         public bool backward = false;
         public bool left = false;
         public bool right = false;
+
+        public float x = 0;
+        public float y = 0;
     }
 }

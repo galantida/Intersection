@@ -41,7 +41,7 @@ namespace gameLogic
             stopWatch.Start();
         }
 
-        public void update(clsGamePieceCar car)
+        public void update(clsCarObject car)
         {
             float deltaTime = stopWatch.ElapsedMilliseconds; // using the base stopwatch
             if (deltaTime > 100)
@@ -129,7 +129,7 @@ namespace gameLogic
         }
 
 
-        public Vector2 getDirection(clsGamePieceCar car, Vector2 destinationLocation)
+        public Vector2 getDirection(clsCarObject car, Vector2 destinationLocation)
         {
             // get direction of way point from cars location
             //Vector2 b = car.location - destination;

@@ -10,30 +10,31 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsGamePieceEntry : clsBaseGamePiece, intGamePiece
+    public class clsGamePieceEntry : clsBaseGameObject, intGamePiece
     {
         // object specific 
         public int maxSpawnTime { get; set; }
         public GamePieceType spawnType { get; set; }
-        public long nextSpawnTime { get; set; }
+        public float nextSpawnTime { get; set; }
         public Vector2 direction { get; set; }
 
-        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(location,new Vector2(0,0), 0)
+        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
         {
             this.gamePieceType = GamePieceType.entry;
             this.direction = direction;
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;
+            // add min spawn time later
             this.nextSpawnTime = world.random.Next(maxSpawnTime);
         }
 
 
-        new public void update(clsWorld world)
+        new public void update()
         {
-            if (stopWatch.ElapsedMilliseconds > nextSpawnTime) 
+            if (world.currentTime > nextSpawnTime) 
             {
-                nextSpawnTime = world.random.Next(maxSpawnTime);
+                nextSpawnTime = world.currentTime + world.random.Next(maxSpawnTime);
 
                 switch (this.spawnType)
                 {
@@ -41,13 +42,16 @@ namespace gameLogic
                         //Vector2 carVelocity = direction * (base.world.rnd.Next(5) * 0.03f);
                         clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
                         clsDriverAI ai = new clsDriverAI(world, exit.location);
-                        clsGamePieceCar car = world.createCar(ai, world.worldLocationToSquareCoordinate(this.location), this.direction, new Vector2(0,0));
+                        clsCarObject car = world.createCar(ai, world.worldLocationToSquareCoordinate(this.location), this.direction, new Vector2(0,0));
                         car.location = randomizeVector(world, car.location); // renadomizes car location slightly
                         break;
                 }
 
-                base.update(new Vector2(0,0));
+                base.applyForce(new Vector2(0,0));
             }
+
+            // always apply phypics
+            base.update();
         }
 
         private Vector2 randomizeVector(clsWorld world, Vector2 location)

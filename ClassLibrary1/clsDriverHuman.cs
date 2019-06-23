@@ -20,14 +20,14 @@ namespace gameLogic
             this.input = input;
         }
 
-        public void update(clsGamePieceCar car)
+        public void update(clsCarObject car)
         {
             pedals(car);
             steeringWheel(car);
         }
 
         // convert user input to gas and break petal control 
-        void pedals(clsGamePieceCar car)
+        void pedals(clsCarObject car)
         {
             float velocityMegnitude = car.velocity.Length();
 
@@ -70,7 +70,17 @@ namespace gameLogic
             }
         }
 
-        void steeringWheel(clsGamePieceCar car)
+        void steeringWheel(clsCarObject car)
+        {
+            car.steeringWheel = 0;
+            if ((input.x > 0) || (input.x < 0))
+            {
+                car.steeringWheel = input.x;
+                if (car.shifter == ShifterPosition.reverse) car.steeringWheel = -car.steeringWheel; // flip the left right keys if we are going backwards
+            }
+        }
+
+        void steeringWheel_old(clsCarObject car)
         {
             car.steeringWheel = 0;
             if (input.left || input.right)
