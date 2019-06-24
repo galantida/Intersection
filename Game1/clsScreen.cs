@@ -38,7 +38,7 @@ namespace Game1
             cameras.Add(camera);
 
             displays = new List<clsDisplay>();
-            clsDisplay display = new clsDisplay(camera, new Rectangle(50, 50, 800, 800), 1, textures, fonts);
+            clsDisplay display = new clsDisplay(camera, new Rectangle(50, 50, 800, 800),1.0f, textures, fonts);
             displays.Add(display);
         }
 

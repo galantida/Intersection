@@ -14,13 +14,13 @@ namespace Game1
     {
         // global graphic opbjects
         clsScreen screen;
-        clsInput input;
+        clsHuman human;
         public clsWorld world;
 
         public clsGame()
         {
-            input = new clsInput();
-            world = new clsWorld(14, 64, input);
+            human = new clsHuman();
+            world = new clsWorld(14, 64, human);
             screen = new clsScreen(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
         }
 
@@ -96,6 +96,7 @@ namespace Game1
         private float lastMouseX = 0;
         private float lastMouseY = 0;
 
+
         public clsInput KeyBoardInput()
         {
             MouseState state = Mouse.GetState();
@@ -124,6 +125,9 @@ namespace Game1
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right)) input.right = true;
             else input.right = false;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.N)) input.n = true;
+            else input.n = false;
 
             return input;
         }

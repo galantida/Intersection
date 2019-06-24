@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace gameLogic
 {
@@ -12,22 +13,47 @@ namespace gameLogic
     public class clsDriverHuman : intDriver
     {
         // inputs and outputs
-        private clsInput input;
-        //private float keyMode = 1; // 1 for forward and -1 for reverse and 0 for neutral
+        private clsCarObject car;
+        private KeyboardState keyboard;
+        private MouseState mouse;
 
-        public clsDriverHuman(clsInput input)
+        public clsDriverHuman(clsCarObject car, Keyboard kb, Mouse mouse)
         {
-            this.input = input;
+            this.car = car;
         }
 
-        public void update(clsCarObject car)
+        public void update()
         {
-            pedals(car);
-            steeringWheel(car);
+            float worldSize = 14 * 64;
+
+            // inbounds
+            while (car.location.X < 0) car.location = new Vector2(car.location.X + worldSize, car.location.Y);
+            while (car.location.X > worldSize) car.location = new Vector2(car.location.X - worldSize, car.location.Y);
+            while (car.location.Y < 0) car.location = new Vector2(car.location.X, car.location.Y + worldSize);
+            while (car.location.Y > worldSize) car.location = new Vector2(car.location.X, car.location.Y - worldSize);
         }
+                
 
         // convert user input to gas and break petal control 
-        void pedals(clsCarObject car)
+        void accelerator(float amount)
+        {
+            car.acceleratorPedal = amount;
+        }
+
+        void steeringWheel(float amount)
+        {
+            car.steeringWheel = amount;
+        }
+
+        void shifter(ShifterPosition shifterPosition)
+        {
+            car.shifter = shifterPosition;
+        }
+
+        /*
+
+        // convert user input to gas and break petal control 
+        void pedals_old(clsCarObject car)
         {
             float velocityMegnitude = car.velocity.Length();
 
@@ -70,16 +96,6 @@ namespace gameLogic
             }
         }
 
-        void steeringWheel(clsCarObject car)
-        {
-            car.steeringWheel = 0;
-            if ((input.x > 0) || (input.x < 0))
-            {
-                car.steeringWheel = input.x;
-                if (car.shifter == ShifterPosition.reverse) car.steeringWheel = -car.steeringWheel; // flip the left right keys if we are going backwards
-            }
-        }
-
         void steeringWheel_old(clsCarObject car)
         {
             car.steeringWheel = 0;
@@ -90,5 +106,7 @@ namespace gameLogic
                 if (car.shifter == ShifterPosition.reverse) car.steeringWheel = -car.steeringWheel; // flip the left right keys if we are going backwards
             }
         }
+
+    */
     }
 }

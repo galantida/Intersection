@@ -18,7 +18,16 @@ namespace gameLogic
         private float breaking = 1.0f; // creates additional kinetic friction coefficient
         private float handling = 0.002f; // .05 was good
 
-        public clsCarObject(clsWorld world, intDriver driver, Vector2 location, Vector2 direction, Vector2 velocity) : base(world, location, velocity)
+        // control status
+        private float _acceleratorPedal;
+        private float _breakPedal;
+        private float _steeringWheel;
+        public ShifterPosition shifter { get; set; } // reverse, neutral, drive
+
+        // car status
+        public Vector2 direction { get; set; }
+
+        public clsCarObject(clsWorld world, Vector2 location, Vector2 direction, Vector2 velocity) : base(world, location, velocity)
         {
             // newtonian physics
             base.mass = 1.0f;
@@ -31,13 +40,14 @@ namespace gameLogic
             base.gamePieceType = GamePieceType.car;
 
             // mechanical properties
-            this.driver = driver;
             this.direction = direction; // car direction
             this.shifter = ShifterPosition.neutral;
         }
 
         // car inputs
-        public float acceleratorPedal {
+        public float acceleratorPedal
+        {
+            // accelerator pedal value 0 - 1
             get
             {
                 return _acceleratorPedal;
@@ -49,10 +59,11 @@ namespace gameLogic
                 else if (_acceleratorPedal < 0) _acceleratorPedal = 0;
             }
         }
-        private float _acceleratorPedal;
+        
 
         public float breakPedal
         {
+            // break pedal value 0 - 1
             get
             {
                 return _breakPedal;
@@ -64,14 +75,24 @@ namespace gameLogic
                 else if (_breakPedal < 0) _breakPedal = 0;
             }
         }
-        private float _breakPedal;
+        
 
-        public float steeringWheel { get; set; }
-        public ShifterPosition shifter { get; set; }
-        public intDriver driver { get; set; } // driver either AI or HUman
+        public float steeringWheel
+        {
+            // -1 to 1 representing steeringwheel position
+            get
+            {
+                return _steeringWheel;
+            }
+            set
+            {
+                _steeringWheel = value;
+                if (_steeringWheel > 1) _steeringWheel = 1;
+                else if (_steeringWheel < 0) _steeringWheel = 0;
+            }
+        }
 
-        // car status
-        public Vector2 direction { get; set; }
+        
         public float speed
         {
             get
@@ -87,9 +108,6 @@ namespace gameLogic
             {
                 lastUpdated = world.currentTime; // reset last updated
 
-                // update this car base on the drivers input
-                driver.update(this);
-
 
                  /**************************************** 
                         breaking and resistance
@@ -99,7 +117,7 @@ namespace gameLogic
                 if (_breakPedal > 0)
                 {
                     // add resistance steering direction and transmission are irrelevant
-                    kineticFrictionCoefficient.addedValue = breaking; // debug disabled breaks
+                    kineticFrictionCoefficient.addedValue = breaking; 
                 }
                 else
                 {
@@ -116,7 +134,7 @@ namespace gameLogic
                 float rotation = (handling * (steeringWheel/2)) * deltaTime; // calculate new car rotation based on handling steering wheel and time
                 if (rotation != 0)
                 {
-                    direction = existingDirection.Rotate(rotation); // rotate car
+                    direction = existingDirection.Rotate(rotation); // rotate car (this has to be updated for valiable rotation)
                 }
 
                 // alter velocity direction based on cars new rotated facing direction
@@ -135,7 +153,6 @@ namespace gameLogic
                     // add force based on the shifter postion, acceleration amount and direction the car is facing
                     addedForce = direction * ((int)shifter - 1) * acceleration;
                 }
-               
 
                 // went off the map
                 //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);

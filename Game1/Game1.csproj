@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="clsCamera.cs" />
     <Compile Include="clsDisplay.cs" />
+    <Compile Include="inputs\clsKeyboard.cs" />
+    <Compile Include="inputs\clsMouse.cs" />
     <Compile Include="clsWaypointLine.cs" />
     <Compile Include="clsScreen.cs" />
     <Compile Include="clsSprite.cs" />

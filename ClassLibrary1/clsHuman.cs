@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace gameLogic
 {
-    public class clsInput
+    public class clsHuman
     {
         public bool forward = false;
         public bool backward = false;
         public bool left = false;
         public bool right = false;
+
+
+        public bool n = false;
 
         public float x = 0;
         public float y = 0;

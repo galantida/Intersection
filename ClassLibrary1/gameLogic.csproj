@@ -48,12 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsDriverAI.cs" />
+    <Compile Include="clsHuman.cs" />
+    <Compile Include="clsInputs.cs" />
     <Compile Include="worldObjects\clsBaseObject.cs" />
     <Compile Include="worldObjects\clsCar.cs" />
     <Compile Include="worldObjects\clsExit.cs" />
     <Compile Include="clsGameMath.cs" />
     <Compile Include="clsDriverHuman.cs" />
-    <Compile Include="clsInput.cs" />
     <Compile Include="worldObjects\clsNewtonObject.cs" />
     <Compile Include="worldObjects\clsNewtonProperty.cs" />
     <Compile Include="clsRoute.cs" />
