@@ -39,14 +39,11 @@ namespace gameLogic
                 switch (this.spawnType)
                 {
                     case GamePieceType.car:
-                        //Vector2 carVelocity = direction * (base.world.rnd.Next(5) * 0.03f);
                         clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
-                        clsDriverAI ai = new clsDriverAI(world, exit.location);
-                        clsCarObject car = world.createCar(ai, world.worldLocationToSquareCoordinate(this.location), this.direction, new Vector2(0,0));
-                        car.location = randomizeVector(world, car.location); // renadomizes car location slightly
+                        Vector2 spawnLocation = randomizeVector(world, this.location); // randomizes car location slightly
+                        world.spawnCarAI(world.worldLocationToSquareCoordinate(spawnLocation), this.direction, new Vector2(0, 0), exit.location);
                         break;
                 }
-
                 base.applyForce(new Vector2(0,0));
             }
 

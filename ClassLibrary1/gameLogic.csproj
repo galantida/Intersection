@@ -48,8 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsDriverAI.cs" />
-    <Compile Include="clsHuman.cs" />
-    <Compile Include="clsInputs.cs" />
     <Compile Include="worldObjects\clsBaseObject.cs" />
     <Compile Include="worldObjects\clsCar.cs" />
     <Compile Include="worldObjects\clsExit.cs" />

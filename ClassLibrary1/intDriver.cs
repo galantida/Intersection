@@ -9,6 +9,6 @@ namespace gameLogic
 {
     public interface intDriver
     {
-        void update(clsCarObject car);
+        void update();
     }
 }

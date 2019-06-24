@@ -44,7 +44,79 @@ namespace gameLogic
             this.shifter = ShifterPosition.neutral;
         }
 
-        // car inputs
+
+        /**************************************** 
+            Processing Functions
+        ****************************************/
+        #region Processing Functions
+        new public void update()
+        {
+            float deltaTime = world.currentTime - lastUpdated; // time since last updated
+            if (deltaTime > 10)
+            {
+                lastUpdated = world.currentTime; // reset last updated
+
+
+                /**************************************** 
+                       breaking and resistance
+               ****************************************/
+                // only break if the pedal is pressed
+                if (_breakPedal > 0)
+                {
+                    // add resistance steering direction and transmission are irrelevant
+                    kineticFrictionCoefficient.addedValue = breaking;
+                }
+                else
+                {
+                    // remove resistance
+                    kineticFrictionCoefficient.addedValue = 0;
+                }
+
+
+                /**************************************** 
+                        steering and direction
+                ****************************************/
+                // change facing direction based on steering wheel position
+                Vector2 existingDirection = new Vector2(direction.X, direction.Y); // copy existing direction
+                float rotation = (handling * (steeringWheel / 2)) * deltaTime; // calculate new car rotation based on handling steering wheel and time
+                if (rotation != 0)
+                {
+                    direction = existingDirection.Rotate(rotation); // rotate car (this has to be updated for valiable rotation)
+                }
+
+                // alter velocity direction based on cars new rotated facing direction
+                Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing velocity
+                if (shifter == ShifterPosition.drive) velocity = direction * existingVelocity.Length(); // direction is forward
+                else velocity = -direction * existingVelocity.Length(); // direction is backward
+
+
+                /**************************************** 
+                        acceleration and force
+                ****************************************/
+                // only accelerate if pedal is pressed
+                Vector2 addedForce = new Vector2(0, 0);
+                if (_acceleratorPedal > 0)
+                {
+                    // add force based on the shifter postion, acceleration amount and direction the car is facing
+                    addedForce = direction * ((int)shifter - 1) * acceleration;
+                }
+
+                // went off the map
+                //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);
+
+                base.applyForce(addedForce);
+            }
+
+            // always apply phypics
+            base.update();
+        }
+        #endregion
+
+
+        /**************************************** 
+             inputs
+        ****************************************/
+        #region Input Functions
         public float acceleratorPedal
         {
             // accelerator pedal value 0 - 1
@@ -88,11 +160,17 @@ namespace gameLogic
             {
                 _steeringWheel = value;
                 if (_steeringWheel > 1) _steeringWheel = 1;
-                else if (_steeringWheel < 0) _steeringWheel = 0;
+                else if (_steeringWheel < -1) _steeringWheel = -1;
             }
         }
+        #endregion
 
-        
+
+        /**************************************** 
+             outputs
+        ****************************************/
+        #region Output Functions
+
         public float speed
         {
             get
@@ -100,70 +178,6 @@ namespace gameLogic
                 return base.velocity.Length(); // speed in mile per hour
             }
         }
-
-        new public void update()
-        {
-            float deltaTime = world.currentTime - lastUpdated; // time since last updated
-            if (deltaTime > 10)
-            {
-                lastUpdated = world.currentTime; // reset last updated
-
-
-                 /**************************************** 
-                        breaking and resistance
-                ****************************************/
-                // only break if the pedal is pressed
-                float addedFrictionCoefficient = 0;
-                if (_breakPedal > 0)
-                {
-                    // add resistance steering direction and transmission are irrelevant
-                    kineticFrictionCoefficient.addedValue = breaking; 
-                }
-                else
-                {
-                    // remove resistance
-                    kineticFrictionCoefficient.addedValue = 0;
-                }
-
-
-                /**************************************** 
-                        steering and direction
-                ****************************************/
-                // change facing direction based on steering wheel position
-                Vector2 existingDirection = new Vector2(direction.X, direction.Y); // copy existing direction
-                float rotation = (handling * (steeringWheel/2)) * deltaTime; // calculate new car rotation based on handling steering wheel and time
-                if (rotation != 0)
-                {
-                    direction = existingDirection.Rotate(rotation); // rotate car (this has to be updated for valiable rotation)
-                }
-
-                // alter velocity direction based on cars new rotated facing direction
-                Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing velocity
-                if (shifter == ShifterPosition.drive) velocity = direction * existingVelocity.Length(); // direction is forward
-                else velocity = -direction * existingVelocity.Length(); // direction is backward
-
-
-                /**************************************** 
-                        acceleration and force
-                ****************************************/
-                // only accelerate if pedal is pressed
-                Vector2 addedForce = new Vector2(0, 0);
-                if (_acceleratorPedal > 0)
-                {
-                    // add force based on the shifter postion, acceleration amount and direction the car is facing
-                    addedForce = direction * ((int)shifter - 1) * acceleration;
-                }
-
-                // went off the map
-                //if (!world.inWorldBounds(this.location)) world.removeGamePiece(this);
-
-                base.applyForce(addedForce, addedFrictionCoefficient);
-            }
-
-            // always apply phypics
-            base.update();
-        }
+        #endregion
     }
-
-
 }

@@ -12,26 +12,22 @@ namespace gameLogic
     public class clsWorld
     {
         public List<intGamePiece> gamePieces;
+        public List<intDriver> drivers;
+
         public clsSquare[,] squares;
 
         public Random random; 
 
-        public clsHuman human; // human input
-
         public float squareSize { get; set; }
 
         private Stopwatch _currentTime = new Stopwatch();
-        public float lastUpdate { get; set; }
 
-
-        public clsWorld(long squaresWide, float squareSize, clsHuman human)
+        public clsWorld(long squaresWide, float squareSize)
         {
             this.squareSize = squareSize;
 
             // randomize
             random = new Random();
-
-            this.human = human;
 
             // create the map
             loadSquares(squaresWide);
@@ -56,6 +52,13 @@ namespace gameLogic
             {
                 gamePieces[t].update();
             }
+
+            // process each actor
+            for (int t = 0; t < drivers.Count; t++)
+            {
+                drivers[t].update();
+            }
+
         }
 
         /**************************************************
@@ -128,6 +131,7 @@ namespace gameLogic
         {
             // create container for game pieces
             gamePieces = new List<intGamePiece>();
+            drivers = new List<intDriver>();
 
             // create entry points
             //createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 10000);
@@ -141,9 +145,8 @@ namespace gameLogic
             createExit(new Vector2(13, 7));
             createExit(new Vector2(0, 6));
 
-            // create a car and put a human in it
-            clsCarObject car = createCar(new Vector2(1, 4), new Vector2(1, 0), new Vector2(-1, 0));
-            clsDriverHuman human = new clsDriverHuman(inputs, car);
+            // spawn a human car
+            spawnCarHuman(new Vector2(1, 4), new Vector2(1, 0), new Vector2(-1, 0));
         }
 
         public void removeGamePiece(intGamePiece gamePiece)
@@ -296,6 +299,34 @@ namespace gameLogic
             clsCarObject car = new clsCarObject(this, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
             gamePieces.Add(car);
             return car;
+        }
+
+        public clsDriverHuman createDriverHuman(clsCarObject car)
+        {
+            clsDriverHuman human = new clsDriverHuman(car); // assign human to it
+            drivers.Add(human);
+            return human;
+        }
+
+        public clsDriverAI createDriverAI(clsCarObject car, Vector2 exitLocation)
+        {
+            clsDriverAI ai = new clsDriverAI(car, exitLocation);
+            drivers.Add(ai);
+            return ai;
+        }
+
+        public clsDriverHuman spawnCarHuman(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
+        {
+            clsCarObject car = createCar(squareCoordinate, direction, velocity); // spanw car
+            clsDriverHuman human = createDriverHuman(car); // create human for the car
+            return human;
+        }
+
+        public clsDriverAI spawnCarAI(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity, Vector2 destination)
+        {
+            clsCarObject car = createCar(squareCoordinate, direction, velocity); // spanw car
+            clsDriverAI AI = createDriverAI(car, destination); // create AI for the car
+            return AI;
         }
 
         public List<intGamePiece> getGamePieces(GamePieceType gamePieceType)

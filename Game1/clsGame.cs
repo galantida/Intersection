@@ -14,13 +14,11 @@ namespace Game1
     {
         // global graphic opbjects
         clsScreen screen;
-        clsHuman human;
         public clsWorld world;
 
         public clsGame()
         {
-            human = new clsHuman();
-            world = new clsWorld(14, 64, human);
+            world = new clsWorld(14, 64);
             screen = new clsScreen(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
         }
 
@@ -77,7 +75,8 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            KeyBoardInput();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
+
             world.update();
             screen.update();
             base.Update(gameTime);
@@ -92,46 +91,5 @@ namespace Game1
             screen.draw();
             base.Draw(gameTime);
         }
-
-        private float lastMouseX = 0;
-        private float lastMouseY = 0;
-
-
-        public clsInput KeyBoardInput()
-        {
-            MouseState state = Mouse.GetState();
-
-            float curMouseX = state.X;
-            input.x = lastMouseX - state.X;
-            lastMouseX = curMouseX;
-
-            float curMouseY = state.Y;
-            input.y = lastMouseY - state.Y;
-            lastMouseY = curMouseY;
-
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Up)) input.forward = true;
-            else input.forward = false;
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Down)) input.backward = true;
-            else input.backward = false;
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Left)) input.left = true;
-            else input.left = false;
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right)) input.right = true;
-            else input.right = false;
-
-            if (Keyboard.GetState().IsKeyDown(Keys.N)) input.n = true;
-            else input.n = false;
-
-            return input;
-        }
-
-        
     }
 }

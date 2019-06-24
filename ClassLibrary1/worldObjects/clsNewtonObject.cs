@@ -52,7 +52,29 @@ namespace gameLogic
             location += velocity * deltaTime; // process base on time since last processing.
         }
 
-        public void applyForce(Vector2 addedForce, float addedFrictionCoefficient = 0)
+
+        /**************************************** 
+            Object Modifier Functions
+        ****************************************/
+        # region Object Modifier Functions
+        // apply force in any direction
+        private void accelerate(Vector2 force)
+        {
+            velocity += Vector2.Divide(force, mass);
+        }
+
+        // apply force, opposite direction of travel
+        private void decelerate(float force)
+        {
+            Vector2 direction = new Vector2(velocity.X, velocity.Y);
+            direction.Normalize();
+            direction *= force;
+            velocity += Vector2.Divide(-direction, mass);
+        }
+        # endregion
+
+
+        public void applyForce(Vector2 addedForce)
         {
             float weight = this.weight();
             bool moving = true;
@@ -61,7 +83,7 @@ namespace gameLogic
             if (velocity.Length() == 0)
             {
                 // did we apply enough force to get it moving
-                if (addedForce.Length() <= staticFrictionResistance(addedFrictionCoefficient))
+                if (addedForce.Length() <= staticFrictionResistance())
                 {
                     moving = false;
                 }
@@ -79,22 +101,11 @@ namespace gameLogic
             return mass * gravity;
         }
 
-        // apply force in any direction
-        private void accelerate(Vector2 force)
-        {
-            velocity += Vector2.Divide(force, mass);
-        }
 
-        // apply force, opposite direction of travel
-        private void decelerate(float force)
-        {
-            Vector2 direction = new Vector2(velocity.X, velocity.Y);
-            direction.Normalize();
-            direction *= force;
-            velocity += Vector2.Divide(-direction, mass);
-        }
-       
-
+        /**************************************** 
+            Calculation Functions
+        ****************************************/
+        # region Calculation Functions
         private float airResistance(float density = 1.225f)
         {
             // denisty of material - 1.225 kg air at sea level
@@ -104,7 +115,7 @@ namespace gameLogic
             return drag;
         }
 
-        private float staticFrictionResistance(float gravity = 1, float addedFrictionCoefficient = 0)
+        private float staticFrictionResistance(float gravity = 1)
         {
             // ice & wood (.05)
             // ice & steel (.03)
@@ -114,11 +125,12 @@ namespace gameLogic
             return staticFriction;
         }
 
-        private float kineticFrictionResistance(float gravity = 1, float addedFrictionCoefficient = 0)
+        private float kineticFrictionResistance(float gravity = 1)
         {
             // rubber on ice (.15)
             float kineticFriction = velocity.Length() * (weight(1) * kineticFrictionCoefficient.totalValue);
             return kineticFriction;
         }
+        # endregion
     }
 }

@@ -12,10 +12,10 @@ namespace gameLogic
 {
     public class clsDriverAI : intDriver
     {
-        protected Stopwatch stopWatch = new Stopwatch();
+        
 
         // AI instructions
-        private clsWorld world { get; set; }
+        private clsCarObject car { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
         public float speedLimit { get; set; }
@@ -24,31 +24,31 @@ namespace gameLogic
         float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
         float speedComplianceVariationPercentage; // faster or slower than normal. (e.g. 10% slower than normal)
 
+        public float lastUpdated { get; set; }
 
-        public clsDriverAI(clsWorld world, Vector2 destination)
+
+        public clsDriverAI(clsCarObject car, Vector2 destination)
         {
             // inputs
-            this.world = world;
             this.destination = destination;
             this.route = null;
             speedLimit = 25f;
 
             // driver differences
-            speedRangePercentage = (world.random.Next(10) - 5) / 100.0f;  
-            speedComplianceVariationPercentage = (world.random.Next(10) - 5) / 100.0f; 
-
-            // start
-            stopWatch.Start();
+            speedRangePercentage = (car.world.random.Next(10) - 5) / 100.0f;  
+            speedComplianceVariationPercentage = (car.world.random.Next(10) - 5) / 100.0f; 
         }
 
-        public void update(clsCarObject car)
+        public void update()
         {
-            float deltaTime = stopWatch.ElapsedMilliseconds; // using the base stopwatch
-            if (deltaTime > 100)
+            float deltaTime = car.world.currentTime - lastUpdated; // time since last updated
+            if (deltaTime > 10)
             {
+                lastUpdated = car.world.currentTime; // reset last updated
+
                 if (route == null) calculateShortestRoute(car.location, destination);
 
-                Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
+                Vector2 wayPointWorldLocation = car.world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
                 /*
                 // acceleration
@@ -97,7 +97,7 @@ namespace gameLogic
                 // reached the destination
                 if (Vector2.Distance(car.location, destination) < 32)
                 {
-                    world.removeGamePiece(car);
+                    car.world.removeGamePiece(car);
                 }
                 
 
@@ -115,7 +115,7 @@ namespace gameLogic
                     catch(Exception ex)
                     {
                         // must be at exit remove car
-                        world.removeGamePiece(car);
+                        car.world.removeGamePiece(car);
                     }
                 }
                 else if (distance > 0)
@@ -124,7 +124,6 @@ namespace gameLogic
 
                 }
 
-                stopWatch.Restart(); // reset update timer
             }
         }
 
@@ -141,10 +140,10 @@ namespace gameLogic
 
         public void calculateShortestRoute(Vector2 fromLocation, Vector2 toLocation)
         {
-            Vector2 carSquareCoordinate = world.worldLocationToSquareCoordinate(fromLocation);
-            Vector2 exitSquareCoordinate = world.worldLocationToSquareCoordinate(toLocation);
+            Vector2 carSquareCoordinate = car.world.worldLocationToSquareCoordinate(fromLocation);
+            Vector2 exitSquareCoordinate = car.world.worldLocationToSquareCoordinate(toLocation);
 
-            this.route = new clsRoute(world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
+            this.route = new clsRoute(car.world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
         }
     }
 }

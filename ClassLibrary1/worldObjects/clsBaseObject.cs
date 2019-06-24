@@ -14,8 +14,7 @@ namespace gameLogic
     {
         // interface fields
         public GamePieceType gamePieceType { get; set; }
-
-        protected clsWorld world { get; set; }
+        public clsWorld world { get; set; }
         protected float lastUpdated { get; set; }
 
         public clsBaseGameObject(clsWorld world, Vector2 location, Vector2 velocity, float mass = 1000.0f):base(location, velocity, mass)
