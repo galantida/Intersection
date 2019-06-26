@@ -52,22 +52,22 @@ namespace gameLogic
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                car.acceleratorPedal += 0.1f;
+                if (!lastState.IsKeyDown(Keys.Up)) car.acceleratorPedal += 0.1f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                car.acceleratorPedal -= 0.1f;
+                if (!lastState.IsKeyDown(Keys.Down)) car.acceleratorPedal -= 0.1f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                car.steeringWheel += 0.1f;
+                if (!lastState.IsKeyDown(Keys.Right)) car.steeringWheel += 0.1f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                car.steeringWheel -= 0.1f;
+                if (!lastState.IsKeyDown(Keys.Left)) car.steeringWheel -= 0.1f;
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.N))
@@ -87,6 +87,7 @@ namespace gameLogic
 
             if (Keyboard.GetState().IsKeyDown(Keys.B))
             {
+                car.acceleratorPedal = 0;
                 car.breakPedal += 0.1f;
             }
             else
@@ -113,9 +114,9 @@ namespace gameLogic
                 if (!lastState.IsKeyDown(Keys.OemPeriod)) car.turnSignal++;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                if (!lastState.IsKeyDown(Keys.H))
+                if (!lastState.IsKeyDown(Keys.E))
                 {
                     if (!this.car.hazzard) this.car.hazzard = true;
                     else this.car.hazzard = false;

@@ -20,6 +20,7 @@ namespace gameLogic
         public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, WorldObjectType spawnType, int maxSpawnTime) : base(world, location, direction, new Vector2(0,0), 0)
         {
             this.worldObjectType = WorldObjectType.entry;
+            base.collisionDetection = false;
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;

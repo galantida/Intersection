@@ -42,6 +42,7 @@ namespace gameLogic
             base.staticFrictionCoefficient.baseValue = 0.001f; // drag on starting to move
             base.surfaceArea = 0.02f; // surface area facing wind
             base.dragCoefficient.baseValue = 0.25f; // wind resistance
+            base.collisionDetection = true;
 
             // Car properties
             this.acceleration = 0.02f; // force to add in the direction of the transmissions
@@ -53,6 +54,7 @@ namespace gameLogic
 
             // flasher circuit
             flasher = new Stopwatch();
+            flasher.Start();
         }
 
 
@@ -115,7 +117,6 @@ namespace gameLogic
                 Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing velocity
                 if (shifter == ShifterPosition.drive) velocity = direction * existingVelocity.Length(); // direction is forward
                 else velocity = -direction * existingVelocity.Length(); // direction is backward
-
 
 
                 /**************************************** 
@@ -243,11 +244,9 @@ namespace gameLogic
                 if (value == 0)
                 {
                     _turnSignal = 0;
-                    flasher.Stop();
                 }
                 else
                 {
-                    flasher.Start();
                     if (value > 0) _turnSignal = 1;
                     else if (value < 0) _turnSignal = -1;
                 }
@@ -264,12 +263,10 @@ namespace gameLogic
             {
                 if (value)
                 {
-                    flasher.Start();
                     _hazzard = true;
                 }
                 else
                 {
-                    flasher.Stop();
                     _hazzard = false;
                 }
             }

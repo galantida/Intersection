@@ -52,6 +52,19 @@ namespace gameLogic
             // process each game piece
             for (int t = 0; t < worldObjects.Count; t++)
             {
+                if (worldObjects[t].collisionDetection)
+                {
+                    if (collision(worldObjects[t]))
+                    {
+                        if (worldObjects[t].worldObjectType == WorldObjectType.car) // if its a car
+                        {
+                            clsCarObject car = (clsCarObject)worldObjects[t];
+                            if (car.hazzard == false) car.hazzard = true;
+                        }
+                    }
+                }
+
+                // update all objects
                 worldObjects[t].update();
             }
 
@@ -136,10 +149,10 @@ namespace gameLogic
             drivers = new List<intDriver>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), WorldObjectType.car, 10000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), WorldObjectType.car, 10000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), WorldObjectType.car, 10000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), WorldObjectType.car, 10000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), WorldObjectType.car, 1000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), WorldObjectType.car, 1000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), WorldObjectType.car, 1000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), WorldObjectType.car, 1000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -346,6 +359,33 @@ namespace gameLogic
             List<intWorldObject> worldObjects = getWorldObjects(worldObjectType);
             return worldObjects[this.random.Next(worldObjects.Count())];
         }
+
+        public bool collision(intWorldObject firstObject, intWorldObject secondObject = null)
+        {
+            if (secondObject != null)
+            {
+                Vector2 distance = firstObject.location - secondObject.location;
+                if (distance.Length() < 50) return true;
+                else return false;
+            }
+            else
+            {
+                foreach (intWorldObject worldObject in this.worldObjects)
+                {
+                    if (worldObject != firstObject)
+                    {
+                        if (worldObject.collisionDetection)
+                        {
+                            Vector2 distance = firstObject.location - worldObject.location;
+                            if (distance.Length() < 50) return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+
     }
     
 }

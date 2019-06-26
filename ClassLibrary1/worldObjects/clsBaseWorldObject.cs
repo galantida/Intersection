@@ -16,6 +16,7 @@ namespace gameLogic
         public WorldObjectType worldObjectType { get; set; }
         public clsWorld world { get; set; }
         public Vector2 direction { get; set; }
+        public bool collisionDetection { get; set; }
         public Dictionary<Color, Color> colorReplacements { get; set; }
 
         protected float lastUpdated { get; set; }

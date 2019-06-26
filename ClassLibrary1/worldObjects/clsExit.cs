@@ -17,6 +17,7 @@ namespace gameLogic
         public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 direction) : base(world, location, direction, new Vector2(0, 0), 0)
         {
             this.worldObjectType = WorldObjectType.exit;
+            base.collisionDetection = false;
             this.direction = direction;
         }
 

@@ -65,6 +65,7 @@ namespace Game1
             {
                 sprite.draw(this, spriteBatch);
             }
+            // this is where you would dispoase of all those textures if you could get to them
         }
 
         private void drawTiles(SpriteBatch spriteBatch)

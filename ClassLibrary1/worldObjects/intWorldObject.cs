@@ -17,6 +17,7 @@ namespace gameLogic
         Vector2 velocity { get; set; }
         float mass { get; set; }
         Vector2 direction { get; set; }
+        bool collisionDetection { get; set; }
         Dictionary<Color, Color> colorReplacements { get; set; }
 
         void update();
