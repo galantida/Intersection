@@ -10,18 +10,16 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsGamePieceEntry : clsBaseGameObject, intGamePiece
+    public class clsGamePieceEntry : clsBaseWorldObject, intWorldObject
     {
         // object specific 
         public int maxSpawnTime { get; set; }
-        public GamePieceType spawnType { get; set; }
+        public WorldObjectType spawnType { get; set; }
         public float nextSpawnTime { get; set; }
-        public Vector2 heading { get; set; }
 
-        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 heading, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
+        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, WorldObjectType spawnType, int maxSpawnTime) : base(world, location, direction, new Vector2(0,0), 0)
         {
-            this.gamePieceType = GamePieceType.entry;
-            this.heading = heading;
+            this.worldObjectType = WorldObjectType.entry;
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;
@@ -38,13 +36,13 @@ namespace gameLogic
 
                 switch (this.spawnType)
                 {
-                    case GamePieceType.car:
-                        clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
+                    case WorldObjectType.car:
+                        clsGamePieceExit exit = (clsGamePieceExit)world.getRandomWorldObject(WorldObjectType.exit);
                         Vector2 spawnLocation = randomizeVector(world, this.location); // randomizes car location slightly
-                        world.spawnCarAI(world.worldLocationToSquareCoordinate(spawnLocation), this.heading, new Vector2(0, 0), exit.location);
+                        world.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
                         break;
                 }
-                base.applyForce(new Vector2(0,0));
+                base.addForce(new Vector2(0,0));
             }
 
             // always apply phypics
@@ -53,7 +51,7 @@ namespace gameLogic
 
         private Vector2 randomizeVector(clsWorld world, Vector2 location)
         {
-            int variant = 10;
+            int variant = 16;
             float modX = world.random.Next(variant * 2) -variant;
             float modY = world.random.Next(variant * 2) -variant;
             return new Vector2(location.X + modX, location.Y + modY);

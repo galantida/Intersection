@@ -14,7 +14,7 @@ namespace Game1
         private clsWorld world;
         public Rectangle visibleArea;
 
-        public List<intGamePiece> gamePieces;
+        public List<intWorldObject> worldObjects;
 
 
         public Vector2 topLeft; // world corrdinates of top left corner of visible map.
@@ -35,22 +35,23 @@ namespace Game1
         public void update()
         {
             // filter game pieces and tiles down to viewable items 
-            this.gamePieces = world.gamePieces;
+            this.worldObjects = world.worldObjects;
 
             // overlay
             text = new List<string>();
-            foreach (intGamePiece g in this.gamePieces)
-            {if (g.gamePieceType == GamePieceType.car)
+            foreach (intWorldObject g in this.worldObjects)
+            {if (g.worldObjectType == WorldObjectType.car)
                 {
                     clsCarObject c = (clsCarObject)g;
-                    text.Add("----------");
+                    text.Add("--------------------");
+                    text.Add("Speed : " + Math.Floor(c.mph) + " MPH");
+                    text.Add("Direction : " + c.cardinalDirection.ToString());
+                    text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
+                    text.Add("velocity : " + c.velocity.Length());
                     text.Add("Steering : " + c.steeringWheel);
                     text.Add("Shifter : " + c.shifter.ToString().ToUpper());
                     text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     text.Add("Break Pedal : " + c.breakPedal);
-                    text.Add("Speed : " + Math.Floor(c.speed) + " MPH");
-                    text.Add("Direction : " + c.cardinalDirection.ToString());
-                    text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
                 }
 
             }

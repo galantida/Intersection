@@ -10,16 +10,22 @@ namespace gameLogic
 {
     // the physical piece which is unaware of its location on the board
 
-    public abstract class clsBaseGameObject : clsNewtonObject
+    public abstract class clsBaseWorldObject : clsNewtonObject
     {
         // interface fields
-        public GamePieceType gamePieceType { get; set; }
+        public WorldObjectType worldObjectType { get; set; }
         public clsWorld world { get; set; }
+        public Vector2 direction { get; set; }
+        public Dictionary<Color, Color> colorReplacements { get; set; }
+
         protected float lastUpdated { get; set; }
 
-        public clsBaseGameObject(clsWorld world, Vector2 location, Vector2 velocity, float mass = 1000.0f):base(location, velocity, mass)
+        public clsBaseWorldObject(clsWorld world, Vector2 location, Vector2 direction, Vector2 velocity, float mass = 1000.0f):base(location, velocity, mass)
         {
             this.world = world; // reference to the world it exists in
+            this.direction = direction;
+
+            colorReplacements = new Dictionary<Color, Color>();
         }
 
         public void update()

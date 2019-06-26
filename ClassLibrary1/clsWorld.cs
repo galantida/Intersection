@@ -13,7 +13,7 @@ namespace gameLogic
 
     public class clsWorld
     {
-        public List<intGamePiece> gamePieces;
+        public List<intWorldObject> worldObjects;
         public List<intDriver> drivers;
 
         public clsSquare[,] squares;
@@ -50,9 +50,9 @@ namespace gameLogic
         public void update()
         {
             // process each game piece
-            for (int t = 0; t < gamePieces.Count; t++)
+            for (int t = 0; t < worldObjects.Count; t++)
             {
-                gamePieces[t].update();
+                worldObjects[t].update();
             }
 
             // process each actor
@@ -132,14 +132,14 @@ namespace gameLogic
         public void loadGamePieces()
         {
             // create container for game pieces
-            gamePieces = new List<intGamePiece>();
+            worldObjects = new List<intWorldObject>();
             drivers = new List<intDriver>();
 
             // create entry points
-            //createEntry(new Vector2(6, 0), new Vector2(0, 1), GamePieceType.car, 10000);
-            //createEntry(new Vector2(7, 13), new Vector2(0, -1), GamePieceType.car, 10000);
-            //createEntry(new Vector2(13, 6), new Vector2(-1, 0), GamePieceType.car, 10000);
-            //createEntry(new Vector2(0, 7), new Vector2(1, 0), GamePieceType.car, 10000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), WorldObjectType.car, 10000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), WorldObjectType.car, 10000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), WorldObjectType.car, 10000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), WorldObjectType.car, 10000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -148,12 +148,12 @@ namespace gameLogic
             createExit(new Vector2(0, 6));
 
             // spawn a human car
-            spawnCarHuman(new Vector2(1, 4), new Vector2(1, 0), new Vector2(-1, 0));
+            spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0));
         }
 
-        public void removeGamePiece(intGamePiece gamePiece)
+        public void removeGamePiece(intWorldObject worldObject)
         {
-            gamePieces.Remove(gamePiece);
+            worldObjects.Remove(worldObject);
         }
 
         public bool inSquareCoordinateBounds(Vector2 squareCoordinate)
@@ -282,24 +282,24 @@ namespace gameLogic
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-        public clsGamePieceEntry createEntry(Vector2 squareCoordinate, Vector2 direction, GamePieceType gamePieceType, int maxSpawnTime)
+        public clsGamePieceEntry createEntry(Vector2 squareCoordinate, Vector2 direction, WorldObjectType gamePieceType, int maxSpawnTime)
         {
             clsGamePieceEntry entry = new clsGamePieceEntry(this, squareCoordinateToWorldLocation(squareCoordinate), direction, gamePieceType, maxSpawnTime);
-            gamePieces.Add(entry);
+            worldObjects.Add(entry);
             return entry;
         }
 
         public clsGamePieceExit createExit(Vector2 squareCoordinate)
         {
             clsGamePieceExit exit = new clsGamePieceExit(this, squareCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
-            gamePieces.Add(exit);
+            worldObjects.Add(exit);
             return exit;
         }
 
-        public clsCarObject createCar(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
+        public clsCarObject createCar(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
-            clsCarObject car = new clsCarObject(this, squareCoordinateToWorldLocation(squareCoordinate), direction, velocity);
-            gamePieces.Add(car);
+            clsCarObject car = new clsCarObject(this, worldLocation, direction, velocity);
+            worldObjects.Add(car);
             return car;
         }
 
@@ -317,34 +317,34 @@ namespace gameLogic
             return ai;
         }
 
-        public clsDriverHuman spawnCarHuman(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity)
+        public clsDriverHuman spawnCarHuman(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
-            clsCarObject car = createCar(squareCoordinate, direction, velocity); // spanw car
+            clsCarObject car = createCar(worldLocation, direction, velocity); // spanw car
             clsDriverHuman human = createDriverHuman(car); // create human for the car
             return human;
         }
 
-        public clsDriverAI spawnCarAI(Vector2 squareCoordinate, Vector2 direction, Vector2 velocity, Vector2 destination)
+        public clsDriverAI spawnCarAI(Vector2 worldLocation, Vector2 direction, Vector2 velocity, Vector2 destination)
         {
-            clsCarObject car = createCar(squareCoordinate, direction, velocity); // spanw car
+            clsCarObject car = createCar(worldLocation, direction, velocity); // spanw car
             clsDriverAI AI = createDriverAI(car, destination); // create AI for the car
             return AI;
         }
 
-        public List<intGamePiece> getGamePieces(GamePieceType gamePieceType)
+        public List<intWorldObject> getWorldObjects(WorldObjectType worldObjectType)
         {
-            List<intGamePiece> gamePieces = new List<intGamePiece>();
-            foreach (intGamePiece gamePiece in this.gamePieces)
+            List<intWorldObject> worldObjects = new List<intWorldObject>();
+            foreach (intWorldObject worldObject in this.worldObjects)
             {
-                if (gamePiece.gamePieceType == gamePieceType) gamePieces.Add(gamePiece);
+                if (worldObject.worldObjectType == worldObjectType) worldObjects.Add(worldObject);
             }
-            return gamePieces;
+            return worldObjects;
         }
 
-        public intGamePiece getRandomGamePiece(GamePieceType gamePieceType)
+        public intWorldObject getRandomWorldObject(WorldObjectType worldObjectType)
         {
-            List<intGamePiece> gamePieces = getGamePieces(gamePieceType);
-            return gamePieces[this.random.Next(gamePieces.Count())];
+            List<intWorldObject> worldObjects = getWorldObjects(worldObjectType);
+            return worldObjects[this.random.Next(worldObjects.Count())];
         }
     }
     

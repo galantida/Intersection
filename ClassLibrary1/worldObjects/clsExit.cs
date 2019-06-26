@@ -10,14 +10,14 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsGamePieceExit : clsBaseGameObject, intGamePiece
+    public class clsGamePieceExit : clsBaseWorldObject, intWorldObject
     {
-        public Vector2 heading { get; set; }
+        public Vector2 direction { get; set; }
         
-        public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 heading) : base(world, location, new Vector2(0, 0), 0)
+        public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 direction) : base(world, location, direction, new Vector2(0, 0), 0)
         {
-            this.gamePieceType = GamePieceType.exit;
-            this.heading = heading;
+            this.worldObjectType = WorldObjectType.exit;
+            this.direction = direction;
         }
 
 
@@ -31,14 +31,14 @@ namespace gameLogic
                 // maybe remove cars
                 // maybe calculate score
 
-                base.applyForce(new Vector2(0,0));
+                base.addForce(new Vector2(0,0));
             }
 
             // always apply phypics
             base.update();
         }
 
-        public void removeGamePiece(intGamePiece gamePiece)
+        public void removeGamePiece(intWorldObject gamePiece)
         {
             world.removeGamePiece(gamePiece);
         }

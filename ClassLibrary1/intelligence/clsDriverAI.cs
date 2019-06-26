@@ -12,8 +12,6 @@ namespace gameLogic
 {
     public class clsDriverAI : intDriver
     {
-        
-
         // AI instructions
         private clsCarObject car { get; set; }
         public Vector2 destination { get; set; }
@@ -30,13 +28,17 @@ namespace gameLogic
         public clsDriverAI(clsCarObject car, Vector2 destination)
         {
             // inputs
+            this.car = car;
             this.destination = destination;
             this.route = null;
             speedLimit = 25f;
 
             // driver differences
-            speedRangePercentage = (car.world.random.Next(10) - 5) / 100.0f;  
-            speedComplianceVariationPercentage = (car.world.random.Next(10) - 5) / 100.0f; 
+            //speedRangePercentage = (car.world.random.Next(10) - 5) / 100.0f;  
+            //speedComplianceVariationPercentage = (car.world.random.Next(10) - 5) / 100.0f;
+
+            // start timer
+            this.lastUpdated = car.world.currentTime;
         }
 
         public void update()
@@ -50,36 +52,38 @@ namespace gameLogic
 
                 Vector2 wayPointWorldLocation = car.world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
-                /*
                 // acceleration
-                var range = speedRangePercentage * speedLimit;
-                var compliance = speedComplianceVariationPercentage * speedLimit;
-                var maxSpeed = speedLimit + compliance + range;
-                var minSpeed = speedLimit + compliance - range;
+                //var range = speedRangePercentage * speedLimit;
+                //var compliance = speedComplianceVariationPercentage * speedLimit;
+                //var maxSpeed = speedLimit + compliance + range;
+                //var minSpeed = speedLimit + compliance - range;
 
 
-                if (car.speed < minSpeed)
+                if (car.mph < speedLimit * 0.9f)
                 {
                     // increase acceleration
                     car.shifter = ShifterPosition.drive;
                     car.acceleratorPedal += 0.1f;
                     car.breakPedal = 0;
                 }
-                else if (car.speed > maxSpeed)
+                else if (car.mph > speedLimit * 1.1f)
+                {
+                    // decrease acceleration
+                    car.acceleratorPedal -= 0.1f;
+                    car.breakPedal += 0;
+                } else if (car.mph > speedLimit * 1.5f)
                 {
                     // increase breaking
-                    car.acceleratorPedal = 0;
+                    car.acceleratorPedal = 0.0f;
                     car.breakPedal += 0.1f;
-                } else
+                }
+                else
                 {
                     // no change in pedals
-                    car.acceleratorPedal = 0;
-                    car.breakPedal = 0;
+                    //car.acceleratorPedal = 0;
+                    //car.breakPedal = 0;
                 }
-                */
-
-                car.shifter = ShifterPosition.drive;
-                car.acceleratorPedal = 1; // this for debug 
+                
 
                 // get desired direction
                 Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
@@ -93,6 +97,11 @@ namespace gameLogic
                 //if ((steering > -5f) && (steering < 5f)) car.velocity = desiredDirection * car.velocity.Length();
                 //else car.steering -= steering / 2;
 
+                // last minute turn signals for fun
+                if (car.steeringWheel < -0.5f) car.turnSignal = -1;
+                else if (car.steeringWheel > 0.5f) car.turnSignal = 1;
+                else car.turnSignal = 0;
+
 
                 // reached the destination
                 if (Vector2.Distance(car.location, destination) < 32)
@@ -105,7 +114,7 @@ namespace gameLogic
                 // distance to way point
                 float distance = Vector2.Distance(car.location, wayPointWorldLocation);
 
-                if (distance < 64)
+                if (distance < 75)
                 {
                     try
                     {

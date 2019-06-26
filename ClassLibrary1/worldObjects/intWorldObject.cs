@@ -7,16 +7,17 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public enum GamePieceType { entry, exit, car };
+    public enum WorldObjectType { entry, exit, car };
 
-    public interface intGamePiece
+    public interface intWorldObject
     {
-        GamePieceType gamePieceType { get; set; }
+        WorldObjectType worldObjectType { get; set; }
         Vector2 location { get; set; }
         //Vector2 squareCoordinate { get; }
         Vector2 velocity { get; set; }
         float mass { get; set; }
-        Vector2 heading { get; set; }
+        Vector2 direction { get; set; }
+        Dictionary<Color, Color> colorReplacements { get; set; }
 
         void update();
     }

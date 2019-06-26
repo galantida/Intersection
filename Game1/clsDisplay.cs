@@ -98,20 +98,20 @@ namespace Game1
         public void spriteManagement()
         {
             // get all the game pieces in the display area
-            List<intGamePiece> displayedGamePieces = new List<intGamePiece>();
-            foreach (intGamePiece gp in camera.gamePieces)
+            List<intWorldObject> displayedWorldObjects = new List<intWorldObject>();
+            foreach (intWorldObject gp in camera.worldObjects)
             {
                 // could be logic here to determine what is in the displayable area
-                displayedGamePieces.Add(gp);
+                displayedWorldObjects.Add(gp);
             }
 
             // remove sprites that represent gamepieces nolonger in the display area
             for (int s = 0; s < sprites.Count; s++)
             {
                 bool found = false;
-                foreach (intGamePiece gp in camera.gamePieces)
+                foreach (intWorldObject worldObject in camera.worldObjects)
                 {
-                    if (sprites[s].gamePiece == gp)
+                    if (sprites[s].worldObject == worldObject)
                     {
                         found = true;
                         break;
@@ -124,33 +124,33 @@ namespace Game1
             }
 
 
-            // remove game pieces from the list that are already paired with a sprite
+            // remove world objects from the list that are already paired with a sprite
             foreach (clsSprite sprite in sprites)
             {
-                displayedGamePieces.Remove(sprite.gamePiece);
+                displayedWorldObjects.Remove(sprite.worldObject);
             }
 
             // the remaining game pieces are not yet paired and need to be
             clsSprite newSprite;
-            foreach (intGamePiece gamePiece in displayedGamePieces)
+            foreach (intWorldObject worldObject in displayedWorldObjects)
             {
-                switch (gamePiece.gamePieceType)
+                switch (worldObject.worldObjectType)
                 {
-                    case GamePieceType.car:
+                    case WorldObjectType.car:
                         {
-                            newSprite = new clsSprite(gamePiece, textures["car"]);
+                            newSprite = new clsSprite(worldObject, textures["car"]);
                             sprites.Add(newSprite);
                             break;
                         }
-                    case (GamePieceType.entry):
+                    case (WorldObjectType.entry):
                         {
-                            newSprite = new clsSprite(gamePiece, textures["entry"]);
+                            newSprite = new clsSprite(worldObject, textures["entry"]);
                             sprites.Add(newSprite);
                             break;
                         }
-                    case (GamePieceType.exit):
+                    case (WorldObjectType.exit):
                         {
-                            newSprite = new clsSprite(gamePiece, textures["exit"]);
+                            newSprite = new clsSprite(worldObject, textures["exit"]);
                             sprites.Add(newSprite);
                             break;
                         }

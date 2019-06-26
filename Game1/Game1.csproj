@@ -42,6 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="clsCamera.cs" />
+    <Compile Include="clsColorReplacement.cs" />
     <Compile Include="clsDisplay.cs" />
     <Compile Include="clsWaypointLine.cs" />
     <Compile Include="clsWindow.cs" />

@@ -16,6 +16,8 @@ namespace gameLogic
         private clsCarObject car;
         public float lastUpdated { get; set; }
 
+        KeyboardState lastState;
+
         public clsDriverHuman(clsCarObject car)
         {
             this.car = car;
@@ -82,65 +84,36 @@ namespace gameLogic
             {
                 car.shifter = ShifterPosition.reverse;
             }
-        }
 
-        /*
-
-        // convert user input to gas and break petal control 
-        void pedals_old(clsCarObject car)
-        {
-            float velocityMegnitude = car.velocity.Length();
-
-            switch (car.shifter)
+            if (Keyboard.GetState().IsKeyDown(Keys.B))
             {
-                case ShifterPosition.neutral:
-                    {
-                        if (input.forward) car.shifter = ShifterPosition.drive; // drive
-                        if (input.backward) car.shifter = ShifterPosition.reverse; // reverse
-                        break;
-                    }
-                case ShifterPosition.drive:
-                    {
-                        if (input.forward) car.acceleratorPedal = 1;
-                        else car.acceleratorPedal = 0;
-
-                        if (input.backward) car.breakPedal = 1;
-                        else car.breakPedal = 0;
-
-                        if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
-                        {
-                            car.shifter = ShifterPosition.neutral; // neutral
-                        }
-                        break;
-                    }
-                case ShifterPosition.reverse:
-                    {
-                        if (input.forward) car.breakPedal = 1;
-                        else car.breakPedal = 0;
-
-                        if (input.backward) car.acceleratorPedal = 1;
-                        else car.acceleratorPedal = 0;
-
-                        if ((velocityMegnitude < 0.01f) && (!input.forward) && (!input.backward))
-                        {
-                            car.shifter = ShifterPosition.neutral; // neutral
-                        }
-                        break;
-                    }
+                car.breakPedal += 0.1f;
             }
-        }
-
-        void steeringWheel_old(clsCarObject car)
-        {
-            car.steeringWheel = 0;
-            if (input.left || input.right)
+            else
             {
-                car.steeringWheel = -1;
-                if (input.right) car.steeringWheel = 1;
-                if (car.shifter == ShifterPosition.reverse) car.steeringWheel = -car.steeringWheel; // flip the left right keys if we are going backwards
+                car.breakPedal -= 0.1f;
             }
-        }
 
-    */
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                if (!lastState.IsKeyDown(Keys.H))
+                {
+                    if (this.car.lights == 0) this.car.lights = 3;
+                    else this.car.lights = 0;
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemComma))
+            {
+                if (!lastState.IsKeyDown(Keys.OemComma)) car.turnSignal--;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.OemPeriod))
+            {
+                if (!lastState.IsKeyDown(Keys.OemPeriod)) car.turnSignal++;
+            }
+
+            lastState = Keyboard.GetState();
+        }
     }
 }

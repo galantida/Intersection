@@ -23,6 +23,7 @@ namespace gameLogic
         public clsNewtonianProperty kineticFrictionCoefficient { get; }
         public clsNewtonianProperty dragCoefficient { get; }
 
+        private Vector2 totalAddedForce { get; set; }
         public float lastProcessed { get; set; }
 
         public clsNewtonObject(Vector2 location, Vector2 velocity, float mass, float surfaceArea = 50.0f, float kineticFrictionCoefficient = 0.8f /* rubber on asphalt */, float staticFrictionCoefficient = 0.9f /* rubber on asphalt */, float dragCoefficient = 0.25f /* .25-.45 car in air at sea level */)
@@ -40,6 +41,9 @@ namespace gameLogic
         {
             float deltaTime = currentTime - lastProcessed; // detemine how long since the last processing
             lastProcessed = currentTime; // set new last processing time
+
+            // apply total forces
+            applyTotalForce();
 
             // process world forces (possibly only if it is moving)
             if (velocity.Length() > 0)
@@ -74,25 +78,10 @@ namespace gameLogic
         # endregion
 
 
-        public void applyForce(Vector2 addedForce)
+        public void addForce(Vector2 addedForce)
         {
-            float weight = this.weight();
-            bool moving = true;
-
-            // if its not moving
-            if (velocity.Length() == 0)
-            {
-                // did we apply enough force to get it moving
-                if (addedForce.Length() <= staticFrictionResistance())
-                {
-                    moving = false;
-                }
-            }
-
-            if (moving)
-            {
-                accelerate(addedForce);
-            }
+            // you must combine all forces to calculate if you overcome static resistance
+            this.totalAddedForce += addedForce;
         }
 
         public float weight(float gravity = 1) // assume earths gravity
@@ -105,7 +94,31 @@ namespace gameLogic
         /**************************************** 
             Calculation Functions
         ****************************************/
-        # region Calculation Functions
+        #region Calculation Functions
+        private void applyTotalForce()
+        {
+            float weight = this.weight();
+            bool moving = true;
+
+            // if its not moving
+            if (velocity.Length() == 0)
+            {
+                // is the total force enough to overcome static resisitance
+                if (this.totalAddedForce.Length() <= staticFrictionResistance())
+                {
+                    moving = false;
+                }
+            }
+
+            // either already moving or just overcome static friction
+            if (moving) accelerate(totalAddedForce);
+
+            // clear already applied forces
+            totalAddedForce = new Vector2(0, 0);
+        }
+
+
+
         private float airResistance(float density = 1.225f)
         {
             // denisty of material - 1.225 kg air at sea level
