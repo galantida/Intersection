@@ -23,13 +23,16 @@ namespace Game1
         public Dictionary<string, Texture2D> textures;
         public Dictionary<string, SpriteFont> fonts;
 
-        public clsDisplay(clsCamera camera, Rectangle displayArea, float scale, Dictionary<string, Texture2D> textures, Dictionary<string, SpriteFont> fonts)
+        public clsDisplay(clsCamera camera, Rectangle displayArea, Dictionary<string, Texture2D> textures, Dictionary<string, SpriteFont> fonts)
         {
             this.camera = camera;
             this.displayArea = displayArea;
-            this.scale = scale;
             this.textures = textures;
             this.fonts = fonts;
+
+            // determine scale up or down of camera content
+            if (this.displayArea.Width > camera.visibleArea.Width) this.scale = this.displayArea.Width / camera.visibleArea.Width;
+            else this.scale = camera.visibleArea.Width / this.displayArea.Width;
         }
 
         public void draw(SpriteBatch spriteBatch)

@@ -13,13 +13,14 @@ namespace Game1
     public class clsGame : Game
     {
         // global graphic opbjects
-        clsScreen screen;
+        clsWindow window;
         public clsWorld world;
 
         public clsGame()
         {
+            // 64 pixels is 15 feet
             world = new clsWorld(14, 64);
-            screen = new clsScreen(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
+            window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(2048, 2048), 64, world);
         }
 
         /// <summary>
@@ -44,19 +45,19 @@ namespace Game1
             // Create a new SpriteBatch, which can be used to draw textures.
             Content.RootDirectory = "Content";
 
-            screen.textures.Add("pixel", new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color));
-            screen.textures["pixel"].SetData(new[] { Color.White });
+            window.textures.Add("pixel", new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color));
+            window.textures["pixel"].SetData(new[] { Color.White });
 
-            screen.textures.Add("grass", Content.Load<Texture2D>("grass"));
-            screen.textures.Add("road", Content.Load<Texture2D>("road"));
-            screen.textures.Add("shoulder", Content.Load<Texture2D>("shoulder"));
-            screen.textures.Add("intersection", Content.Load<Texture2D>("intersection"));
-            screen.textures.Add("car", Content.Load<Texture2D>("car"));
-            screen.textures.Add("gear", Content.Load<Texture2D>("gear"));
-            screen.textures.Add("entry", Content.Load<Texture2D>("entry"));
-            screen.textures.Add("exit", Content.Load<Texture2D>("exit"));
+            window.textures.Add("grass", Content.Load<Texture2D>("grass"));
+            window.textures.Add("road", Content.Load<Texture2D>("road"));
+            window.textures.Add("shoulder", Content.Load<Texture2D>("shoulder"));
+            window.textures.Add("intersection", Content.Load<Texture2D>("intersection"));
+            window.textures.Add("car", Content.Load<Texture2D>("car"));
+            window.textures.Add("gear", Content.Load<Texture2D>("gear"));
+            window.textures.Add("entry", Content.Load<Texture2D>("entry"));
+            window.textures.Add("exit", Content.Load<Texture2D>("exit"));
 
-            screen.fonts.Add("arial", Content.Load<SpriteFont>("File"));
+            window.fonts.Add("arial", Content.Load<SpriteFont>("File"));
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Game1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
             world.update();
-            screen.update();
+            window.update();
             base.Update(gameTime);
         }
 
@@ -88,7 +89,7 @@ namespace Game1
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            screen.draw();
+            window.draw();
             base.Draw(gameTime);
         }
     }

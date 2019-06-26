@@ -12,12 +12,12 @@ namespace gameLogic
 {
     public class clsGamePieceExit : clsBaseGameObject, intGamePiece
     {
-        public Vector2 direction { get; set; }
+        public Vector2 heading { get; set; }
         
-        public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 direction) : base(world, location, new Vector2(0, 0), 0)
+        public clsGamePieceExit(clsWorld world, Vector2 location, Vector2 heading) : base(world, location, new Vector2(0, 0), 0)
         {
             this.gamePieceType = GamePieceType.exit;
-            this.direction = direction;
+            this.heading = heading;
         }
 
 

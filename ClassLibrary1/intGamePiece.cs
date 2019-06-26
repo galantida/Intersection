@@ -16,7 +16,7 @@ namespace gameLogic
         //Vector2 squareCoordinate { get; }
         Vector2 velocity { get; set; }
         float mass { get; set; }
-        Vector2 direction { get; set; }
+        Vector2 heading { get; set; }
 
         void update();
     }

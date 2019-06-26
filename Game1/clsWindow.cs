@@ -9,7 +9,7 @@ using gameLogic;
 
 namespace Game1
 {
-    class clsScreen
+    class clsWindow
     {
         // settings
         Vector2 size;
@@ -22,7 +22,7 @@ namespace Game1
         public Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
         public Dictionary<string, SpriteFont> fonts = new Dictionary<string, SpriteFont>();
 
-        public clsScreen(GraphicsDeviceManager graphics, Vector2 size, int tileSize, clsWorld world)
+        public clsWindow(GraphicsDeviceManager graphics, Vector2 size, int tileSize, clsWorld world)
         {
             this.graphics = graphics;
             this.size = size;
@@ -33,12 +33,12 @@ namespace Game1
             spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
             cameras = new List<clsCamera>();
-            clsCamera camera = new clsCamera(world, new Vector2(0, 0), new Vector2(100,100));
-            //cameras.Add(new clsCamera(game, new Vector2(0, 0), new Vector2(100, 600), 0.5f));
+            clsCamera camera = new clsCamera(world, new Rectangle(0,0,1000,1000));
             cameras.Add(camera);
 
             displays = new List<clsDisplay>();
-            clsDisplay display = new clsDisplay(camera, new Rectangle(50, 50, 800, 800),1.0f, textures, fonts);
+            //clsDisplay display = new clsDisplay(camera, new Rectangle(50, 50, (int)this.size.X-50, (int)this.size.Y-50), 2.0f, textures, fonts);
+            clsDisplay display = new clsDisplay(camera, new Rectangle(0, 0, (int)this.size.X, (int)this.size.Y), textures, fonts);
             displays.Add(display);
         }
 

@@ -12,8 +12,7 @@ namespace Game1
     public class clsCamera
     {
         private clsWorld world;
-        public Vector2 worldLocation;
-        public Vector2 viewSize;
+        public Rectangle visibleArea;
 
         public List<intGamePiece> gamePieces;
 
@@ -27,11 +26,10 @@ namespace Game1
         public List<clsWaypointLine> lines = new List<clsWaypointLine>();
 
 
-        public clsCamera(clsWorld world, Vector2 worldLocation, Vector2 viewSize)
+        public clsCamera(clsWorld world, Rectangle visibleArea)
         {
             this.world = world;
-            this.worldLocation = worldLocation;
-            this.viewSize = viewSize;
+            this.visibleArea = visibleArea;
         }
 
         public void update()
@@ -46,18 +44,13 @@ namespace Game1
                 {
                     clsCarObject c = (clsCarObject)g;
                     text.Add("----------");
-                    //text.Add("Location : " + c.location);
-                    //text.Add("Mass : " + c.mass);
-                    //text.Add("Direction : " + c.direction);
                     text.Add("Steering : " + c.steeringWheel);
-                    text.Add("Shifter : " + c.shifter);
+                    text.Add("Shifter : " + c.shifter.ToString().ToUpper());
                     text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     text.Add("Break Pedal : " + c.breakPedal);
-                    text.Add("Speed : " + c.speed);
-                    text.Add("Location : " + c.location.X + "," + c.location.Y);
-                    text.Add("Drag Coefficient: " + c.dragCoefficient.totalValue);
-                    text.Add("Static Friction Coefficient: " + c.staticFrictionCoefficient.totalValue);
-                    text.Add("Kinetic Friction Coefficient: " + c.kineticFrictionCoefficient.totalValue);
+                    text.Add("Speed : " + Math.Floor(c.speed) + " MPH");
+                    text.Add("Direction : " + c.cardinalDirection.ToString());
+                    text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
                 }
 
             }

@@ -9,6 +9,8 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
+    public enum CardinalDirection { East, Southeast, South, Southhwest, West, Northwest, North, Northeast }
+
     public class clsWorld
     {
         public List<intGamePiece> gamePieces;

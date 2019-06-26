@@ -14,9 +14,9 @@ namespace gameLogic
     public class clsCarObject : clsBaseGameObject, intGamePiece
     {
         // car specifications
-        private float acceleration = 0.02f; // force to add in the direction of the transmissions
-        private float breaking = 1.0f; // creates additional kinetic friction coefficient
-        private float handling = 0.002f; // .05 was good
+        private float acceleration; // force to add in the direction of the transmissions
+        private float breaking; // creates additional kinetic friction coefficient
+        private float handling; // .05 was good
 
         // control status
         private float _acceleratorPedal;
@@ -25,22 +25,27 @@ namespace gameLogic
         public ShifterPosition shifter { get; set; } // reverse, neutral, drive
 
         // car status
-        public Vector2 direction { get; set; }
+        public Vector2 heading { get; set; }
 
-        public clsCarObject(clsWorld world, Vector2 location, Vector2 direction, Vector2 velocity) : base(world, location, velocity)
+        public clsCarObject(clsWorld world, Vector2 location, Vector2 heading, Vector2 velocity) : base(world, location, velocity)
         {
-            // newtonian physics
-            base.mass = 1.0f;
-            base.surfaceArea = 0.01f;
-            base.kineticFrictionCoefficient.baseValue = 0.02f;
-            base.staticFrictionCoefficient.baseValue = 0.03f;
-            base.dragCoefficient.baseValue = 0.25f;
-
             // general
             base.gamePieceType = GamePieceType.car;
 
-            // mechanical properties
-            this.direction = direction; // car direction
+            // newtonian properties
+            base.mass = 10.0f; // weight (10 = 4000 lbs.)
+            base.kineticFrictionCoefficient.baseValue = 0.001f; // drag while moving
+            base.staticFrictionCoefficient.baseValue = 0.002f; // drag on starting to move
+            base.surfaceArea = 0.01f; // surface area facing wind
+            base.dragCoefficient.baseValue = 0.25f; // wind resistance
+
+            // Car properties
+            this.acceleration = 0.02f; // force to add in the direction of the transmissions
+            this.breaking = 1.0f; // creates additional kinetic friction coefficient
+            this.handling = 0.002f; // im pact of steering
+
+            // mechanical status
+            this.heading = heading; // car direction
             this.shifter = ShifterPosition.neutral;
         }
 
@@ -77,17 +82,17 @@ namespace gameLogic
                         steering and direction
                 ****************************************/
                 // change facing direction based on steering wheel position
-                Vector2 existingDirection = new Vector2(direction.X, direction.Y); // copy existing direction
+                Vector2 existingDirection = new Vector2(heading.X, heading.Y); // copy existing direction
                 float rotation = (handling * (steeringWheel / 2)) * deltaTime; // calculate new car rotation based on handling steering wheel and time
                 if (rotation != 0)
                 {
-                    direction = existingDirection.Rotate(rotation); // rotate car (this has to be updated for valiable rotation)
+                    heading = existingDirection.Rotate(rotation); // rotate car (this has to be updated for valiable rotation)
                 }
 
                 // alter velocity direction based on cars new rotated facing direction
                 Vector2 existingVelocity = new Vector2(velocity.X, velocity.Y); // get the existing velocity
-                if (shifter == ShifterPosition.drive) velocity = direction * existingVelocity.Length(); // direction is forward
-                else velocity = -direction * existingVelocity.Length(); // direction is backward
+                if (shifter == ShifterPosition.drive) velocity = heading * existingVelocity.Length(); // direction is forward
+                else velocity = -heading * existingVelocity.Length(); // direction is backward
 
 
                 /**************************************** 
@@ -98,7 +103,7 @@ namespace gameLogic
                 if (_acceleratorPedal > 0)
                 {
                     // add force based on the shifter postion, acceleration amount and direction the car is facing
-                    addedForce = direction * ((int)shifter - 1) * acceleration;
+                    addedForce = heading * ((int)shifter - 1) * acceleration * acceleratorPedal;
                 }
 
                 // went off the map
@@ -175,8 +180,32 @@ namespace gameLogic
         {
             get
             {
-                return base.velocity.Length(); // speed in mile per hour
+                // 64 pixels = 15 feet
+                // mile = 5280 feet
+                // 22528 pixels in a mile
+                // pixel = .234375 feet
+
+                float pixelsPerMilisecond = base.velocity.Length();
+                float pixelsPerHour = (((pixelsPerMilisecond * 1000) * 60) * 60);
+                float MPH = pixelsPerHour / 22528;
+
+                return MPH; // (pixels in a mile / pixels per miliseond) / (60 * 1000)
             }
+        }
+
+        public CardinalDirection cardinalDirection
+        {
+            get
+            {
+                double angle = Math.Atan2(heading.Y, heading.X);
+                int octant = (int)Math.Round(8 * angle / (2 * Math.PI) + 8) % 8;
+                return (CardinalDirection)octant;
+            }
+        }
+
+        public float weightPounds()
+        {
+            return (base.weight() / 2.5f);
         }
         #endregion
     }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/exit.png</SourceFile>
-  <SourceTime>2018-10-29T21:31:30-04:00</SourceTime>
-  <DestFile>C:/Users/dgalanti/Documents/GitHub/Intersection/Game1/Content/bin/Windows/Content/exit.xnb</DestFile>
-  <DestTime>2019-06-24T14:10:04.0792116-04:00</DestTime>
+  <SourceFile>C:/Users/dave/Documents/Github/Intersection/Game1/Content/exit.png</SourceFile>
+  <SourceTime>2018-12-29T16:41:54.5561238-05:00</SourceTime>
+  <DestFile>C:/Users/dave/Documents/Github/Intersection/Game1/Content/bin/Windows/Content/exit.xnb</DestFile>
+  <DestTime>2019-06-25T20:08:30.8080035-04:00</DestTime>
   <Importer>TextureImporter</Importer>
-  <ImporterTime>2018-12-08T11:35:54-05:00</ImporterTime>
+  <ImporterTime>2018-09-23T17:55:52-04:00</ImporterTime>
   <Processor>TextureProcessor</Processor>
-  <ProcessorTime>2018-12-08T11:35:54-05:00</ProcessorTime>
+  <ProcessorTime>2018-09-23T17:55:52-04:00</ProcessorTime>
   <Parameters>
     <Key>ColorKeyColor</Key>
     <Value>255,0,255,255</Value>

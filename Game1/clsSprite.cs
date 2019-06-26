@@ -36,7 +36,7 @@ namespace Game1
             Vector2 displayLocation = new Vector2(display.displayArea.X, display.displayArea.Y);
 
             location = (displayLocation + gamePiece.location) * display.scale;
-            rotation = clsGameMath.toRotation(gamePiece.direction);
+            rotation = clsGameMath.toRotation(gamePiece.heading);
             float scale = display.scale * this.scale;
 
             // draw

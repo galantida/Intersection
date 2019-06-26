@@ -16,12 +16,12 @@ namespace gameLogic
         public int maxSpawnTime { get; set; }
         public GamePieceType spawnType { get; set; }
         public float nextSpawnTime { get; set; }
-        public Vector2 direction { get; set; }
+        public Vector2 heading { get; set; }
 
-        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 direction, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
+        public clsGamePieceEntry(clsWorld world, Vector2 location, Vector2 heading, GamePieceType spawnType, int maxSpawnTime) : base(world, location,new Vector2(0,0), 0)
         {
             this.gamePieceType = GamePieceType.entry;
-            this.direction = direction;
+            this.heading = heading;
 
             this.spawnType = spawnType;
             this.maxSpawnTime = maxSpawnTime;
@@ -41,7 +41,7 @@ namespace gameLogic
                     case GamePieceType.car:
                         clsGamePieceExit exit = (clsGamePieceExit)world.getRandomGamePiece(GamePieceType.exit);
                         Vector2 spawnLocation = randomizeVector(world, this.location); // randomizes car location slightly
-                        world.spawnCarAI(world.worldLocationToSquareCoordinate(spawnLocation), this.direction, new Vector2(0, 0), exit.location);
+                        world.spawnCarAI(world.worldLocationToSquareCoordinate(spawnLocation), this.heading, new Vector2(0, 0), exit.location);
                         break;
                 }
                 base.applyForce(new Vector2(0,0));

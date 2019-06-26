@@ -111,7 +111,8 @@ namespace gameLogic
             // denisty of material - 1.225 kg air at sea level
             // surfaceArea = units?
             // dragCoeffecient - cube:1.05, sphere:0.47, half sphere:0.42, cone:0.50, steamline:0.04;
-            float drag = (velocity.Length() * velocity.Length()) * ((density * surfaceArea * dragCoefficient.totalValue) / 2);
+            //float drag = (velocity.Length() * velocity.Length()) * ((density * surfaceArea * dragCoefficient.totalValue) / 2);
+            float drag = (velocity.Length() * velocity.Length()) * (density * surfaceArea * dragCoefficient.totalValue) / 2;
             return drag;
         }
 
@@ -128,7 +129,7 @@ namespace gameLogic
         private float kineticFrictionResistance(float gravity = 1)
         {
             // rubber on ice (.15)
-            float kineticFriction = velocity.Length() * (weight(1) * kineticFrictionCoefficient.totalValue);
+            float kineticFriction = this.velocity.Length() * (this.weight() * kineticFrictionCoefficient.totalValue);
             return kineticFriction;
         }
         # endregion
