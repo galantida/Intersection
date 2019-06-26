@@ -113,6 +113,15 @@ namespace gameLogic
                 if (!lastState.IsKeyDown(Keys.OemPeriod)) car.turnSignal++;
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.H))
+            {
+                if (!lastState.IsKeyDown(Keys.H))
+                {
+                    if (!this.car.hazzard) this.car.hazzard = true;
+                    else this.car.hazzard = false;
+                }
+            }
+
             lastState = Keyboard.GetState();
         }
     }

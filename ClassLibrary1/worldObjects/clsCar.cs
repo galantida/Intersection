@@ -25,7 +25,7 @@ namespace gameLogic
         private float _steeringWheel;
         private int _turnSignal; // (-1 left, 0, 1 right)
         private int _lights;
-        private bool _emergency;
+        private bool _hazzard;
 
         // indicators
         private Stopwatch flasher;
@@ -136,14 +136,14 @@ namespace gameLogic
                     colorReplacements.Add(source, destination);
                 }
 
-                if (this.leftTurnSignal)
+                if ((this.leftTurnSignal) || (this.hazzards))
                 {
                     Color source = new Color(215, 90, 0);
                     Color destination = new Color(255, 192, 0);
                     colorReplacements.Add(source, destination);
                 }
 
-                if (this.rightTurnSignal)
+                if ((this.rightTurnSignal) || (this.hazzards))
                 {
                     Color source = new Color(215, 90, 1);
                     Color destination = new Color(255, 192, 0);
@@ -156,7 +156,6 @@ namespace gameLogic
                     Color destination = new Color(255, 255, 255);
                     colorReplacements.Add(source, destination);
                 }
-
             }
 
             // always apply phypics
@@ -254,6 +253,27 @@ namespace gameLogic
                 }
             }
         }
+
+        public bool hazzard
+        {
+            get
+            {
+                return _hazzard;
+            }
+            set
+            {
+                if (value)
+                {
+                    flasher.Start();
+                    _hazzard = true;
+                }
+                else
+                {
+                    flasher.Stop();
+                    _hazzard = false;
+                }
+            }
+        }
         #endregion
 
 
@@ -337,6 +357,22 @@ namespace gameLogic
             get
             {
                 if (this.turnSignal == 1)
+                {
+                    if ((flasher.Elapsed.Milliseconds % 500) < 250)
+                    {
+                        return true;
+                    }
+
+                }
+                return false;
+            }
+        }
+
+        public bool hazzards
+        {
+            get
+            {
+                if (this.hazzard == true)
                 {
                     if ((flasher.Elapsed.Milliseconds % 500) < 250)
                     {
