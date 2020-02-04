@@ -5,18 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using physicalWorld;
+using tileWorld;
 using Microsoft.Xna.Framework;
 
 
 namespace gameLogic
 {
-    public class clsDriverAI : intDriver
+    public class clsDriverAI : intActor
     {
         // AI instructions
-        private clsCarObject car { get; set; }
+        private clsCar car { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
         public float speedLimit { get; set; }
+
+        public clsWorld world;
 
         // driver spped differences
         float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
@@ -25,32 +29,33 @@ namespace gameLogic
         public float lastUpdated { get; set; }
 
 
-        public clsDriverAI(clsCarObject car, Vector2 destination)
+        public clsDriverAI(clsWorld world, clsCar car, Vector2 destination)
         {
             // inputs
             this.car = car;
             this.destination = destination;
             this.route = null;
             speedLimit = 25f;
+            this.world = world;
 
             // driver differences
             //speedRangePercentage = (car.world.random.Next(10) - 5) / 100.0f;  
             //speedComplianceVariationPercentage = (car.world.random.Next(10) - 5) / 100.0f;
 
             // start timer
-            this.lastUpdated = car.world.currentTime;
+            this.lastUpdated = world.currentTime;
         }
 
-        public void update()
+        public void update(float currentTime)
         {
-            float deltaTime = car.world.currentTime - lastUpdated; // time since last updated
+            float deltaTime = world.currentTime - lastUpdated; // time since last updated
             if (deltaTime > 10)
             {
-                lastUpdated = car.world.currentTime; // reset last updated
+                lastUpdated = world.currentTime; // reset last updated
 
                 if (route == null) calculateShortestRoute(car.location, destination);
 
-                Vector2 wayPointWorldLocation = car.world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
+                Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
                 // acceleration
                 //var range = speedRangePercentage * speedLimit;
@@ -106,7 +111,7 @@ namespace gameLogic
                 // reached the destination
                 if (Vector2.Distance(car.location, destination) < 32)
                 {
-                    car.world.removeGamePiece(car);
+                    world.remove(car);
                 }
                 
 
@@ -124,7 +129,7 @@ namespace gameLogic
                     catch(Exception ex)
                     {
                         // must be at exit remove car
-                        car.world.removeGamePiece(car);
+                        world.remove((intWorldObject)car);
                     }
                 }
                 else if (distance > 0)
@@ -137,7 +142,7 @@ namespace gameLogic
         }
 
 
-        public Vector2 getDirection(clsCarObject car, Vector2 destinationLocation)
+        public Vector2 getDirection(clsCar car, Vector2 destinationLocation)
         {
             // get direction of way point from cars location
             //Vector2 b = car.location - destination;
@@ -149,10 +154,10 @@ namespace gameLogic
 
         public void calculateShortestRoute(Vector2 fromLocation, Vector2 toLocation)
         {
-            Vector2 carSquareCoordinate = car.world.worldLocationToSquareCoordinate(fromLocation);
-            Vector2 exitSquareCoordinate = car.world.worldLocationToSquareCoordinate(toLocation);
+            Vector2 carSquareCoordinate = world.worldLocationToSquareCoordinate(fromLocation);
+            Vector2 exitSquareCoordinate = world.worldLocationToSquareCoordinate(toLocation);
 
-            this.route = new clsRoute(car.world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
+            this.route = new clsRoute(world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
         }
     }
 }

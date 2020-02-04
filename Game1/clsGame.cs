@@ -20,7 +20,7 @@ namespace Game1
         {
             // 64 pixels is 15 feet
             world = new clsWorld(14, 64);
-            window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(2048, 2048), 64, world);
+            window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
         }
 
         /// <summary>

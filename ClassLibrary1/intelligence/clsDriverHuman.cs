@@ -4,31 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using tileWorld;
 using Microsoft.Xna.Framework.Input;
 
 namespace gameLogic
 {
 
     // ussed to convert humnan input into car input
-    public class clsDriverHuman : intDriver
+    public class clsDriverHuman : intActor
     {
         // inputs and outputs
-        private clsCarObject car;
+        private clsCar car;
         public float lastUpdated { get; set; }
 
         KeyboardState lastState;
 
-        public clsDriverHuman(clsCarObject car)
+        public clsDriverHuman(clsCar car)
         {
             this.car = car;
         }
 
-        public void update()
+        public void update(float currentTime)
         {
-            float deltaTime = car.world.currentTime - lastUpdated; // time since last updated
+            float deltaTime = currentTime - lastUpdated; // time since last updated
             if (deltaTime > 10)
             {
-                lastUpdated = car.world.currentTime; // reset last updated
+                lastUpdated = currentTime; // reset last updated
 
                 // read human input
                 keyboardInput();

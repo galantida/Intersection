@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using gameLogic;
+using tileWorld;
+using physicalWorld;
 
 namespace Game1
 {
@@ -14,11 +16,11 @@ namespace Game1
         private clsWorld world;
         public Rectangle visibleArea;
 
-        public List<intWorldObject> worldObjects;
-
-
         public Vector2 topLeft; // world corrdinates of top left corner of visible map.
-        public clsSquare[,] squares;
+
+
+        public List<intWorldObject> viewableObjects;
+        public clsTile[,] viewableTiles;
 
 
         public List<string> text;
@@ -34,15 +36,18 @@ namespace Game1
 
         public void update()
         {
+            topLeft = new Vector2(0, 0);
+
             // filter game pieces and tiles down to viewable items 
-            this.worldObjects = world.worldObjects;
+            viewableObjects  = this.world.worldObjects;
+            
 
             // overlay
             text = new List<string>();
-            foreach (intWorldObject g in this.worldObjects)
+            foreach (intWorldObject g in viewableObjects)
             {if (g.worldObjectType == WorldObjectType.car)
                 {
-                    clsCarObject c = (clsCarObject)g;
+                    clsCar c = (clsCar)g;
                     text.Add("--------------------");
                     text.Add("Speed : " + Math.Floor(c.mph) + " MPH");
                     text.Add("Direction : " + c.cardinalDirection.ToString());
@@ -56,8 +61,9 @@ namespace Game1
 
             }
 
-            topLeft = new Vector2(0, 0);
-            this.squares = world.squares;
+            // viewable tiles
+            
+            viewableTiles = this.world.tiles;
 
             /*
 

@@ -17,7 +17,7 @@ namespace Game1
 
         // camera views
         List<clsSprite> sprites = new List<clsSprite>();
-        clsTile[,] tiles = new clsTile[0,0];
+        clsStaticSprite[,] staticSprites = new clsStaticSprite[0,0];
 
         // content
         public Dictionary<string, Texture2D> textures;
@@ -38,7 +38,7 @@ namespace Game1
         public void draw(SpriteBatch spriteBatch)
         {
             drawBorder(spriteBatch, textures["pixel"], displayArea, 1, Color.Gold);
-            drawTiles(spriteBatch);
+            drawStaticSprites(spriteBatch);
             drawSprites(spriteBatch);
             drawLines(spriteBatch);
             drawOverlay(spriteBatch);
@@ -47,7 +47,7 @@ namespace Game1
         public void update()
         {
             spriteManagement();
-            tileManagement();
+            staticSpriteManagement();
         }
 
         private void drawBorder(SpriteBatch spriteBatch, Texture2D texture, Rectangle rectangleToDraw, int thicknessOfBorder, Color borderColor)
@@ -68,11 +68,11 @@ namespace Game1
             // this is where you would dispoase of all those textures if you could get to them
         }
 
-        private void drawTiles(SpriteBatch spriteBatch)
+        private void drawStaticSprites(SpriteBatch spriteBatch)
         {
-            foreach (clsTile tile in tiles)
+            foreach (clsStaticSprite staticSprite in staticSprites)
             {
-                tile.draw(this, spriteBatch);
+                staticSprite.draw(this, spriteBatch);
             }
         }
 
@@ -100,7 +100,7 @@ namespace Game1
         {
             // get all the game pieces in the display area
             List<intWorldObject> displayedWorldObjects = new List<intWorldObject>();
-            foreach (intWorldObject gp in camera.worldObjects)
+            foreach (intWorldObject gp in camera.viewableObjects)
             {
                 // could be logic here to determine what is in the displayable area
                 displayedWorldObjects.Add(gp);
@@ -110,7 +110,7 @@ namespace Game1
             for (int s = 0; s < sprites.Count; s++)
             {
                 bool found = false;
-                foreach (intWorldObject worldObject in camera.worldObjects)
+                foreach (intWorldObject worldObject in camera.viewableObjects)
                 {
                     if (sprites[s].worldObject == worldObject)
                     {
@@ -160,18 +160,18 @@ namespace Game1
         }
 
 
-        public void tileManagement()
+        public void staticSpriteManagement()
         {
             Vector2 displayLocation = new Vector2(this.displayArea.Left, this.displayArea.Top);
             float spacing = 64.0f * this.scale;
 
-            tiles = new clsTile[camera.squares.GetLength(0), camera.squares.GetLength(1)];
-            for (int x=0; x < camera.squares.GetLength(0); x++)
+            staticSprites = new clsStaticSprite[camera.viewableTiles.GetLength(0), camera.viewableTiles.GetLength(1)];
+            for (int x=0; x < camera.viewableTiles.GetLength(0); x++)
             {
-                for (int y = 0; y < camera.squares.GetLength(0); y++)
+                for (int y = 0; y < camera.viewableTiles.GetLength(0); y++)
                 {
-                    tiles[x, y] = new clsTile(camera.squares[x,y], textures);
-                    tiles[x, y].location = displayLocation + new Vector2(x * spacing, y * spacing);
+                    staticSprites[x, y] = new clsStaticSprite(camera.viewableTiles[x,y], textures);
+                    staticSprites[x, y].location = displayLocation + new Vector2(x * spacing, y * spacing);
                 }
             }
         }

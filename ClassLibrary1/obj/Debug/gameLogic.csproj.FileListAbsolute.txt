@@ -36,8 +36,12 @@ C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\SharpDX.DXGI
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\SharpDX.XInput.xml
+C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csprojAssemblyReference.cache
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.pdb
-C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.csprojAssemblyReference.cache
+C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\physicalWorld.dll
+C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\tileWorld.dll
+C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\physicalWorld.pdb
+C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\bin\Debug\tileWorld.pdb

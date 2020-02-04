@@ -46,7 +46,7 @@
     <Compile Include="clsWaypointLine.cs" />
     <Compile Include="clsWindow.cs" />
     <Compile Include="clsSprite.cs" />
-    <Compile Include="clsTile.cs" />
+    <Compile Include="clsStatic.cs" />
     <Compile Include="clsGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +73,14 @@
     <ProjectReference Include="..\ClassLibrary1\gameLogic.csproj">
       <Project>{d11d54ba-e80b-4d36-9678-9ee7360bbf43}</Project>
       <Name>gameLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GamePhysics\physicalWorld.csproj">
+      <Project>{2a87df12-fb92-4288-affc-34d44919fa05}</Project>
+      <Name>physicalWorld</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TileBasedGameLayer\tileWorld.csproj">
+      <Project>{91c9e011-d0a0-4219-9adf-772ced5e52ea}</Project>
+      <Name>tileWorld</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

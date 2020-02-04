@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game1", "Game1\Game1.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gameLogic", "ClassLibrary1\gameLogic.csproj", "{D11D54BA-E80B-4D36-9678-9EE7360BBF43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "physicalWorld", "GamePhysics\physicalWorld.csproj", "{2A87DF12-FB92-4288-AFFC-34D44919FA05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tileWorld", "TileBasedGameLayer\tileWorld.csproj", "{91C9E011-D0A0-4219-9ADF-772CED5E52EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +34,22 @@ Global
 		{D11D54BA-E80B-4D36-9678-9EE7360BBF43}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D11D54BA-E80B-4D36-9678-9EE7360BBF43}.Release|x86.ActiveCfg = Release|Any CPU
 		{D11D54BA-E80B-4D36-9678-9EE7360BBF43}.Release|x86.Build.0 = Release|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Debug|x86.Build.0 = Debug|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A87DF12-FB92-4288-AFFC-34D44919FA05}.Release|x86.Build.0 = Release|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Debug|x86.Build.0 = Debug|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Release|x86.ActiveCfg = Release|Any CPU
+		{91C9E011-D0A0-4219-9ADF-772CED5E52EA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
