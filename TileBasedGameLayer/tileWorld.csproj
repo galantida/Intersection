@@ -47,11 +47,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsTileObject.cs" />
-    <Compile Include="clsRoute.cs" />
     <Compile Include="clsTile.cs" />
     <Compile Include="clsTileWorld.cs" />
-    <Compile Include="intTileObject.cs" />
+    <Compile Include="clsWorldObject.cs" />
+    <Compile Include="clsWorldTile.cs" />
+    <Compile Include="intWorldObject.cs" />
+    <Compile Include="intWorldTile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

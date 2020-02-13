@@ -43,7 +43,7 @@ namespace gameLogic
          *****************************************/
         public void loadTiles(long tilesWide)
         {
-            tiles = new clsTile[tilesWide, tilesWide];
+            tiles = new clsWorldTile[tilesWide, tilesWide];
             long x, y;
 
             // grass
@@ -51,7 +51,7 @@ namespace gameLogic
             {
                 for (x = 0; x < tilesWide; x++)
                 {
-                    tiles[x, y] = new clsTile(false, false, false, false);
+                    tiles[x, y] = new clsWorldTile(false, false, false, false);
                 }
             }
 
@@ -59,23 +59,23 @@ namespace gameLogic
             y = tilesWide / 2;
             for (x = 0; x < tilesWide; x++)
             {
-                tiles[x, y - 1] = new clsTile(false, true, false, false);
-                tiles[x, y] = new clsTile(true, false, false, false);
+                tiles[x, y - 1] = new clsWorldTile(false, true, false, false);
+                tiles[x, y] = new clsWorldTile(true, false, false, false);
             }
 
             // north south road
             x = (tilesWide / 2);
             for (y = 0; y < tilesWide; y++)
             {
-                tiles[x, y] = new clsTile(false, false, true, false);
-                tiles[x - 1, y] = new clsTile(false, false, false, true);
+                tiles[x, y] = new clsWorldTile(false, false, true, false);
+                tiles[x - 1, y] = new clsWorldTile(false, false, false, true);
             }
 
             // intersection
-            tiles[(tilesWide / 2) - 1, (tilesWide / 2)] = new clsTile(true, false, false, true); // southwest
-            tiles[(tilesWide / 2), (tilesWide / 2) - 1] = new clsTile(false, true, true, false); // northeast
-            tiles[(tilesWide / 2) - 1, (tilesWide / 2) - 1] = new clsTile(false, true, false, true); // northwest
-            tiles[(tilesWide / 2), (tilesWide / 2)] = new clsTile(true, false, true, false); // southeast
+            tiles[(tilesWide / 2) - 1, (tilesWide / 2)] = new clsWorldTile(true, false, false, true); // southwest
+            tiles[(tilesWide / 2), (tilesWide / 2) - 1] = new clsWorldTile(false, true, true, false); // northeast
+            tiles[(tilesWide / 2) - 1, (tilesWide / 2) - 1] = new clsWorldTile(false, true, false, true); // northwest
+            tiles[(tilesWide / 2), (tilesWide / 2)] = new clsWorldTile(true, false, true, false); // southeast
         }
 
         public void loadObjects()
@@ -83,10 +83,10 @@ namespace gameLogic
             worldObjects = new List<intWorldObject>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), WorldObjectType.car, 10000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), WorldObjectType.car, 10000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), WorldObjectType.car, 10000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), WorldObjectType.car, 10000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 10000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 10000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 10000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 10000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -95,7 +95,7 @@ namespace gameLogic
             createExit(new Vector2(0, 6));
 
             // spawn a human car
-            spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0));
+            actors.Add(spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
         }
 
         public void loadActors()
@@ -130,23 +130,23 @@ namespace gameLogic
             worldObjects.Remove(gameObject);
         }
 
-        public clsEntry createEntry(Vector2 squareCoordinate, Vector2 direction, WorldObjectType gameObjectType, int maxSpawnTime)
+        public clsEntry createEntry(Vector2 squareCoordinate, Vector2 direction, string typeName, int maxSpawnTime)
         {
-            clsEntry entry = new clsEntry(squareCoordinateToWorldLocation(squareCoordinate), direction, this, gameObjectType, maxSpawnTime);
+            clsEntry entry = new clsEntry("entry", squareCoordinateToWorldLocation(squareCoordinate), direction, this, typeName, maxSpawnTime);
             worldObjects.Add((intWorldObject)entry);
             return entry;
         }
 
         public clsExit createExit(Vector2 squareCoordinate)
         {
-            clsExit exit = new clsExit(squareCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
+            clsExit exit = new clsExit("exit", squareCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
             worldObjects.Add((intWorldObject)exit);
             return exit;
         }
 
         public clsCar createCar(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
-            clsCar car = new clsCar(worldLocation, direction, velocity);
+            clsCar car = new clsCar("car", worldLocation, direction, velocity);
             worldObjects.Add((intWorldObject)car);
             return car;
         }
@@ -179,19 +179,19 @@ namespace gameLogic
             return AI;
         }
 
-        public List<intWorldObject> getWorldObjects(WorldObjectType worldObjectType)
+        public List<intWorldObject> getWorldObjects(string typeName)
         {
             List<intWorldObject> filteredWorldObjects = new List<intWorldObject>();
             foreach (intWorldObject worldObject in this.worldObjects)
             {
-                if (worldObject.worldObjectType == worldObjectType) filteredWorldObjects.Add(worldObject);
+                if (worldObject.typeName == typeName) filteredWorldObjects.Add(worldObject);
             }
             return filteredWorldObjects;
         }
 
-        public intWorldObject getRandomWorldObject(WorldObjectType worldObjectType)
+        public intWorldObject getRandomWorldObject(string typeName)
         {
-            List<intWorldObject> filteredWorldObjects = getWorldObjects(worldObjectType);
+            List<intWorldObject> filteredWorldObjects = getWorldObjects(typeName);
             return filteredWorldObjects[this.random.Next(filteredWorldObjects.Count())];
         }
 

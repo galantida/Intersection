@@ -20,7 +20,7 @@ namespace Game1
 
 
         public List<intWorldObject> viewableObjects;
-        public clsTile[,] viewableTiles;
+        public clsWorldTile[,] viewableTiles;
 
 
         public List<string> text;
@@ -45,7 +45,7 @@ namespace Game1
             // overlay
             text = new List<string>();
             foreach (intWorldObject g in viewableObjects)
-            {if (g.worldObjectType == WorldObjectType.car)
+            {if (g.typeName == "car")
                 {
                     clsCar c = (clsCar)g;
                     text.Add("--------------------");

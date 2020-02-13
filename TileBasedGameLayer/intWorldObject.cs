@@ -7,13 +7,15 @@ using Microsoft.Xna.Framework;
 
 namespace tileWorld
 {
-    public interface intTileObject
+    public interface intWorldObject
     {
+        string typeName { get; set; }
+        string textureName { get; set; }
+
+        Vector2 location { get; set; }
+        Vector2 direction { get; set; }
         Dictionary<Color, Color> colorReplacements { get; set; }
 
         void update(float currentTime);
-
-
-
     }
 }

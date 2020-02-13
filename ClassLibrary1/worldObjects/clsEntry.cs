@@ -16,15 +16,15 @@ namespace gameLogic
     {
         // object specific 
         public clsWorld worldToSpawnIn;
-        public WorldObjectType spawnType { get; set; }
+        public string spawnTypeName { get; set; }
         public int maxSpawnTime { get; set; }
         public float nextSpawnTime { get; set; }
 
-        public clsEntry(Vector2 location, Vector2 direction, clsWorld worldToSpawnIn, WorldObjectType spawnType, int maxSpawnTime) : base(location, direction, new Vector2(0,0))
+        public clsEntry(string textureName, Vector2 location, Vector2 direction, clsWorld worldToSpawnIn, string spawnTypeName, int maxSpawnTime) : base(textureName, location, direction, new Vector2(0,0))
         {
-            this.worldObjectType = WorldObjectType.entry;
+            base.typeName = "entry";
             base.collisionType = CollisionType.None;
-            this.spawnType = spawnType;
+            this.spawnTypeName = spawnTypeName;
             this.maxSpawnTime = maxSpawnTime;
             this.worldToSpawnIn = worldToSpawnIn;
 
@@ -39,18 +39,18 @@ namespace gameLogic
             {
                 nextSpawnTime = currentTime + worldToSpawnIn.random.Next(maxSpawnTime);
 
-                switch (this.spawnType)
+                switch (this.spawnTypeName)
                 {
-                    case WorldObjectType.car:
-                        clsExit exit = (clsExit)worldToSpawnIn.getRandomWorldObject(WorldObjectType.exit);
+                    case "car":
+                        clsExit exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
                         Vector2 spawnLocation = randomizeVector(worldToSpawnIn, this.location); // randomizes car location slightly
                         worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
                         break;
                 }
-                base.addForce(new Vector2(0,0));
+                base.addForce(new Vector2(0,0)); // not sure why we add no force
             }
 
-            // always apply phypics
+            // always apply physpics
             base.update(currentTime);
         }
 

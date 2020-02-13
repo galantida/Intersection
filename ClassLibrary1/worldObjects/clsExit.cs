@@ -14,13 +14,11 @@ namespace gameLogic
 {
     public class clsExit : clsWorldObject, intWorldObject
     {
-        public Vector2 direction { get; set; }
         
-        public clsExit(Vector2 location, Vector2 direction) : base(location, direction, new Vector2(0, 0))
+        public clsExit(string textureName, Vector2 location, Vector2 direction) : base(textureName, location, direction, new Vector2(0, 0))
         {
-            this.worldObjectType = WorldObjectType.exit;
+            base.typeName = "exit";
             base.collisionType = CollisionType.None;
-            this.direction = direction;
         }
 
 
@@ -31,19 +29,19 @@ namespace gameLogic
             {
                 this.lastUpdated = currentTime; // reset last updated
 
-                // maybe remove cars
+                // maybe remove cars. Cars know their exit so maybe not
                 // maybe calculate score
 
-                base.addForce(new Vector2(0,0));
+                base.addForce(new Vector2(0,0)); // not sure why we add no force
             }
 
-            // always apply phypics
+            // always apply physics
             base.update(currentTime);
         }
 
-        public void removeGameObject(clsWorld gameWorld, clsWorldObject gameObject)
+        public void removeGameObject(clsWorld world, clsWorldObject worldObject)
         {
-            gameWorld.remove((intWorldObject)gameObject);
+            world.remove((intWorldObject)worldObject);
         }
     }
 }

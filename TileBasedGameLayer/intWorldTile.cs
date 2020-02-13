@@ -7,13 +7,15 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public interface intWorldObject
+    public interface intWorldTile
     {
-        WorldObjectType worldObjectType { get; set; }
-        void update(float currentTime);
+        string typeName { get; set; }
+        string textureName { get; set; }
 
-        Vector2 location { get; set; }
-        Vector2 direction { get; set; }
+        List<Vector2> directions { get; set; }
+
         Dictionary<Color, Color> colorReplacements { get; set; }
+
+
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using gameLogic;
 using physicalWorld;
+using tileWorld;
 
 namespace Game1
 {
@@ -19,8 +20,6 @@ namespace Game1
         public float rotation = 0;
         public float scale = 1;
         public Vector2 origin = new Vector2(32,32);
-        
-
 
         public clsSprite(intWorldObject worldObject, Texture2D texture)
         {

@@ -33,10 +33,10 @@ namespace gameLogic
         private Stopwatch flasher;
 
 
-        public clsCar(Vector2 location, Vector2 direction, Vector2 velocity) : base(location, direction, velocity) 
+        public clsCar(string textureName, Vector2 location, Vector2 direction, Vector2 velocity) : base(textureName, location, direction, velocity) 
         {
             // general
-            base.worldObjectType = WorldObjectType.car;
+            base.typeName = "car";
 
             // newtonian properties
             base.mass = 10.0f; // weight (10 = 4000 lbs.)
@@ -58,7 +58,7 @@ namespace gameLogic
             flasher = new Stopwatch();
             flasher.Start();
         }
-
+        
 
         /**************************************** 
             Processing Functions

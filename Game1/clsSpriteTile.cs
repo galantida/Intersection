@@ -11,38 +11,40 @@ using gameLogic;
 
 namespace Game1
 {
-    public class clsStaticSprite
+    public class clsSpriteTile
     {
-        public clsTile square;
+        public clsWorldTile tile;
         public Texture2D texture;
-        public Vector2 location = new Vector2(0, 0); // screen location
-        public float rotation = 0;
-        public Vector2 origin = new Vector2(0, 0); // origin of rotation
+        public Vector2 location; // screen location
+        public float rotation; // texture rotation
+        public Vector2 origin; // origin of texture rotation
 
 
-        public clsStaticSprite(clsTile square, Dictionary<string, Texture2D>  textures)
+        public clsSpriteTile(clsWorldTile tile, Dictionary<string, Texture2D>  textures)
         {
-            this.square = square;
+            this.tile = tile;
 
+            location = new Vector2(0, 0);
             rotation = 0f;
+            origin = new Vector2(0, 0);
 
             // determine origin and rotation
-            if (square.directions.Count == 1)
+            if (tile.directions.Count == 1)
             {
                 // simple road
-                if (square.directions[0].X == 1)
+                if (tile.directions[0].X == 1)
                 {
                     // east
                     rotation = 3.14f;
                     origin = new Vector2(64, 64);
                 }
-                else if (square.directions[0].X == -1)
+                else if (tile.directions[0].X == -1)
                 {
                     // west
                     rotation = 0f;
                     origin = new Vector2(0, 0);
                 }
-                else if (square.directions[0].Y == 1)
+                else if (tile.directions[0].Y == 1)
                 {
                     // south
                     rotation = 4.71f;
@@ -57,21 +59,7 @@ namespace Game1
 
             }
 
-            // static section
-            if (square.directions.Count() == 0)
-            {
-                this.texture = textures["grass"];
-            }
-            else if (square.directions.Count() == 1)
-            {
-                // directional statics
-                this.texture = textures["road"];
-            }
-            else
-            {
-                // multidirectional statics
-                this.texture = textures["intersection"];
-            }
+            this.texture = textures[this.tile.textureName];
         }
 
         public void draw(clsDisplay display, SpriteBatch spriteBatch)

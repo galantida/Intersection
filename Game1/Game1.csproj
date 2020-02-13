@@ -46,7 +46,7 @@
     <Compile Include="clsWaypointLine.cs" />
     <Compile Include="clsWindow.cs" />
     <Compile Include="clsSprite.cs" />
-    <Compile Include="clsStatic.cs" />
+    <Compile Include="clsSpriteTile.cs" />
     <Compile Include="clsGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

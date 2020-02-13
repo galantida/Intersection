@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using gameLogic;
+using tileWorld;
 
 namespace Game1
 {
@@ -17,7 +18,7 @@ namespace Game1
 
         // camera views
         List<clsSprite> sprites = new List<clsSprite>();
-        clsStaticSprite[,] staticSprites = new clsStaticSprite[0,0];
+        clsSpriteTile[,] spriteTiles = new clsSpriteTile[0,0];
 
         // content
         public Dictionary<string, Texture2D> textures;
@@ -70,9 +71,9 @@ namespace Game1
 
         private void drawStaticSprites(SpriteBatch spriteBatch)
         {
-            foreach (clsStaticSprite staticSprite in staticSprites)
+            foreach (clsSpriteTile spriteTile in spriteTiles)
             {
-                staticSprite.draw(this, spriteBatch);
+                spriteTile.draw(this, spriteBatch);
             }
         }
 
@@ -98,7 +99,7 @@ namespace Game1
 
         public void spriteManagement()
         {
-            // get all the game pieces in the display area
+            // get all the world objects in the display area
             List<intWorldObject> displayedWorldObjects = new List<intWorldObject>();
             foreach (intWorldObject gp in camera.viewableObjects)
             {
@@ -135,27 +136,8 @@ namespace Game1
             clsSprite newSprite;
             foreach (intWorldObject worldObject in displayedWorldObjects)
             {
-                switch (worldObject.worldObjectType)
-                {
-                    case WorldObjectType.car:
-                        {
-                            newSprite = new clsSprite(worldObject, textures["car"]);
-                            sprites.Add(newSprite);
-                            break;
-                        }
-                    case (WorldObjectType.entry):
-                        {
-                            newSprite = new clsSprite(worldObject, textures["entry"]);
-                            sprites.Add(newSprite);
-                            break;
-                        }
-                    case (WorldObjectType.exit):
-                        {
-                            newSprite = new clsSprite(worldObject, textures["exit"]);
-                            sprites.Add(newSprite);
-                            break;
-                        }
-                }
+                newSprite = new clsSprite(worldObject, textures[worldObject.textureName]);
+                sprites.Add(newSprite);
             }
         }
 
@@ -165,13 +147,13 @@ namespace Game1
             Vector2 displayLocation = new Vector2(this.displayArea.Left, this.displayArea.Top);
             float spacing = 64.0f * this.scale;
 
-            staticSprites = new clsStaticSprite[camera.viewableTiles.GetLength(0), camera.viewableTiles.GetLength(1)];
+            spriteTiles = new clsSpriteTile[camera.viewableTiles.GetLength(0), camera.viewableTiles.GetLength(1)];
             for (int x=0; x < camera.viewableTiles.GetLength(0); x++)
             {
                 for (int y = 0; y < camera.viewableTiles.GetLength(0); y++)
                 {
-                    staticSprites[x, y] = new clsStaticSprite(camera.viewableTiles[x,y], textures);
-                    staticSprites[x, y].location = displayLocation + new Vector2(x * spacing, y * spacing);
+                    spriteTiles[x, y] = new clsSpriteTile(camera.viewableTiles[x,y], textures);
+                    spriteTiles[x, y].location = displayLocation + new Vector2(x * spacing, y * spacing);
                 }
             }
         }

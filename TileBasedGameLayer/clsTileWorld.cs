@@ -15,7 +15,7 @@ namespace tileWorld
 
     public class clsTileWorld 
     {
-        public clsTile[,] tiles;
+        public clsWorldTile[,] tiles;
         public float tileSize { get; set; }
 
         //public List<intTileObject> tileWorldObjects;
@@ -55,12 +55,12 @@ namespace tileWorld
         /**************************************************
             square access shortcut
         **************************************************/
-        public clsTile getSquareFromWorldLocation(Vector2 worldLocation)
+        public clsWorldTile getSquareFromWorldLocation(Vector2 worldLocation)
         {
             return getSquareFromSquareCoordinate(this.worldLocationToSquareCoordinate(worldLocation));
         }
 
-        public clsTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
+        public clsWorldTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
         {
             return tiles[(int)squareCoordinate.X, (int)squareCoordinate.Y];
         }
@@ -83,7 +83,7 @@ namespace tileWorld
 
 
         /*****************************************
-         *              Path Finding
+         *              Path Finding (Tiles)
          *****************************************/
         public List<Vector2> findShortestPath(Vector2 fromWaypoint, Vector2 toWaypoint)
         {
@@ -117,7 +117,7 @@ namespace tileWorld
 
             // set the current square to the starting location
             Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count()-1];
-            clsTile currentSquare = this.getSquareFromSquareCoordinate(currentWaypoint);
+            clsWorldTile currentSquare = this.getSquareFromSquareCoordinate(currentWaypoint);
 
             // get all posible directions off of the current square
             foreach (Vector2 currentDirection in currentSquare.directions)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using tileWorld;
 
 namespace tileWorld
 {
@@ -12,21 +13,42 @@ namespace tileWorld
     // speed
     // stop , stop temp, yeild, lane chnage, no lane change
 
-    public class clsTile
+    public class clsTile_old
     {
-        public List<Vector2> directions;
+        public List<Vector2> directions { get; set; }
 
-        public clsTile()
+        public clsTile_old()
         {
             directions = new List<Vector2>();
         }
-        public clsTile(bool east, bool west, bool north, bool south)
+        public clsTile_old(bool east, bool west, bool north, bool south)
         {
             directions = new List<Vector2>();
             if (east) directions.Add(new Vector2(1, 0));
             if (west) directions.Add(new Vector2(-1, 0));
             if (north) directions.Add(new Vector2(0, -1));
             if (south) directions.Add(new Vector2(0, 1));
+        }
+
+        public string textureName
+        {
+            get
+            {
+                if (directions.Count() == 0)
+                {
+                    return "grass";
+                }
+                else if (directions.Count() == 1)
+                {
+                    // directional road
+                    return "road";
+                }
+                else
+                {
+                    // multidirectional road
+                    return "intersection";
+                }
+            }
         }
     }
 }
