@@ -13,14 +13,14 @@ namespace Game1
 {
     public class clsSpriteTile
     {
-        public clsWorldTile tile;
+        public clsTile tile;
         public Texture2D texture;
         public Vector2 location; // screen location
         public float rotation; // texture rotation
         public Vector2 origin; // origin of texture rotation
 
 
-        public clsSpriteTile(clsWorldTile tile, Dictionary<string, Texture2D>  textures)
+        public clsSpriteTile(clsTile tile, Dictionary<string, Texture2D>  textures)
         {
             this.tile = tile;
 

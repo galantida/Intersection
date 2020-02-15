@@ -13,7 +13,7 @@ namespace Game1
 {
     public class clsSprite
     {
-        public intWorldObject worldObject;
+        public intObject worldObject;
         public Texture2D texture;
         public Rectangle sourceTileArea;
         public Vector2 location = new Vector2(0, 0);
@@ -21,7 +21,7 @@ namespace Game1
         public float scale = 1;
         public Vector2 origin = new Vector2(32,32);
 
-        public clsSprite(intWorldObject worldObject, Texture2D texture)
+        public clsSprite(intObject worldObject, Texture2D texture)
         {
             // passed
             this.worldObject = worldObject;

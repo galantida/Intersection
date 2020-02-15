@@ -22,7 +22,7 @@ namespace Game1
         public Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
         public Dictionary<string, SpriteFont> fonts = new Dictionary<string, SpriteFont>();
 
-        public clsWindow(GraphicsDeviceManager graphics, Vector2 size, int tileSize, clsWorld world)
+        public clsWindow(GraphicsDeviceManager graphics, Vector2 size, int tileSize, clsRoadWorld world)
         {
             this.graphics = graphics;
             this.size = size;

@@ -13,16 +13,56 @@ namespace tileWorld
     public enum CardinalDirection { East, Southeast, South, Southhwest, West, Northwest, North, Northeast }
     public enum CollisionType { None, Spherical }
 
-    public class clsTileWorld 
+    public class clsWorld 
     {
-        public clsWorldTile[,] tiles;
+        public Random random;
+        protected Stopwatch _currentTime = new Stopwatch();
+
+        public clsTile[,] tiles;
+        public List<intObject> worldObjects;
+        public List<intActor> actors;
+
         public float tileSize { get; set; }
 
-        //public List<intTileObject> tileWorldObjects;
-
-        public clsTileWorld(float tileSize)
+        public clsWorld(float tileSize)
         {
+            random = new Random(); // randomize seed the world
+            _currentTime.Start(); // start processing clock
+
             this.tileSize = tileSize;
+        }
+
+        /*********************************************************************************
+         * Tile Functions
+         *********************************************************************************/
+        public void addTile(string typeName, string textureName, long tilex, long tiley, bool east, bool west, bool north, bool south)
+        {
+            tiles[tilex, tiley] = new clsTile(typeName, textureName, east, west, north, south);
+        }
+
+        /*********************************************************************************
+         * Object Functions
+         *********************************************************************************/
+
+        public void remove(intObject gameObject)
+        {
+            worldObjects.Remove(gameObject);
+        }
+
+        public List<intObject> getWorldObjects(string typeName)
+        {
+            List<intObject> filteredWorldObjects = new List<intObject>();
+            foreach (intObject worldObject in this.worldObjects)
+            {
+                if (worldObject.typeName == typeName) filteredWorldObjects.Add(worldObject);
+            }
+            return filteredWorldObjects;
+        }
+
+        public intObject getRandomWorldObject(string typeName)
+        {
+            List<intObject> filteredWorldObjects = getWorldObjects(typeName);
+            return filteredWorldObjects[this.random.Next(filteredWorldObjects.Count())];
         }
 
         /*
@@ -55,12 +95,12 @@ namespace tileWorld
         /**************************************************
             square access shortcut
         **************************************************/
-        public clsWorldTile getSquareFromWorldLocation(Vector2 worldLocation)
+        public clsTile getSquareFromWorldLocation(Vector2 worldLocation)
         {
             return getSquareFromSquareCoordinate(this.worldLocationToSquareCoordinate(worldLocation));
         }
 
-        public clsWorldTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
+        public clsTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
         {
             return tiles[(int)squareCoordinate.X, (int)squareCoordinate.Y];
         }
@@ -117,7 +157,7 @@ namespace tileWorld
 
             // set the current square to the starting location
             Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count()-1];
-            clsWorldTile currentSquare = this.getSquareFromSquareCoordinate(currentWaypoint);
+            clsTile currentSquare = this.getSquareFromSquareCoordinate(currentWaypoint);
 
             // get all posible directions off of the current square
             foreach (Vector2 currentDirection in currentSquare.directions)
@@ -184,6 +224,39 @@ namespace tileWorld
                 if ((existingWaypoint.X == waypoint.X) && (existingWaypoint.Y == waypoint.Y)) return true;
             }
             return false;
+        }
+
+
+        /*****************************************
+         *              Collision Detections
+         *****************************************/
+
+        public bool collision(clsObject firstObject, clsObject secondObject = null)
+        {
+            // detect collision between two specific objects
+            if (secondObject != null)
+            {
+                Vector2 distance = firstObject.location - secondObject.location;
+                if (distance.Length() < 50) return true;
+                else return false;
+            }
+            else
+            {
+                // detect collision with anyting
+                foreach (clsObject worldObject in this.worldObjects)
+                {
+
+                    if (worldObject.collisionType != CollisionType.None)
+                    {
+                        if (worldObject != firstObject)
+                        {
+                            Vector2 distance = firstObject.location - worldObject.location;
+                            if (distance.Length() < 50) return true;
+                        }
+                    }
+                }
+                return false;
+            }
         }
     }
     

@@ -13,8 +13,11 @@ namespace gameLogic
 {
     public enum ShifterPosition { reverse, neutral, drive }
 
-    public class clsCar : clsWorldObject , intWorldObject
+    public class clsCar : clsObject , intObject
     {
+        // car visuals
+        public Color color;
+
         // car specifications
         private float acceleration; // force to add in the direction of the transmissions
         private float breaking; // creates additional kinetic friction coefficient
@@ -124,41 +127,22 @@ namespace gameLogic
                 /**************************************** 
                    model display
                ****************************************/
-                base.colorReplacements = new Dictionary<Color, Color>();
-                if (this.breakLights)
-                {
-                    Color source = new Color(128, 0, 0);
-                    Color destination = new Color(255, 0, 0);
-                    colorReplacements.Add(source, destination);
-                }
+                if (!this.breakLights) base.colorReplace(new Color(128, 0, 0), null);
+                else base.colorReplace(new Color(128, 0, 0), new Color(255, 0, 0)); 
 
-                if (this.reverseLights)
-                {
-                    Color source = new Color(128, 128, 129);
-                    Color destination = new Color(255, 255, 255);
-                    colorReplacements.Add(source, destination);
-                }
+                if (!this.reverseLights) base.colorReplace(new Color(128, 128, 129), null);
+                else base.colorReplace(new Color(128, 128, 129), new Color(255, 255, 255));
 
-                if ((this.leftTurnSignal) || (this.hazzards))
-                {
-                    Color source = new Color(215, 90, 0);
-                    Color destination = new Color(255, 192, 0);
-                    colorReplacements.Add(source, destination);
-                }
+                if ((this.leftTurnSignal) || (this.hazzards)) base.colorReplace(new Color(215, 90, 0), null);
+                else base.colorReplace(new Color(215, 90, 0), new Color(255, 192, 0));
 
-                if ((this.rightTurnSignal) || (this.hazzards))
-                {
-                    Color source = new Color(215, 90, 1);
-                    Color destination = new Color(255, 192, 0);
-                    colorReplacements.Add(source, destination);
-                }
+                if ((this.rightTurnSignal) || (this.hazzards)) base.colorReplace(new Color(215, 90, 1), null);
+                else base.colorReplace(new Color(215, 90, 1), new Color(255, 192, 0));
 
-                if (this.headLights)
-                {
-                    Color source = new Color(128, 128, 128);
-                    Color destination = new Color(255, 255, 255);
-                    colorReplacements.Add(source, destination);
-                }
+                if (this.headLights) base.colorReplace(new Color(128, 128, 128), null);
+                else base.colorReplace(new Color(128, 128, 128), new Color(255, 255, 255));
+
+                base.colorReplace(new Color(63, 72, 204), this.color);
             }
 
             // always apply phypics

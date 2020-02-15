@@ -14,12 +14,12 @@ namespace Game1
     {
         // global graphic opbjects
         clsWindow window;
-        public clsWorld world;
+        public clsRoadWorld world;
 
         public clsGame()
         {
             // 64 pixels is 15 feet
-            world = new clsWorld(14, 64);
+            world = new clsRoadWorld(14, 64);
             window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(1024, 1024), 64, world);
         }
 

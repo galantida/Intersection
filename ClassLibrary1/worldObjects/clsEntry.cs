@@ -12,15 +12,15 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsEntry : clsWorldObject, intWorldObject
+    public class clsEntry : clsObject, intObject
     {
         // object specific 
-        public clsWorld worldToSpawnIn;
+        public clsRoadWorld worldToSpawnIn;
         public string spawnTypeName { get; set; }
         public int maxSpawnTime { get; set; }
         public float nextSpawnTime { get; set; }
 
-        public clsEntry(string textureName, Vector2 location, Vector2 direction, clsWorld worldToSpawnIn, string spawnTypeName, int maxSpawnTime) : base(textureName, location, direction, new Vector2(0,0))
+        public clsEntry(string textureName, Vector2 location, Vector2 direction, clsRoadWorld worldToSpawnIn, string spawnTypeName, int maxSpawnTime) : base(textureName, location, direction, new Vector2(0,0))
         {
             base.typeName = "entry";
             base.collisionType = CollisionType.None;
@@ -44,7 +44,8 @@ namespace gameLogic
                     case "car":
                         clsExit exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
                         Vector2 spawnLocation = randomizeVector(worldToSpawnIn, this.location); // randomizes car location slightly
-                        worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
+                        clsDriverAI driver = worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
+                        driver.car.color = new Color(worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255));
                         break;
                 }
                 base.addForce(new Vector2(0,0)); // not sure why we add no force
@@ -54,7 +55,7 @@ namespace gameLogic
             base.update(currentTime);
         }
 
-        private Vector2 randomizeVector(clsWorld world, Vector2 location)
+        private Vector2 randomizeVector(clsRoadWorld world, Vector2 location)
         {
             int variant = 16;
             float modX = world.random.Next(variant * 2) -variant;

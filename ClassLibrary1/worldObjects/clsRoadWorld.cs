@@ -12,22 +12,13 @@ namespace gameLogic
 {
     public enum CardinalDirection { East, Southeast, South, Southhwest, West, Northwest, North, Northeast }
 
-    public class clsWorld : clsTileWorld
+    public class clsRoadWorld : clsWorld
     {
-        public List<intWorldObject> worldObjects;
-        private List<intActor> actors;
-        private Stopwatch _currentTime = new Stopwatch();
-        public Random random;
-
-        public clsWorld(long tilesWide, float tileSize): base(tileSize)
+        public clsRoadWorld(long tilesWide, float tileSize): base(tileSize)
         {
-            random = new Random(); // randomize seed the world
-            _currentTime.Start(); // start processing clock
-
-            loadActors();
             loadTiles(tilesWide);
             loadObjects();
-            
+            loadActors();
         }
 
         public float currentTime
@@ -43,7 +34,7 @@ namespace gameLogic
          *****************************************/
         public void loadTiles(long tilesWide)
         {
-            tiles = new clsWorldTile[tilesWide, tilesWide];
+            tiles = new clsTile[tilesWide, tilesWide];
             long x, y;
 
             // grass
@@ -51,7 +42,8 @@ namespace gameLogic
             {
                 for (x = 0; x < tilesWide; x++)
                 {
-                    tiles[x, y] = new clsWorldTile(false, false, false, false);
+                    this.addGrass(x, y);
+                    //tiles[x, y] = new clsTile("grass", false, false, false, false);
                 }
             }
 
@@ -59,28 +51,29 @@ namespace gameLogic
             y = tilesWide / 2;
             for (x = 0; x < tilesWide; x++)
             {
-                tiles[x, y - 1] = new clsWorldTile(false, true, false, false);
-                tiles[x, y] = new clsWorldTile(true, false, false, false);
+                addEastboundLane(x, y);
+                addWestboundLane(x, y - 1);
             }
 
             // north south road
             x = (tilesWide / 2);
             for (y = 0; y < tilesWide; y++)
             {
-                tiles[x, y] = new clsWorldTile(false, false, true, false);
-                tiles[x - 1, y] = new clsWorldTile(false, false, false, true);
+                addNorthboundLane(x, y);
+                addSouthboundLane(x-1, y);
             }
 
             // intersection
-            tiles[(tilesWide / 2) - 1, (tilesWide / 2)] = new clsWorldTile(true, false, false, true); // southwest
-            tiles[(tilesWide / 2), (tilesWide / 2) - 1] = new clsWorldTile(false, true, true, false); // northeast
-            tiles[(tilesWide / 2) - 1, (tilesWide / 2) - 1] = new clsWorldTile(false, true, false, true); // northwest
-            tiles[(tilesWide / 2), (tilesWide / 2)] = new clsWorldTile(true, false, true, false); // southeast
+            long center = tilesWide / 2;
+            addIntersection(center - 1, center, true, false, false, true);
+            addIntersection(center, center-1, false, true, true, false);
+            addIntersection(center - 1, center - 1, false, true, false, true);
+            addIntersection(center, center, true, false, true, false);
         }
 
         public void loadObjects()
         {
-            worldObjects = new List<intWorldObject>();
+            worldObjects = new List<intObject>();
 
             // create entry points
             createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 10000);
@@ -93,14 +86,14 @@ namespace gameLogic
             createExit(new Vector2(6, 13));
             createExit(new Vector2(13, 7));
             createExit(new Vector2(0, 6));
-
-            // spawn a human car
-            actors.Add(spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
         }
 
         public void loadActors()
         {
             actors = new List<intActor>();
+
+            // spawn a human car
+            actors.Add(spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
         }
 
         /*****************************************
@@ -120,37 +113,71 @@ namespace gameLogic
                 // update all objects
                 worldObjects[t].update(currentTime);
             }
+
+            // tiles are activated and read they are not processed
+
         }
 
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-        public void remove(intWorldObject gameObject)
+
+        // tiles[(tilesWide / 2) - 1, (tilesWide / 2)] = new clsTile("intersection", true, false, false, true); // southwest
+
+        public void addGrass(long tilex, long tiley)
         {
-            worldObjects.Remove(gameObject);
+            base.addTile("grass", "grass", tilex, tiley, false, false, false, false);
         }
 
+        public void addEastboundLane(long tilex, long tiley)
+        {
+            base.addTile("road", "road", tilex, tiley, true, false, false, false);
+        }
+        public void addWestboundLane(long tilex, long tiley)
+        {
+            base.addTile("road", "road", tilex, tiley, false, true, false, false);
+        }
+
+        public void addNorthboundLane(long tilex, long tiley)
+        {
+            base.addTile("road", "road", tilex, tiley, false, false, true, false);
+        }
+        public void addSouthboundLane(long tilex, long tiley)
+        {
+            base.addTile("road", "road", tilex, tiley, false, false, false, true);
+        }
+        public void addIntersection(long tilex, long tiley, bool east, bool west, bool north, bool south)
+        {
+            base.addTile("intersection", "intersection", tilex, tiley, east, west, north, south);
+        }
+
+        /*****************************************
+                Instance Objects in the world
+         *****************************************/
         public clsEntry createEntry(Vector2 squareCoordinate, Vector2 direction, string typeName, int maxSpawnTime)
         {
             clsEntry entry = new clsEntry("entry", squareCoordinateToWorldLocation(squareCoordinate), direction, this, typeName, maxSpawnTime);
-            worldObjects.Add((intWorldObject)entry);
+            worldObjects.Add((intObject)entry);
             return entry;
         }
 
         public clsExit createExit(Vector2 squareCoordinate)
         {
             clsExit exit = new clsExit("exit", squareCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
-            worldObjects.Add((intWorldObject)exit);
+            worldObjects.Add((intObject)exit);
             return exit;
         }
 
         public clsCar createCar(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
             clsCar car = new clsCar("car", worldLocation, direction, velocity);
-            worldObjects.Add((intWorldObject)car);
+            worldObjects.Add((intObject)car);
             return car;
         }
 
+        /*****************************************
+                Instance Game Intelegence hooks
+         *****************************************/
         public clsDriverHuman createDriverHuman(clsCar car)
         {
             clsDriverHuman human = new clsDriverHuman(car); // assign human to it
@@ -165,6 +192,10 @@ namespace gameLogic
             return ai;
         }
 
+
+        /*****************************************
+                Instance Objects in the world
+         *****************************************/
         public clsDriverHuman spawnCarHuman(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
@@ -177,50 +208,6 @@ namespace gameLogic
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
             clsDriverAI AI = createDriverAI(car, destination); // create AI for the car
             return AI;
-        }
-
-        public List<intWorldObject> getWorldObjects(string typeName)
-        {
-            List<intWorldObject> filteredWorldObjects = new List<intWorldObject>();
-            foreach (intWorldObject worldObject in this.worldObjects)
-            {
-                if (worldObject.typeName == typeName) filteredWorldObjects.Add(worldObject);
-            }
-            return filteredWorldObjects;
-        }
-
-        public intWorldObject getRandomWorldObject(string typeName)
-        {
-            List<intWorldObject> filteredWorldObjects = getWorldObjects(typeName);
-            return filteredWorldObjects[this.random.Next(filteredWorldObjects.Count())];
-        }
-
-        public bool collision(clsWorldObject firstObject, clsWorldObject secondObject = null)
-        {
-            // detect collision between two specific objects
-            if (secondObject != null)
-            {
-                Vector2 distance = firstObject.location - secondObject.location;
-                if (distance.Length() < 50) return true;
-                else return false;
-            }
-            else
-            {
-                // detect collision with anyting
-                foreach (clsWorldObject worldObject in this.worldObjects)
-                {
-
-                    if (worldObject.collisionType != CollisionType.None)
-                    {
-                        if (worldObject != firstObject)
-                        {
-                            Vector2 distance = firstObject.location - worldObject.location;
-                            if (distance.Length() < 50) return true;
-                        }
-                    }
-                }
-                return false;
-            }
         }
     }
     

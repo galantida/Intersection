@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
 
-namespace gameLogic
+namespace tileWorld
 {
-    public interface intActor
+    public class clsActor
     {
-        void update(float currentTime);
+        public float lastUpdated { get; set; }
+
+
     }
 }

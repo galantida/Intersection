@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 
-namespace gameLogic
+namespace tileWorld
 {
     // route is a collection of square coordinates between two squares
     public class clsRoute

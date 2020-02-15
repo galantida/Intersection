@@ -11,11 +11,10 @@ namespace gameLogic
 {
 
     // ussed to convert humnan input into car input
-    public class clsDriverHuman : intActor
+    public class clsDriverHuman : clsActor, intActor
     {
         // inputs and outputs
         private clsCar car;
-        public float lastUpdated { get; set; }
 
         KeyboardState lastState;
 

@@ -100,8 +100,8 @@ namespace Game1
         public void spriteManagement()
         {
             // get all the world objects in the display area
-            List<intWorldObject> displayedWorldObjects = new List<intWorldObject>();
-            foreach (intWorldObject gp in camera.viewableObjects)
+            List<intObject> displayedWorldObjects = new List<intObject>();
+            foreach (intObject gp in camera.viewableObjects)
             {
                 // could be logic here to determine what is in the displayable area
                 displayedWorldObjects.Add(gp);
@@ -111,7 +111,7 @@ namespace Game1
             for (int s = 0; s < sprites.Count; s++)
             {
                 bool found = false;
-                foreach (intWorldObject worldObject in camera.viewableObjects)
+                foreach (intObject worldObject in camera.viewableObjects)
                 {
                     if (sprites[s].worldObject == worldObject)
                     {
@@ -134,7 +134,7 @@ namespace Game1
 
             // the remaining game pieces are not yet paired and need to be
             clsSprite newSprite;
-            foreach (intWorldObject worldObject in displayedWorldObjects)
+            foreach (intObject worldObject in displayedWorldObjects)
             {
                 newSprite = new clsSprite(worldObject, textures[worldObject.textureName]);
                 sprites.Add(newSprite);

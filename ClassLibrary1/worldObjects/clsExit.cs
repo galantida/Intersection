@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsExit : clsWorldObject, intWorldObject
+    public class clsExit : clsObject, intObject
     {
         
         public clsExit(string textureName, Vector2 location, Vector2 direction) : base(textureName, location, direction, new Vector2(0, 0))
@@ -39,9 +39,9 @@ namespace gameLogic
             base.update(currentTime);
         }
 
-        public void removeGameObject(clsWorld world, clsWorldObject worldObject)
+        public void removeGameObject(clsRoadWorld world, clsObject worldObject)
         {
-            world.remove((intWorldObject)worldObject);
+            world.remove((intObject)worldObject);
         }
     }
 }

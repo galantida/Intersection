@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace tileWorld
 {
-    public interface intWorldObject
+    public interface intObject
     {
         string typeName { get; set; }
         string textureName { get; set; }

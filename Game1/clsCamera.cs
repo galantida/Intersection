@@ -13,14 +13,14 @@ namespace Game1
 {
     public class clsCamera
     {
-        private clsWorld world;
+        private clsRoadWorld world;
         public Rectangle visibleArea;
 
         public Vector2 topLeft; // world corrdinates of top left corner of visible map.
 
 
-        public List<intWorldObject> viewableObjects;
-        public clsWorldTile[,] viewableTiles;
+        public List<intObject> viewableObjects;
+        public clsTile[,] viewableTiles;
 
 
         public List<string> text;
@@ -28,7 +28,7 @@ namespace Game1
         public List<clsWaypointLine> lines = new List<clsWaypointLine>();
 
 
-        public clsCamera(clsWorld world, Rectangle visibleArea)
+        public clsCamera(clsRoadWorld world, Rectangle visibleArea)
         {
             this.world = world;
             this.visibleArea = visibleArea;
@@ -44,7 +44,7 @@ namespace Game1
 
             // overlay
             text = new List<string>();
-            foreach (intWorldObject g in viewableObjects)
+            foreach (intObject g in viewableObjects)
             {if (g.typeName == "car")
                 {
                     clsCar c = (clsCar)g;

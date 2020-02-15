@@ -12,24 +12,24 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public class clsDriverAI : intActor
+    public class clsDriverAI : clsActor, intActor
     {
         // AI instructions
-        private clsCar car { get; set; }
+        public clsCar car { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
         public float speedLimit { get; set; }
 
-        public clsWorld world;
+        public clsRoadWorld world;
 
         // driver spped differences
         float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
         float speedComplianceVariationPercentage; // faster or slower than normal. (e.g. 10% slower than normal)
 
-        public float lastUpdated { get; set; }
+        
 
 
-        public clsDriverAI(clsWorld world, clsCar car, Vector2 destination)
+        public clsDriverAI(clsRoadWorld world, clsCar car, Vector2 destination)
         {
             // inputs
             this.car = car;
@@ -129,7 +129,7 @@ namespace gameLogic
                     catch(Exception ex)
                     {
                         // must be at exit remove car
-                        world.remove((intWorldObject)car);
+                        world.remove((intObject)car);
                     }
                 }
                 else if (distance > 0)
