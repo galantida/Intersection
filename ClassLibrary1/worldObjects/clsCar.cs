@@ -51,7 +51,7 @@ namespace gameLogic
 
             // Car properties
             this.acceleration = 0.02f; // force to add in the direction of the transmissions
-            this.breaking = 0.05f; // creates additional kinetic friction coefficient
+            this.breaking = 0.001f; // creates additional kinetic friction coefficient
             this.handling = 1.0f; // im pact of steering
 
             // mechanical status

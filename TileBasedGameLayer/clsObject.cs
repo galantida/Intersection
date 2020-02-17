@@ -9,7 +9,7 @@ using physicalWorld;
 
 namespace tileWorld
 {
-    //public enum WorldObjectType { entry, exit, car };
+    public enum CollisionType { None, Spherical }
 
     public class clsObject : clsNewtonObject
     {
@@ -21,7 +21,9 @@ namespace tileWorld
 
         public CollisionType collisionType { get; set; }
 
-        public Dictionary<Color, Color> colorReplacements { get; set; }
+        private Dictionary<Color, Color> _colorReplacements { get; set; }
+
+        public bool colorsUpdated { get; set; }
 
         protected float lastUpdated { get; set; }
 
@@ -29,20 +31,40 @@ namespace tileWorld
         {
             this.textureName = textureName;
             this.direction = direction;
-            colorReplacements = new Dictionary<Color, Color>();
+            _colorReplacements = new Dictionary<Color, Color>();
+            this.colorsUpdated = false;
         }
 
         public void colorReplace(Color originalColor, Color? newColor = null)
         {
-            if (colorReplacements.TryGetValue(originalColor, out Color currentColor)) // Returns true.
+            this.colorsUpdated = true;
+            if (_colorReplacements.TryGetValue(originalColor, out Color currentColor)) // Returns true.
             {
-                if (newColor == null) colorReplacements.Remove(originalColor);
+                if (newColor == null)
+                {
+                    // remove existing replacement
+                    _colorReplacements.Remove(originalColor);
+                }
                 else
                 {
+                    // update exsiting replacement
                     currentColor = (Color)newColor;
                 }
             }
-            else if (newColor != null) colorReplacements.Add(originalColor, (Color)newColor);
+            else
+            {
+                // add new replacement
+                if (newColor != null) _colorReplacements.Add(originalColor, (Color)newColor);
+            }
+        }
+
+        public Dictionary<Color, Color> colorReplacements
+        {
+            get
+            {
+                this.colorsUpdated = false;
+                return _colorReplacements;
+            }
         }
     }
 }

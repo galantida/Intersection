@@ -48,7 +48,8 @@ namespace gameLogic
                         driver.car.color = new Color(worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255));
                         break;
                 }
-                base.addForce(new Vector2(0,0)); // not sure why we add no force
+                base.addForce(new Vector2(0, 0)); // not sure why we add no force
+
             }
 
             // always apply physpics

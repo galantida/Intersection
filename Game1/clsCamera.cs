@@ -20,7 +20,7 @@ namespace Game1
 
 
         public List<intObject> viewableObjects;
-        public clsTile[,] viewableTiles;
+        public intTile[,] viewableTiles;
 
 
         public List<string> text;

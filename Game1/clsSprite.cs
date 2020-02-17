@@ -14,7 +14,8 @@ namespace Game1
     public class clsSprite
     {
         public intObject worldObject;
-        public Texture2D texture;
+        public Texture2D baseTexture;
+        public Texture2D spriteTexture;
         public Rectangle sourceTileArea;
         public Vector2 location = new Vector2(0, 0);
         public float rotation = 0;
@@ -25,10 +26,11 @@ namespace Game1
         {
             // passed
             this.worldObject = worldObject;
-            this.texture = texture;
+            this.baseTexture = texture;
+            this.spriteTexture = new Texture2D(this.baseTexture.GraphicsDevice, this.baseTexture.Width, this.baseTexture.Height);
 
             // calculated
-            this.sourceTileArea = new Rectangle(0, 0, this.texture.Width, this.texture.Height);
+            this.sourceTileArea = new Rectangle(0, 0, this.baseTexture.Width, this.baseTexture.Height);
         }
 
         public void draw(clsDisplay display, SpriteBatch spriteBatch)
@@ -40,12 +42,25 @@ namespace Game1
             rotation = clsGameMath.toRotation(worldObject.direction);
             float scale = display.scale * this.scale;
 
-            // color replacements
-            Color[] data = new Color[texture.Width * texture.Height];
-            texture.GetData(data);
+            // update custom colors
+            if (worldObject.colorsUpdated) updateSpriteTexture();
+
+
+            // draw
+            spriteBatch.Draw(this.spriteTexture, this.location, new Rectangle(0 , 0, this.spriteTexture.Width, this.spriteTexture.Height), Color.White, this.rotation, this.origin, scale, SpriteEffects.None, 1);
+        }
+
+        public void updateSpriteTexture()
+        {
+            // get texture as a strip of color values
+            Color[] data = new Color[baseTexture.Width * baseTexture.Height];
+            baseTexture.GetData(data);
             for (int i = 0; i < data.Length; i++)
             {
-                foreach (KeyValuePair<Color, Color> kvp in worldObject.colorReplacements) {
+                // loop over color replacements
+                foreach (KeyValuePair<Color, Color> kvp in worldObject.colorReplacements)
+                {
+                    // review each pixel and replace based on color replacements
                     Color source = new Color(data[i].R, data[i].G, data[i].B);
                     if (source == kvp.Key)
                     {
@@ -55,12 +70,12 @@ namespace Game1
             }
 
             // apply colors to new texture
-            Texture2D updatedTexture = new Texture2D(this.texture.GraphicsDevice, this.texture.Width, this.texture.Height);
-            updatedTexture.SetData<Color>(data);
+            this.spriteTexture.SetData<Color>(data);
+        }
 
-
-            // draw
-            spriteBatch.Draw(updatedTexture, this.location, new Rectangle(0 , 0, this.texture.Width, this.texture.Height), Color.White, this.rotation, this.origin, scale, SpriteEffects.None, 1);
+        public void dispose()
+        {
+            this.spriteTexture.Dispose();
         }
     }
 }

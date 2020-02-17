@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace gameLogic
+namespace tileWorld
 {
-    public interface intWorldTile
+    public interface intTile
     {
         string typeName { get; set; }
         string textureName { get; set; }
-
-        List<Vector2> directions { get; set; }
+        float rotation { get; set; }
+        bool passable { get; set; }
+        float textureRotation { get; }
 
         Dictionary<Color, Color> colorReplacements { get; set; }
-
-
     }
 }

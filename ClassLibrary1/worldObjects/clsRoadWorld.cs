@@ -34,7 +34,7 @@ namespace gameLogic
          *****************************************/
         public void loadTiles(long tilesWide)
         {
-            tiles = new clsTile[tilesWide, tilesWide];
+            tiles = new intTile[tilesWide, tilesWide];
             long x, y;
 
             // grass
@@ -51,16 +51,16 @@ namespace gameLogic
             y = tilesWide / 2;
             for (x = 0; x < tilesWide; x++)
             {
-                addEastboundLane(x, y);
-                addWestboundLane(x, y - 1);
+                addRoad(x, y, CardinalDirection.East);
+                addRoad(x, y - 1, CardinalDirection.West);
             }
 
             // north south road
             x = (tilesWide / 2);
             for (y = 0; y < tilesWide; y++)
             {
-                addNorthboundLane(x, y);
-                addSouthboundLane(x-1, y);
+                addRoad(x, y, CardinalDirection.North);
+                addRoad(x-1, y, CardinalDirection.South);
             }
 
             // intersection
@@ -126,29 +126,45 @@ namespace gameLogic
 
         public void addGrass(long tilex, long tiley)
         {
-            base.addTile("grass", "grass", tilex, tiley, false, false, false, false);
+            clsGrass grass = new clsGrass();
+            base.addTile(grass, tilex, tiley);
         }
 
-        public void addEastboundLane(long tilex, long tiley)
+        public void addRoad(long tilex, long tiley, CardinalDirection direction)
         {
-            base.addTile("road", "road", tilex, tiley, true, false, false, false);
-        }
-        public void addWestboundLane(long tilex, long tiley)
-        {
-            base.addTile("road", "road", tilex, tiley, false, true, false, false);
+            switch (direction)
+            {
+                case CardinalDirection.East:
+                    {
+                        clsLane road = new clsLane(CardinalDirection.East);
+                        base.addTile(road, tilex, tiley);
+                        break;
+                    }
+                case CardinalDirection.West:
+                    {
+                        clsLane road = new clsLane(CardinalDirection.West);
+                        base.addTile(road, tilex, tiley);
+                        break;
+                    }
+                case CardinalDirection.North:
+                    {
+                        clsLane road = new clsLane(CardinalDirection.North);
+                        base.addTile(road, tilex, tiley);
+                        break;
+                    }
+                case CardinalDirection.South:
+                    {
+                        clsLane road = new clsLane(CardinalDirection.South);
+                        base.addTile(road, tilex, tiley);
+                        break;
+                    }
+            }
         }
 
-        public void addNorthboundLane(long tilex, long tiley)
-        {
-            base.addTile("road", "road", tilex, tiley, false, false, true, false);
-        }
-        public void addSouthboundLane(long tilex, long tiley)
-        {
-            base.addTile("road", "road", tilex, tiley, false, false, false, true);
-        }
         public void addIntersection(long tilex, long tiley, bool east, bool west, bool north, bool south)
         {
-            base.addTile("intersection", "intersection", tilex, tiley, east, west, north, south);
+            clsIntersection intersection = new clsIntersection(east, west, north, south);
+            base.addTile(intersection, tilex, tiley);
         }
 
         /*****************************************
@@ -208,6 +224,112 @@ namespace gameLogic
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
             clsDriverAI AI = createDriverAI(car, destination); // create AI for the car
             return AI;
+        }
+
+
+
+        /*****************************************
+         *              Path Finding (Tiles)
+         *****************************************/
+        public List<Vector2> findShortestPath(Vector2 fromWaypoint, Vector2 toWaypoint)
+        {
+            // create a new path with the start point as the first way point
+            List<Vector2> startPath = new List<Vector2>();
+            startPath.Add(fromWaypoint);
+
+            // get all paths to destination
+            List<List<Vector2>> allPaths = this.getAllPaths(startPath, toWaypoint);
+
+            // get shorts path from that list
+            List<Vector2> shortestPath = null;
+            foreach (List<Vector2> path in allPaths)
+            {
+                if ((shortestPath == null) || (path.Count() < shortestPath.Count()))
+                {
+                    shortestPath = path;
+                }
+            }
+            return shortestPath;
+        }
+
+
+        // get all the valid routes between two points
+        // the only rule is that they can not overlap themselves
+        public List<List<Vector2>> getAllPaths(List<Vector2> previousWaypoints, Vector2 destinationSquareCoordinate)
+        {
+            // collection of all possible paths
+            List<List<Vector2>> paths = new List<List<Vector2>>();
+
+
+            // set the current square to the starting location
+            Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count() - 1];
+            intRoad currentSquare = (intRoad)this.getSquareFromSquareCoordinate(currentWaypoint);
+
+            // get all posible directions off of the current square
+            foreach (Vector2 currentDirection in currentSquare.directions)
+            {
+                // get way point for this direction
+                Vector2 newWaypoint = new Vector2(currentWaypoint.X, currentWaypoint.Y) + currentDirection;
+
+                // is this a valid new waypoint
+                if (this.inSquareCoordinateBounds(newWaypoint)) // is it on the map
+                {
+                    if (!containsWaypoint(previousWaypoints, newWaypoint)) // is it not an infinite loop
+                    {
+                        // fully copy existing path to a new path and add the new waypoint direction
+                        List<Vector2> newPath = copyWaypoints(previousWaypoints);
+                        newPath.Add(newWaypoint);
+
+                        // does this new path reach our destination?
+                        if ((newWaypoint.X == destinationSquareCoordinate.X) && (newWaypoint.Y == destinationSquareCoordinate.Y))
+                        {
+                            // add the now completed path to the collection of paths
+                            paths.Add(newPath);
+                        }
+                        else
+                        {
+                            // do further exploration of this path and all its possibilities
+                            List<List<Vector2>> newPaths = getAllPaths(newPath, destinationSquareCoordinate);
+                            foreach (List<Vector2> newSubPath in newPaths)
+                            {
+                                paths.Add(newSubPath);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // all processing is done
+            return paths;
+        }
+
+
+
+        public static List<Vector2> copyWaypoints(List<Vector2> waypoints)
+        {
+            List<Vector2> newWaypoints = new List<Vector2>();
+            foreach (Vector2 waypoint in waypoints)
+            {
+                newWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
+            }
+            return newWaypoints;
+        }
+
+        public static void appendWaypoints(List<Vector2> originalWaypoints, List<Vector2> waypointsToAppend)
+        {
+            foreach (Vector2 waypoint in waypointsToAppend)
+            {
+                originalWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
+            }
+        }
+
+        public static bool containsWaypoint(List<Vector2> waypoints, Vector2 waypoint)
+        {
+            foreach (Vector2 existingWaypoint in waypoints)
+            {
+                if ((existingWaypoint.X == waypoint.X) && (existingWaypoint.Y == waypoint.Y)) return true;
+            }
+            return false;
         }
     }
     

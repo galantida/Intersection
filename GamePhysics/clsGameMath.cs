@@ -29,5 +29,10 @@ namespace physicalWorld
 
             return new Vector2((float)(cos * tx - sin * ty), (float)(sin * tx + cos * ty));
         }
+
+        public static float areaOfTriangle(Vector2 pointA, Vector2 pointB, Vector2 pointC)
+        {
+            return pointA.X * (pointB.Y - pointC.Y) + pointB.X * (pointC.Y - pointA.Y) + pointC.X * (pointA.Y - pointB.Y);
+        }
     }
 }

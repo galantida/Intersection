@@ -14,7 +14,10 @@ namespace tileWorld
 
         Vector2 location { get; set; }
         Vector2 direction { get; set; }
-        Dictionary<Color, Color> colorReplacements { get; set; }
+        Dictionary<Color, Color> colorReplacements { get; }
+        bool colorsUpdated { get; }
+
+        CollisionType collisionType { get; set; }
 
         void update(float currentTime);
     }

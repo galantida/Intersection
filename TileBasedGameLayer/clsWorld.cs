@@ -11,14 +11,13 @@ using Microsoft.Xna.Framework;
 namespace tileWorld
 {
     public enum CardinalDirection { East, Southeast, South, Southhwest, West, Northwest, North, Northeast }
-    public enum CollisionType { None, Spherical }
 
     public class clsWorld 
     {
         public Random random;
         protected Stopwatch _currentTime = new Stopwatch();
 
-        public clsTile[,] tiles;
+        public intTile[,] tiles;
         public List<intObject> worldObjects;
         public List<intActor> actors;
 
@@ -35,9 +34,14 @@ namespace tileWorld
         /*********************************************************************************
          * Tile Functions
          *********************************************************************************/
-        public void addTile(string typeName, string textureName, long tilex, long tiley, bool east, bool west, bool north, bool south)
+        public void addTile(string typeName, string textureName, long tilex, long tiley, bool passable)
         {
-            tiles[tilex, tiley] = new clsTile(typeName, textureName, east, west, north, south);
+            tiles[tilex, tiley] = (intTile)new clsTile(typeName, textureName, passable);
+        }
+
+        public void addTile(intTile tile, long tilex, long tiley)
+        {
+            tiles[tilex, tiley] = tile;
         }
 
         /*********************************************************************************
@@ -95,12 +99,12 @@ namespace tileWorld
         /**************************************************
             square access shortcut
         **************************************************/
-        public clsTile getSquareFromWorldLocation(Vector2 worldLocation)
+        public intTile getSquareFromWorldLocation(Vector2 worldLocation)
         {
             return getSquareFromSquareCoordinate(this.worldLocationToSquareCoordinate(worldLocation));
         }
 
-        public clsTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
+        public intTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
         {
             return tiles[(int)squareCoordinate.X, (int)squareCoordinate.Y];
         }
@@ -121,123 +125,38 @@ namespace tileWorld
             return result;
         }
 
-
         /*****************************************
-         *              Path Finding (Tiles)
+         *              Collision Detections
          *****************************************/
-        public List<Vector2> findShortestPath(Vector2 fromWaypoint, Vector2 toWaypoint)
+        public intObject closestColidableObject(Vector2 location)
         {
-            // create a new path with the start point as the first way point
-            List<Vector2> startPath = new List<Vector2>();
-            startPath.Add(fromWaypoint);
-
-            // get all paths to destination
-            List<List<Vector2>> allPaths = this.getAllPaths(startPath, toWaypoint);
-
-            // get shorts path from that list
-            List<Vector2> shortestPath = null;
-            foreach (List<Vector2> path in allPaths)
+            intObject closestObject = null;
+            float closestDistance = 1000000000;
+            foreach (intObject worldObject in this.worldObjects)
             {
-                if ((shortestPath == null) || (path.Count() < shortestPath.Count()))
+                if (worldObject.collisionType != CollisionType.None)
                 {
-                    shortestPath = path;
-                }
-            }
-            return shortestPath;
-        }
-
-
-        // get all the valid routes between two points
-        // the only rule is that they can not overlap themselves
-        public List<List<Vector2>> getAllPaths(List<Vector2> previousWaypoints, Vector2 destinationSquareCoordinate)
-        {
-            // collection of all possible paths
-            List<List<Vector2>> paths = new List<List<Vector2>>();
-
-
-            // set the current square to the starting location
-            Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count()-1];
-            clsTile currentSquare = this.getSquareFromSquareCoordinate(currentWaypoint);
-
-            // get all posible directions off of the current square
-            foreach (Vector2 currentDirection in currentSquare.directions)
-            {
-                // get way point for this direction
-                Vector2 newWaypoint = new Vector2(currentWaypoint.X, currentWaypoint.Y) + currentDirection;
-
-                // is this a valid new waypoint
-                if (this.inSquareCoordinateBounds(newWaypoint)) // is it on the map
-                {
-                    if (!containsWaypoint(previousWaypoints, newWaypoint)) // is it not an infinite loop
+                    if (worldObject.location != location)
                     {
-                        // fully copy existing path to a new path and add the new waypoint direction
-                        List<Vector2> newPath = copyWaypoints(previousWaypoints);
-                        newPath.Add(newWaypoint);
-
-                        // does this new path reach our destination?
-                        if ((newWaypoint.X == destinationSquareCoordinate.X) && (newWaypoint.Y == destinationSquareCoordinate.Y))
+                        float distance = (location - worldObject.location).Length();
+                        if ((closestObject == null) || (distance < closestDistance))
                         {
-                            // add the now completed path to the collection of paths
-                            paths.Add(newPath);
-                        }
-                        else
-                        {
-                            // do further exploration of this path and all its possibilities
-                            List<List<Vector2>> newPaths = getAllPaths(newPath, destinationSquareCoordinate);
-                            foreach (List<Vector2> newSubPath in newPaths)
-                            {
-                                paths.Add(newSubPath);
-                            }
+                            closestDistance = distance;
+                            closestObject = worldObject;
                         }
                     }
                 }
             }
-
-            // all processing is done
-            return paths;
+            return closestObject;
         }
 
-
-
-        public static List<Vector2> copyWaypoints(List<Vector2> waypoints)
-        {
-            List<Vector2> newWaypoints = new List<Vector2>();
-            foreach (Vector2 waypoint in waypoints)
-            {
-                newWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
-            }
-            return newWaypoints;
-        }
-
-        public static void appendWaypoints(List<Vector2> originalWaypoints, List<Vector2> waypointsToAppend)
-        {
-            foreach (Vector2 waypoint in waypointsToAppend)
-            {
-                originalWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
-            }
-        }
-
-        public static bool containsWaypoint(List<Vector2> waypoints, Vector2 waypoint)
-        {
-            foreach (Vector2 existingWaypoint in waypoints)
-            {
-                if ((existingWaypoint.X == waypoint.X) && (existingWaypoint.Y == waypoint.Y)) return true;
-            }
-            return false;
-        }
-
-
-        /*****************************************
-         *              Collision Detections
-         *****************************************/
-
-        public bool collision(clsObject firstObject, clsObject secondObject = null)
+        public bool collision(intObject firstObject, intObject secondObject = null)
         {
             // detect collision between two specific objects
             if (secondObject != null)
             {
                 Vector2 distance = firstObject.location - secondObject.location;
-                if (distance.Length() < 50) return true;
+                if (distance.Length() < 64) return true;
                 else return false;
             }
             else

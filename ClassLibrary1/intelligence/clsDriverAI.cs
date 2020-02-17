@@ -22,12 +22,9 @@ namespace gameLogic
 
         public clsRoadWorld world;
 
-        // driver spped differences
+        // driver speed differences
         float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
         float speedComplianceVariationPercentage; // faster or slower than normal. (e.g. 10% slower than normal)
-
-        
-
 
         public clsDriverAI(clsRoadWorld world, clsCar car, Vector2 destination)
         {
@@ -53,7 +50,10 @@ namespace gameLogic
             {
                 lastUpdated = world.currentTime; // reset last updated
 
-                if (route == null) calculateShortestRoute(car.location, destination);
+                if (this.route == null)
+                {
+                    calculateShortestRoute(car.location, destination);
+                }
 
                 Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
 
@@ -63,24 +63,34 @@ namespace gameLogic
                 //var maxSpeed = speedLimit + compliance + range;
                 //var minSpeed = speedLimit + compliance - range;
 
+                // drivers speed limit due to route
+                float driversSpeedLimit = speedLimit;
+                if (this.route.distanceToNextTurn < 1) driversSpeedLimit = speedLimit * 0.3f;
 
-                if (car.mph < speedLimit * 0.9f)
+                if (driversSpeedLimit > (car.mph * 1.5))
+                {
+                    car.shifter = ShifterPosition.drive;
+                }
+
+
+                if (car.mph < driversSpeedLimit * 0.9f)
                 {
                     // increase acceleration
                     car.shifter = ShifterPosition.drive;
                     car.acceleratorPedal += 0.1f;
                     car.breakPedal = 0;
                 }
-                else if (car.mph > speedLimit * 1.1f)
-                {
-                    // decrease acceleration
-                    car.acceleratorPedal -= 0.1f;
-                    car.breakPedal += 0;
-                } else if (car.mph > speedLimit * 1.5f)
+                else if (car.mph > driversSpeedLimit * 1.2f)
                 {
                     // increase breaking
                     car.acceleratorPedal = 0.0f;
-                    car.breakPedal += 0.1f;
+                    car.breakPedal = 0.001f;
+                }
+                else if (car.mph > driversSpeedLimit * 1.1f)
+                {
+                    // decrease acceleration
+                    car.acceleratorPedal -= 0.1f;
+                    car.breakPedal = 0;
                 }
                 else
                 {
@@ -88,6 +98,17 @@ namespace gameLogic
                     //car.acceleratorPedal = 0;
                     //car.breakPedal = 0;
                 }
+
+                /*
+                if (this.route.distanceToNextCollision < 3)
+                {
+                    // increase breaking
+                    car.acceleratorPedal = 0.0f;
+                    car.breakPedal += 1f;
+                }
+                */
+
+                
                 
 
                 // get desired direction
@@ -157,7 +178,7 @@ namespace gameLogic
             Vector2 carSquareCoordinate = world.worldLocationToSquareCoordinate(fromLocation);
             Vector2 exitSquareCoordinate = world.worldLocationToSquareCoordinate(toLocation);
 
-            this.route = new clsRoute(world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
+            this.route = new clsRoute(world, world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Game1
         // settings
         Vector2 size;
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         List<clsCamera> cameras;
         List<clsDisplay> displays;
@@ -30,7 +29,6 @@ namespace Game1
             this.graphics.PreferredBackBufferWidth = (int)size.X;  // set this value to the desired width of your window
             this.graphics.PreferredBackBufferHeight = (int)size.Y;   // set this value to the desired height of your window
             this.graphics.ApplyChanges();
-            spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
             cameras = new List<clsCamera>();
             clsCamera camera = new clsCamera(world, new Rectangle(0,0,1000,1000));
@@ -58,6 +56,7 @@ namespace Game1
         public void draw()
         {
             graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
+            SpriteBatch spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
             spriteBatch.Begin();
             foreach (clsDisplay display in displays)
             {
