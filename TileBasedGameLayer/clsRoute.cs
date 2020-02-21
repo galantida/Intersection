@@ -14,13 +14,27 @@ namespace tileWorld
     public class clsRoute
     {
         private clsWorld world;
-        private List<Vector2> waypoints; // tile coordinates
-        private int currentWaypointIndex = 1;
+        public List<Vector2> waypoints; // tile coordinates
+        private int _currentWaypointIndex = 1;
+
+        public int currentWaypointIndex
+        {
+            get
+            {
+                return _currentWaypointIndex; 
+            }
+        }
 
         public clsRoute(clsWorld world, List<Vector2> waypoints)
         {
             this.world = world;
             this.waypoints = waypoints;
+        }
+
+        public void advanceWaypoint()
+        {
+            _currentWaypointIndex++;
+            if (currentWaypointIndex >= waypoints.Count()) _currentWaypointIndex = waypoints.Count() - 1;
         }
 
         public Vector2 currentWaypoint
@@ -36,7 +50,7 @@ namespace tileWorld
             // returns the next waypoint or the last one if we are already on the last one
             get
             {
-                int nextIndex = currentWaypointIndex + 1;
+                int nextIndex = _currentWaypointIndex + 1;
                 if (nextIndex >= waypoints.Count) nextIndex = waypoints.Count() - 1;
                 return waypoints[nextIndex];
             }
@@ -47,7 +61,7 @@ namespace tileWorld
             // returns the previous waypoint or the first one if we are still at the start
             get
             {
-                int previousIndex = currentWaypointIndex - 1;
+                int previousIndex = _currentWaypointIndex - 1;
                 if (previousIndex < 0) previousIndex = 0;
                 return waypoints[previousIndex];
             }
@@ -91,7 +105,7 @@ namespace tileWorld
             get
             {
                 // this can be used for breaking or turn signaling
-                for (int t = this.currentWaypointIndex; t < this.length; t++)
+                for (int t = _currentWaypointIndex; t < this.length; t++)
                 {
                     intTile tile = world.getTileFromTileCoordinate(this.waypoints[t]);
                     foreach (intObject worldObject in tile.worldObjects)
@@ -107,11 +121,7 @@ namespace tileWorld
             }
         }
 
-        public void advanceWaypoint()
-        {
-            currentWaypointIndex++;
-            if (currentWaypointIndex >= waypoints.Count()) currentWaypointIndex = waypoints.Count() - 1;
-        }
+        
     }
         
 }

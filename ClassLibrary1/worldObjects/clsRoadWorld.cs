@@ -76,10 +76,10 @@ namespace gameLogic
             worldObjects = new List<intObject>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 10000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 10000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 10000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 10000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 20000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 20000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 20000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 20000);
 
             // create exit points
             createExit(new Vector2(7, 0));

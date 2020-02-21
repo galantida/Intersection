@@ -18,14 +18,11 @@ namespace Game1
 
         public Vector2 topLeft; // world corrdinates of top left corner of visible map.
 
-
+        // display elements
         public List<intObject> viewableObjects;
         public intTile[,] viewableTiles;
-
-
+        public List<clsLine> lines = new List<clsLine>();
         public List<string> text;
-        //public List<Vector4> lines = new List<Vector4>();
-        public List<clsWaypointLine> lines = new List<clsWaypointLine>();
 
 
         public clsCamera(clsRoadWorld world, Rectangle visibleArea)
@@ -64,31 +61,33 @@ namespace Game1
             }
 
             // viewable tiles
-            
             viewableTiles = this.world.tiles;
 
-            /*
-
             // lines
-            int x = 0;
-            int y = 0;
-            //lines = new List<Vector4>();
-            lines = new List<clsWaypointLine>();
-            foreach (intDriver driver in world.drivers)
+            lines = new List<clsLine>();
+            foreach (intActor driver in world.actors)
             {
                 try
                 {
+                    // route lines
                     clsDriverAI ai = (clsDriverAI)driver;
-                    lines.Add(new clsWaypointLine(ai.car.location, world.squareCoordinateToWorldLocation(ai.route.currentWaypoint)));
-                    x += 25;
-                    y += 25;
+                    Vector2 lastWaypointWorldLocation = ai.car.location;
+                    for (int t = ai.route.currentWaypointIndex; t < ai.route.waypoints.Count; t++)
+                    {
+                        Vector2 thisWaypointWorldLocation = world.tileCoordinateToWorldLocation(ai.route.waypoints[t]);
+                        lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, ai.car.color, 4));
+                        lastWaypointWorldLocation = thisWaypointWorldLocation;
+                    }
+
                 }
                 catch (Exception ex)
                 {
 
                 }
             }
-            */
+
+
+            
 
 
         }

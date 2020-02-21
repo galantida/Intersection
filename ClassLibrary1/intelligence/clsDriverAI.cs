@@ -128,7 +128,7 @@ namespace gameLogic
                 //      way point control
 
                 // reached the destination
-                if (Vector2.Distance(car.location, destination) < 32)
+                if (Vector2.Distance(car.location, destination) < 64)
                 {
                     world.remove(car);
                     world.remove(this);

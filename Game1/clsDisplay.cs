@@ -143,9 +143,9 @@ namespace Game1
 
         private void drawLines(SpriteBatch spriteBatch)
         {
-            foreach (clsWaypointLine line in this.camera.lines)
+            foreach (clsLine line in this.camera.lines)
             {
-                DrawLine(spriteBatch, new Vector2(displayArea.Left + line.point1.X, displayArea.Top + line.point1.Y), new Vector2(displayArea.Left + line.point2.X, displayArea.Top + line.point2.Y), Color.AliceBlue, 2);
+                DrawLine(spriteBatch, new Vector2(displayArea.Left + line.point1.X, displayArea.Top + line.point1.Y), new Vector2(displayArea.Left + line.point2.X, displayArea.Top + line.point2.Y), line.color, line.thickness);
             }
         }
 
