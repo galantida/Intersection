@@ -31,6 +31,12 @@ namespace tileWorld
             this.tileSize = tileSize;
         }
 
+        public void update()
+        {
+            processCollisions();
+            processTileLocations();
+        }
+
         /*********************************************************************************
          * Tile Functions
          *********************************************************************************/
@@ -69,114 +75,117 @@ namespace tileWorld
             return filteredWorldObjects[this.random.Next(filteredWorldObjects.Count())];
         }
 
-        /*
-        public clsTileObject addTileObject(Vector2 location, Vector2 direction, Vector2 velocity, float mass = 1000.0f)
+        /*********************************************************************************
+         * Actor Functions
+         *********************************************************************************/
+        public void remove(intActor actorObject)
         {
-            clsTileObject newTileObject = new clsTileObject(location, direction, velocity, mass);
-            tileWorldObjects.Add((intTileObject)newTileObject);
-            return newTileObject;
+            actors.Remove(actorObject);
         }
-
-        public void removeTileObject(intTileObject tileObject)
-        {
-            tileWorldObjects.Remove(tileObject); // remove from
-        }
-        */
 
         /**************************************************
             coordinate conversion functions
         **************************************************/
-        public Vector2 worldLocationToSquareCoordinate(Vector2 worldCoordinate)
+        public Vector2 worldLocationToTileCoordinate(Vector2 worldCoordinate)
         {
             return new Vector2((int)(worldCoordinate.X / tileSize), (int)(worldCoordinate.Y / tileSize));
         }
 
-        public Vector2 squareCoordinateToWorldLocation(Vector2 squareCoordinate)
+        public Vector2 tileCoordinateToWorldLocation(Vector2 tileCoordinate)
         {
-            return new Vector2(squareCoordinate.X * tileSize + (tileSize / 2), squareCoordinate.Y * tileSize + (tileSize / 2));
+            return new Vector2(tileCoordinate.X * tileSize + (tileSize / 2), tileCoordinate.Y * tileSize + (tileSize / 2));
         }
 
         /**************************************************
-            square access shortcut
+            tile access shortcut
         **************************************************/
-        public intTile getSquareFromWorldLocation(Vector2 worldLocation)
+        public intTile getTileFromWorldLocation(Vector2 worldLocation)
         {
-            return getSquareFromSquareCoordinate(this.worldLocationToSquareCoordinate(worldLocation));
+            return getTileFromTileCoordinate(this.worldLocationToTileCoordinate(worldLocation));
         }
 
-        public intTile getSquareFromSquareCoordinate(Vector2 squareCoordinate)
+        public intTile getTileFromTileCoordinate(Vector2 tileCoordinate)
         {
-            return tiles[(int)squareCoordinate.X, (int)squareCoordinate.Y];
+            return tiles[(int)tileCoordinate.X, (int)tileCoordinate.Y];
         }
 
-        public bool inSquareCoordinateBounds(Vector2 squareCoordinate)
+        public bool inTileCoordinateBounds(Vector2 tileCoordinate)
         {
             bool result = true;
-            if ((squareCoordinate.X < 0) || (squareCoordinate.X >= tiles.GetLength(0))) result = false; 
-            if ((squareCoordinate.Y < 0) || (squareCoordinate.Y >= tiles.GetLength(1))) result = false; 
+            if ((tileCoordinate.X < 0) || (tileCoordinate.X >= tiles.GetLength(0))) result = false; 
+            if ((tileCoordinate.Y < 0) || (tileCoordinate.Y >= tiles.GetLength(1))) result = false; 
             return result;
         }
 
-        public bool inWorldBounds(Vector2 squareCoordinate)
+        public bool inWorldBounds(Vector2 tileCoordinate)
         {
             bool result = true;
-            if ((squareCoordinate.X < 0) || (squareCoordinate.X >= tiles.GetLength(0))) result = false;
-            if ((squareCoordinate.Y < 0) || (squareCoordinate.Y >= tiles.GetLength(1))) result = false;
+            if ((tileCoordinate.X < 0) || (tileCoordinate.X >= tiles.GetLength(0))) result = false;
+            if ((tileCoordinate.Y < 0) || (tileCoordinate.Y >= tiles.GetLength(1))) result = false;
             return result;
         }
 
         /*****************************************
-         *              Collision Detections
-         *****************************************/
-        public intObject closestColidableObject(Vector2 location)
+        *              Collision Detections
+        *****************************************/
+        public void processCollisions()
         {
-            intObject closestObject = null;
-            float closestDistance = 1000000000;
+            // create a list of objects to process
+            List<intObject> allCollisionObjects = new List<intObject>();
+            List<intObject> unprocessedCollisionObjects = new List<intObject>();
             foreach (intObject worldObject in this.worldObjects)
             {
-                if (worldObject.collisionType != CollisionType.None)
+                // clear world object previous list of collisions
+                worldObject.collisions = new List<intObject>();
+                if (worldObject.collisionDetection != CollisionType.None)
                 {
-                    if (worldObject.location != location)
+                    allCollisionObjects.Add(worldObject);
+                    unprocessedCollisionObjects.Add(worldObject);
+                }
+            }
+
+            // process each object
+            foreach (intObject worldObject in allCollisionObjects)
+            {
+                for (int t=0; t < unprocessedCollisionObjects.Count; t++)
+                {
+                    // objects should compare themselves to themselves
+                    if (worldObject != unprocessedCollisionObjects[t])
                     {
-                        float distance = (location - worldObject.location).Length();
-                        if ((closestObject == null) || (distance < closestDistance))
+                        float distance = (worldObject.location - unprocessedCollisionObjects[t].location).Length();
+                        if (distance < (worldObject.collisionRadius + unprocessedCollisionObjects[t].collisionRadius))
                         {
-                            closestDistance = distance;
-                            closestObject = worldObject;
+                            // we have a collsions
+                            worldObject.collisions.Add(unprocessedCollisionObjects[t]);
+                            unprocessedCollisionObjects[t].collisions.Add(worldObject);
                         }
                     }
                 }
+
+                // remove this object from unprocessed
+                unprocessedCollisionObjects.Remove(worldObject);
             }
-            return closestObject;
         }
 
-        public bool collision(intObject firstObject, intObject secondObject = null)
+        /*****************************************
+       *              tile locations
+       *****************************************/
+       public void processTileLocations()
         {
-            // detect collision between two specific objects
-            if (secondObject != null)
+            for (int x = 0; x < this.tiles.GetLength(0); x += 1)
             {
-                Vector2 distance = firstObject.location - secondObject.location;
-                if (distance.Length() < 64) return true;
-                else return false;
-            }
-            else
-            {
-                // detect collision with anyting
-                foreach (clsObject worldObject in this.worldObjects)
+                for (int y = 0; y < this.tiles.GetLength(1); y += 1)
                 {
-
-                    if (worldObject.collisionType != CollisionType.None)
-                    {
-                        if (worldObject != firstObject)
-                        {
-                            Vector2 distance = firstObject.location - worldObject.location;
-                            if (distance.Length() < 50) return true;
-                        }
-                    }
+                    this.tiles[x, y].worldObjects = new List<intObject>();
                 }
-                return false;
+            }
+
+            foreach (intObject worldObject in this.worldObjects)
+            {
+                intTile tile = this.getTileFromWorldLocation(worldObject.location);
+                tile.worldObjects.Add(worldObject);
             }
         }
     }
-    
+
 }

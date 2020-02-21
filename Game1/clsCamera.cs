@@ -40,25 +40,27 @@ namespace Game1
 
             // filter game pieces and tiles down to viewable items 
             viewableObjects  = this.world.worldObjects;
-            
 
             // overlay
             text = new List<string>();
-            foreach (intObject g in viewableObjects)
-            {if (g.typeName == "car")
+            foreach (intActor a in world.actors)
+            {
+                clsDriverAI driverAI = a as clsDriverAI;   // Here is where I get typeof(IA)
+                if (driverAI != null)
                 {
-                    clsCar c = (clsCar)g;
                     text.Add("--------------------");
-                    text.Add("Speed : " + Math.Floor(c.mph) + " MPH");
-                    text.Add("Direction : " + c.cardinalDirection.ToString());
-                    text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
-                    text.Add("velocity : " + c.velocity.Length());
-                    text.Add("Steering : " + c.steeringWheel);
-                    text.Add("Shifter : " + c.shifter.ToString().ToUpper());
-                    text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
-                    text.Add("Break Pedal : " + c.breakPedal);
+                    text.Add("Name : " + driverAI.car.name);
+                    text.Add("Speed : " + Math.Floor(driverAI.car.mph) + " MPH");
+                    //text.Add("Collisions : " + c.collisions.Count);
+                    if (driverAI.route!= null) text.Add("DistanceToNextObstruction : " + driverAI.route.distanceToNextObstruction);
+                    //text.Add("Direction : " + c.cardinalDirection.ToString());
+                    //text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
+                    //text.Add("velocity : " + c.velocity.Length());
+                    //text.Add("Steering : " + c.steeringWheel);
+                    //text.Add("Shifter : " + c.shifter.ToString().ToUpper());
+                    //text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
+                    //text.Add("Break Pedal : " + c.breakPedal);
                 }
-
             }
 
             // viewable tiles

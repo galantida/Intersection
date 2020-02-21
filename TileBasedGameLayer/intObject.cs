@@ -17,7 +17,9 @@ namespace tileWorld
         Dictionary<Color, Color> colorReplacements { get; }
         bool colorsUpdated { get; }
 
-        CollisionType collisionType { get; set; }
+        CollisionType collisionDetection { get; set; }
+        float collisionRadius { get; set; }
+        List<intObject> collisions { get; set; }
 
         void update(float currentTime);
     }

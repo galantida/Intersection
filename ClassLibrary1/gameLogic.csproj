@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="intelligence\clsDriverAI.cs" />
-    <Compile Include="intelligence\clsRoute.cs" />
     <Compile Include="worldObjects\clsCar.cs" />
     <Compile Include="worldObjects\clsExit.cs" />
     <Compile Include="intelligence\clsDriverHuman.cs" />

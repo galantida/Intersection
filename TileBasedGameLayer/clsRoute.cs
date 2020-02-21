@@ -8,16 +8,16 @@ using Microsoft.Xna.Framework;
 using tileWorld;
 using physicalWorld;
 
-namespace gameLogic
+namespace tileWorld
 {
     // route is a collection of square coordinates between two squares
     public class clsRoute
     {
-        private clsRoadWorld world;
-        private List<Vector2> waypoints;
+        private clsWorld world;
+        private List<Vector2> waypoints; // tile coordinates
         private int currentWaypointIndex = 1;
 
-        public clsRoute(clsRoadWorld world, List<Vector2> waypoints)
+        public clsRoute(clsWorld world, List<Vector2> waypoints)
         {
             this.world = world;
             this.waypoints = waypoints;
@@ -86,21 +86,24 @@ namespace gameLogic
             }
         }
 
-        public int distanceToNextCollision
+        public int distanceToNextObstruction
         {
             get
             {
+                // this can be used for breaking or turn signaling
                 for (int t = this.currentWaypointIndex; t < this.length; t++)
                 {
-                    Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(waypoints[t]);
-                    intObject closestObject = world.closestColidableObject(wayPointWorldLocation);
-                    Vector2 distance = closestObject.location - wayPointWorldLocation;
-                    if ((distance.Length() > 0) && (distance.Length() < 64))
+                    intTile tile = world.getTileFromTileCoordinate(this.waypoints[t]);
+                    foreach (intObject worldObject in tile.worldObjects)
                     {
-                        return t;
+                        if (worldObject.collisionDetection != CollisionType.None)
+                        {
+                            return t - this.currentWaypointIndex;
+                        }
                     }
+                    
                 }
-                return 100000; // no turns. Maybe should return -1?
+                return 1000;
             }
         }
 

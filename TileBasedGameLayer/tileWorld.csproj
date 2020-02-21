@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsActor.cs" />
+    <Compile Include="clsRoute.cs" />
     <Compile Include="clsWorld.cs" />
     <Compile Include="clsObject.cs" />
     <Compile Include="clsTile.cs" />

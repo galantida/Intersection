@@ -99,7 +99,7 @@ namespace gameLogic
         /*****************************************
                 Running the world
          *****************************************/
-        public void update()
+        public new void update()
         {
             // process each actor
             for (int t = 0; t < actors.Count; t++)
@@ -116,6 +116,7 @@ namespace gameLogic
 
             // tiles are activated and read they are not processed
 
+            base.update();
         }
 
         /*****************************************
@@ -172,14 +173,14 @@ namespace gameLogic
          *****************************************/
         public clsEntry createEntry(Vector2 squareCoordinate, Vector2 direction, string typeName, int maxSpawnTime)
         {
-            clsEntry entry = new clsEntry("entry", squareCoordinateToWorldLocation(squareCoordinate), direction, this, typeName, maxSpawnTime);
+            clsEntry entry = new clsEntry("entry", tileCoordinateToWorldLocation(squareCoordinate), direction, this, typeName, maxSpawnTime);
             worldObjects.Add((intObject)entry);
             return entry;
         }
 
         public clsExit createExit(Vector2 squareCoordinate)
         {
-            clsExit exit = new clsExit("exit", squareCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
+            clsExit exit = new clsExit("exit", tileCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
             worldObjects.Add((intObject)exit);
             return exit;
         }
@@ -263,7 +264,7 @@ namespace gameLogic
 
             // set the current square to the starting location
             Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count() - 1];
-            intRoad currentSquare = (intRoad)this.getSquareFromSquareCoordinate(currentWaypoint);
+            intRoad currentSquare = (intRoad)this.getTileFromTileCoordinate(currentWaypoint);
 
             // get all posible directions off of the current square
             foreach (Vector2 currentDirection in currentSquare.directions)
@@ -272,7 +273,7 @@ namespace gameLogic
                 Vector2 newWaypoint = new Vector2(currentWaypoint.X, currentWaypoint.Y) + currentDirection;
 
                 // is this a valid new waypoint
-                if (this.inSquareCoordinateBounds(newWaypoint)) // is it on the map
+                if (this.inTileCoordinateBounds(newWaypoint)) // is it on the map
                 {
                     if (!containsWaypoint(previousWaypoints, newWaypoint)) // is it not an infinite loop
                     {

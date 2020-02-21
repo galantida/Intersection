@@ -19,7 +19,11 @@ namespace tileWorld
         // interface fields
         public Vector2 direction { get; set; }
 
-        public CollisionType collisionType { get; set; }
+        public CollisionType collisionDetection { get; set; }
+
+        public float collisionRadius { get; set; }
+
+        public List<intObject> collisions { get; set; }
 
         private Dictionary<Color, Color> _colorReplacements { get; set; }
 
@@ -32,7 +36,8 @@ namespace tileWorld
             this.textureName = textureName;
             this.direction = direction;
             _colorReplacements = new Dictionary<Color, Color>();
-            this.colorsUpdated = false;
+            this.colorsUpdated = true;
+            this.collisionRadius = 32;
         }
 
         public void colorReplace(Color originalColor, Color? newColor = null)

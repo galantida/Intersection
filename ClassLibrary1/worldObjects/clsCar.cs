@@ -35,6 +35,14 @@ namespace gameLogic
         // indicators
         private Stopwatch flasher;
 
+        public string name
+        {
+            get
+            {
+                return "car" + this.color.G;
+            }
+        }
+
 
         public clsCar(string textureName, Vector2 location, Vector2 direction, Vector2 velocity) : base(textureName, location, direction, velocity) 
         {
@@ -47,7 +55,7 @@ namespace gameLogic
             base.staticFrictionCoefficient.baseValue = 0.001f; // drag on starting to move
             base.surfaceArea = 0.02f; // surface area facing wind
             base.dragCoefficient.baseValue = 0.25f; // wind resistance
-            base.collisionType = CollisionType.Spherical;
+            base.collisionDetection = CollisionType.Spherical;
 
             // Car properties
             this.acceleration = 0.02f; // force to add in the direction of the transmissions
@@ -139,8 +147,8 @@ namespace gameLogic
                 if ((this.rightTurnSignal) || (this.hazzards)) base.colorReplace(new Color(215, 90, 1), null);
                 else base.colorReplace(new Color(215, 90, 1), new Color(255, 192, 0));
 
-                if (this.headLights) base.colorReplace(new Color(128, 128, 128), null);
-                else base.colorReplace(new Color(128, 128, 128), new Color(255, 255, 255));
+                if (this.headLights) base.colorReplace(new Color(128, 128, 128), new Color(255, 255, 255)); 
+                else base.colorReplace(new Color(128, 128, 128), null);
 
                 base.colorReplace(new Color(63, 72, 204), this.color);
             }
@@ -276,7 +284,8 @@ namespace gameLogic
 
                 float pixelsPerMilisecond = base.velocity.Length();
                 float pixelsPerHour = (((pixelsPerMilisecond * 1000) * 60) * 60);
-                float mph = pixelsPerHour / 22528;
+                //float mph = pixelsPerHour / 22528;
+                float mph = pixelsPerHour / 11264;
 
                 return mph; // (pixels in a mile / pixels per miliseond) / (60 * 1000)
             }

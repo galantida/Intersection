@@ -32,7 +32,7 @@ namespace gameLogic
             this.car = car;
             this.destination = destination;
             this.route = null;
-            speedLimit = 25f;
+            speedLimit = 35f;
             this.world = world;
 
             // driver differences
@@ -50,68 +50,64 @@ namespace gameLogic
             {
                 lastUpdated = world.currentTime; // reset last updated
 
-                if (this.route == null)
-                {
-                    calculateShortestRoute(car.location, destination);
-                }
+                if (this.route == null) calculateShortestRoute(car.location, destination);
 
-                Vector2 wayPointWorldLocation = world.squareCoordinateToWorldLocation(this.route.currentWaypoint);
-
-                // acceleration
-                //var range = speedRangePercentage * speedLimit;
-                //var compliance = speedComplianceVariationPercentage * speedLimit;
-                //var maxSpeed = speedLimit + compliance + range;
-                //var minSpeed = speedLimit + compliance - range;
-
-                // drivers speed limit due to route
+                // drivers desired speed due to route
                 float driversSpeedLimit = speedLimit;
-                if (this.route.distanceToNextTurn < 1) driversSpeedLimit = speedLimit * 0.3f;
+                if (this.route.distanceToNextTurn < 3) driversSpeedLimit = speedLimit * 0.1f;
 
-                if (driversSpeedLimit > (car.mph * 1.5))
+                // drivers desired speed due to obstructions
+                if (this.route.distanceToNextObstruction < 4) driversSpeedLimit = speedLimit * 0.75f;
+                if (this.route.distanceToNextObstruction < 3) driversSpeedLimit = speedLimit * 0.50f;
+                if (this.route.distanceToNextObstruction < 2) 
                 {
-                    car.shifter = ShifterPosition.drive;
+                    driversSpeedLimit = 0.0f;
                 }
 
 
-                if (car.mph < driversSpeedLimit * 0.9f)
+                // ********************************************
+                //          speed Control
+                if (car.mph < driversSpeedLimit * 0.7f)
                 {
-                    // increase acceleration
+                    // heavy increase in acceleration
                     car.shifter = ShifterPosition.drive;
                     car.acceleratorPedal += 0.1f;
                     car.breakPedal = 0;
                 }
-                else if (car.mph > driversSpeedLimit * 1.2f)
+                else if (car.mph < driversSpeedLimit * 0.8f)
                 {
-                    // increase breaking
-                    car.acceleratorPedal = 0.0f;
-                    car.breakPedal = 0.001f;
+                    // slight increase in acceleration
+                    car.acceleratorPedal += 0.01f;
+                    car.breakPedal = 0;
                 }
-                else if (car.mph > driversSpeedLimit * 1.1f)
+                else if (car.mph > driversSpeedLimit * 1.5f)
+                {
+                    // hard braking
+                    car.acceleratorPedal = 0.0f;
+                    car.breakPedal = 1000f;
+                }
+                else if (car.mph > driversSpeedLimit * 1.4f)
+                {
+                    // heavy breaking
+                    car.acceleratorPedal = 0.0f;
+                    car.breakPedal = 0.1f;
+                }
+                else if (car.mph > driversSpeedLimit * 1.3f)
+                {
+                    // slight breaking
+                    car.acceleratorPedal = 0.0f;
+                    car.breakPedal = 0.01f;
+                }
+                else if (car.mph > driversSpeedLimit * 1.2f)
                 {
                     // decrease acceleration
                     car.acceleratorPedal -= 0.1f;
                     car.breakPedal = 0;
                 }
-                else
-                {
-                    // no change in pedals
-                    //car.acceleratorPedal = 0;
-                    //car.breakPedal = 0;
-                }
 
-                /*
-                if (this.route.distanceToNextCollision < 3)
-                {
-                    // increase breaking
-                    car.acceleratorPedal = 0.0f;
-                    car.breakPedal += 1f;
-                }
-                */
-
-                
-                
-
-                // get desired direction
+                // ********************************************
+                //          steering control
+                Vector2 wayPointWorldLocation = world.tileCoordinateToWorldLocation(this.route.currentWaypoint);
                 Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
 
                 // how much are we off
@@ -128,37 +124,23 @@ namespace gameLogic
                 else if (car.steeringWheel > 0.5f) car.turnSignal = 1;
                 else car.turnSignal = 0;
 
+                // ********************************************
+                //      way point control
 
                 // reached the destination
                 if (Vector2.Distance(car.location, destination) < 32)
                 {
                     world.remove(car);
+                    world.remove(this);
                 }
-                
-
 
                 // distance to way point
                 float distance = Vector2.Distance(car.location, wayPointWorldLocation);
-
-                if (distance < 75)
+                if (distance < 32) // was 75
                 {
-                    try
-                    {
-                        // arrived at way point, advance to next one
-                        this.route.advanceWaypoint();
-                    }
-                    catch(Exception ex)
-                    {
-                        // must be at exit remove car
-                        world.remove((intObject)car);
-                    }
+                    // comming up to way point target the next one
+                    this.route.advanceWaypoint();
                 }
-                else if (distance > 0)
-                {
-                    // keep trying
-
-                }
-
             }
         }
 
@@ -175,8 +157,8 @@ namespace gameLogic
 
         public void calculateShortestRoute(Vector2 fromLocation, Vector2 toLocation)
         {
-            Vector2 carSquareCoordinate = world.worldLocationToSquareCoordinate(fromLocation);
-            Vector2 exitSquareCoordinate = world.worldLocationToSquareCoordinate(toLocation);
+            Vector2 carSquareCoordinate = world.worldLocationToTileCoordinate(fromLocation);
+            Vector2 exitSquareCoordinate = world.worldLocationToTileCoordinate(toLocation);
 
             this.route = new clsRoute(world, world.findShortestPath(carSquareCoordinate, exitSquareCoordinate));
         }

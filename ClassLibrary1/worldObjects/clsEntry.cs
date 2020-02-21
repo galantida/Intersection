@@ -23,7 +23,7 @@ namespace gameLogic
         public clsEntry(string textureName, Vector2 location, Vector2 direction, clsRoadWorld worldToSpawnIn, string spawnTypeName, int maxSpawnTime) : base(textureName, location, direction, new Vector2(0,0))
         {
             base.typeName = "entry";
-            base.collisionType = CollisionType.None;
+            base.collisionDetection = CollisionType.None;
             this.spawnTypeName = spawnTypeName;
             this.maxSpawnTime = maxSpawnTime;
             this.worldToSpawnIn = worldToSpawnIn;

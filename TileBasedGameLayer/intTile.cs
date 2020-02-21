@@ -11,9 +11,11 @@ namespace tileWorld
     {
         string typeName { get; set; }
         string textureName { get; set; }
-        float rotation { get; set; }
-        bool passable { get; set; }
         float textureRotation { get; }
+        float rotation { get; set; }
+        bool collisionDetection { get; set; }
+        List<intObject> worldObjects { get; set; }
+        
 
         Dictionary<Color, Color> colorReplacements { get; set; }
     }

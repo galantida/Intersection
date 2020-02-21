@@ -18,7 +18,7 @@ namespace gameLogic
         public clsExit(string textureName, Vector2 location, Vector2 direction) : base(textureName, location, direction, new Vector2(0, 0))
         {
             base.typeName = "exit";
-            base.collisionType = CollisionType.None;
+            base.collisionDetection = CollisionType.None;
         }
 
 
