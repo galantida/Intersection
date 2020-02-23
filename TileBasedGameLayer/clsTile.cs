@@ -10,23 +10,22 @@ namespace tileWorld
 {
     public class clsTile
     {
+        // visible properties
         public string textureName { get; set; }
+        public Vector2 location { get; set;  }
         public float rotation { get; set; } // actual rotation of the tile from its default
-        private float _defaultTextureRotation; // if tile rotation is zero what should the default texture roation be?
-        public bool collisionDetection { get; set; }
-        public List<intObject> worldObjects { get; set; }
-
         public Dictionary<Color, Color> colorReplacements { get; set; }
 
+        // processing properties
+        public bool collisionDetection { get; set; } // will store a reference to objects that are on this tile
+        public List<intObject> worldObjects { get; set; } // objects on this tile
+        
+        // privates 
+        private float _defaultTextureRotation; // if tile rotation is zero what should the default texture roation be?
+
+        // Notes
         // other than direction what properties would a tile have
         // height? impead movment? slippery? temperature?
-
-        public clsTile(string textureName, bool collisionDetection, float defaultTextureRotation = 0)
-        {
-            this.textureName = textureName;
-            this.collisionDetection = collisionDetection;
-            _defaultTextureRotation = defaultTextureRotation;
-        }
 
         public float textureRotation
         {
@@ -35,5 +34,15 @@ namespace tileWorld
                 return (rotation + _defaultTextureRotation);
             }
         }
+
+
+        public clsTile(string textureName, bool collisionDetection, float defaultTextureRotation = 0)
+        {
+            this.textureName = textureName;
+            this.collisionDetection = collisionDetection;
+            _defaultTextureRotation = defaultTextureRotation;
+        }
+
+        
     }
 }

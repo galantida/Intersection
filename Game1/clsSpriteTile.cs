@@ -15,20 +15,15 @@ namespace Game1
     {
         public intTile tile;
         public Texture2D texture;
-        public Vector2 location; // screen location
-        //public float rotation; // texture rotation
+        public Vector2 screenLocation; // screen location
         public Vector2 origin; // origin of texture rotation
 
 
         public clsSpriteTile(intTile tile, Dictionary<string, Texture2D>  textures)
         {
             this.tile = tile;
-
-            location = new Vector2(0, 0);
-            //rotation = 0f;
-            //origin = new Vector2(0, 0);
+            screenLocation = new Vector2(0, 0);
             origin = new Vector2(32, 32);
-
             this.texture = textures[this.tile.textureName];
         }
     }

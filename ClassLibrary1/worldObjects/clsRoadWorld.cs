@@ -14,19 +14,14 @@ namespace gameLogic
 
     public class clsRoadWorld : clsWorld
     {
+        private clsInput input;
+
         public clsRoadWorld(long tilesWide, float tileSize): base(tileSize)
         {
+            input = new clsInput();
             loadTiles(tilesWide);
             loadObjects();
             loadActors();
-        }
-
-        public float currentTime
-        {
-            get
-            {
-                return _currentTime.ElapsedMilliseconds;
-            }
         }
 
         /*****************************************
@@ -99,24 +94,28 @@ namespace gameLogic
         /*****************************************
                 Running the world
          *****************************************/
-        public new void update()
+        public new void update(float currentTime)
         {
+            float localTime = base.currentTime;
+
+            input.update(localTime);
+
             // process each actor
             for (int t = 0; t < actors.Count; t++)
             {
-                actors[t].update(currentTime);
+                actors[t].update(localTime);
             }
 
             // process each object
             for (int t = 0; t < worldObjects.Count; t++)
             {
                 // update all objects
-                worldObjects[t].update(currentTime);
+                worldObjects[t].update(localTime);
             }
 
             // tiles are activated and read they are not processed
 
-            base.update();
+            base.update(localTime);
         }
 
         /*****************************************
@@ -195,9 +194,9 @@ namespace gameLogic
         /*****************************************
                 Instance Game Intelegence hooks
          *****************************************/
-        public clsDriverHuman createDriverHuman(clsCar car)
+        public clsDriverHuman createDriverHuman(clsCar car, clsInput input)
         {
-            clsDriverHuman human = new clsDriverHuman(car); // assign human to it
+            clsDriverHuman human = new clsDriverHuman(car, input); // assign human to it
             actors.Add((intActor)human);
             return human;
         }
@@ -216,7 +215,7 @@ namespace gameLogic
         public clsDriverHuman spawnCarHuman(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
-            clsDriverHuman human = createDriverHuman(car); // create human for the car
+            clsDriverHuman human = createDriverHuman(car, this.input); // create human for the car
             return human;
         }
 

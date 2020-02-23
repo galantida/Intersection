@@ -78,8 +78,11 @@ namespace Game1
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
-            world.update();
-            window.update();
+            float currentTime = gameTime.ElapsedGameTime.Milliseconds;
+
+            world.update(currentTime); // base these updates on game time
+            window.update(currentTime); // base these updates on game time
+
             base.Update(gameTime);
         }
 

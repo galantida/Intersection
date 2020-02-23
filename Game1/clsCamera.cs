@@ -13,59 +13,73 @@ namespace Game1
 {
     public class clsCamera
     {
-        // a camera is using to define a displayable area
-        // and act as a container to hold all of those objects.
+        // a camera refind area in the world.
+        // It can be used as a container tha hold the tiles and objects that are viewable in that area
 
         // properties
-        public Vector2 target { get; set; }// world corrdinates of top left corner of visible map.
-        public Vector2 size { get; set; }// world corrdinates of top left corner of visible map.
+        public Rectangle visibleArea { get; set; }// world coordinates of top left corner of visible map.
 
-        // camera captured objects
-        public List<intObject> viewableObjects { get; set; }
-        public intTile[,] viewableTiles { get; set; }
-        public List<clsLine> lines { get; set; }
-        public List<string> text { get; set; }
+        // camera captured objects in order of display depth
+        public List<string> text { get; set; } // camera over lay text
+        public List<intObject> visableObjects { get; set; }
+        public List<clsLine> lines { get; set; } // lines above the tiles but below the objects
+        
 
         // privates
-        private clsRoadWorld world;
+        public clsRoadWorld world { get; }
 
-        public clsCamera(clsRoadWorld world, Vector2 target, Vector2 size)
+        public clsCamera(clsRoadWorld world, Rectangle visibleArea)
         {
             this.world = world;
-            this.target = target;
-            this.size = size;
+            this.visibleArea = visibleArea;
 
             // init objects
             this.lines = new List<clsLine>();
         }
 
-        public Rectangle visibleArea
-        {
-            get
-            {
-                int topLeftX = (int)target.X - (int)(size.X / 2);
-                int topLeftY = (int)target.Y - (int)(size.Y / 2);
-                return new Rectangle(topLeftX, topLeftY, (int)size.X, (int)size.Y);
-            }
-        }
-
         public void update()
         {
-            // filter game pieces and tiles down to viewable items 
-            viewableObjects  = this.world.worldObjects;
-
-            // overlay
-            text = new List<string>();
-            foreach (intActor a in world.actors)
+            // filter world objects to viewable items 
+            visableObjects = new List<intObject>();
+            foreach (intObject o in this.world.worldObjects)
             {
-                clsDriverAI driverAI = a as clsDriverAI;   // Here is where I get typeof(IA)
+                if (this.isVisible(o.location))
+                {
+                    visableObjects.Add(o);
+                }
+            }
+
+
+            // camera overlay
+            lines = new List<clsLine>();
+            text = new List<string>();
+            foreach (intActor driver in world.actors)
+            {
+                clsDriverHuman driverHuman = driver as clsDriverHuman;   // Here is where I get typeof(IA)
+                if (driverHuman != null)
+                {
+                    text.Add("--------------------");
+                    text.Add("Name : " + driverHuman.car.name);
+                    text.Add("Speed : " + Math.Floor(driverHuman.car.mph) + " MPH");
+                    //text.Add("Collisions : " + c.collisions.Count);
+                    //text.Add("Direction : " + c.cardinalDirection.ToString());
+                    //text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
+                    //text.Add("velocity : " + c.velocity.Length());
+                    //text.Add("Steering : " + c.steeringWheel);
+                    text.Add("Shifter : " + driverHuman.car.shifter.ToString().ToUpper());
+                    text.Add("Acceleerator Pedal : " + driverHuman.car.acceleratorPedal);
+                    text.Add("Break Pedal : " + driverHuman.car.breakPedal);
+                }
+
+                // route lines
+                clsDriverAI driverAI = driver as clsDriverAI;
                 if (driverAI != null)
                 {
                     text.Add("--------------------");
                     text.Add("Name : " + driverAI.car.name);
                     text.Add("Speed : " + Math.Floor(driverAI.car.mph) + " MPH");
                     //text.Add("Collisions : " + c.collisions.Count);
-                    if (driverAI.route!= null) text.Add("DistanceToNextObstruction : " + driverAI.route.distanceToNextObstruction);
+                    //if (driverAI.route != null) text.Add("DistanceToNextObstruction : " + driverAI.route.distanceToNextObstruction);
                     //text.Add("Direction : " + c.cardinalDirection.ToString());
                     //text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
                     //text.Add("velocity : " + c.velocity.Length());
@@ -73,39 +87,49 @@ namespace Game1
                     //text.Add("Shifter : " + c.shifter.ToString().ToUpper());
                     //text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     //text.Add("Break Pedal : " + c.breakPedal);
-                }
-            }
 
-            // viewable tiles
-            viewableTiles = this.world.tiles;
-
-            // lines
-            lines = new List<clsLine>();
-            foreach (intActor driver in world.actors)
-            {
-                try
-                {
-                    // route lines
-                    clsDriverAI ai = (clsDriverAI)driver;
-                    Vector2 lastWaypointWorldLocation = ai.car.location;
-                    for (int t = ai.route.currentWaypointIndex; t < ai.route.waypoints.Count; t++)
+                    if (driverAI.route != null)
                     {
-                        Vector2 thisWaypointWorldLocation = world.tileCoordinateToWorldLocation(ai.route.waypoints[t]);
-                        lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, ai.car.color, 4));
-                        lastWaypointWorldLocation = thisWaypointWorldLocation;
+                        Vector2 lastWaypointWorldLocation = driverAI.car.location;
+                        for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
+                        {
+                            Vector2 thisWaypointWorldLocation = world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
+                            if (this.isVisible(thisWaypointWorldLocation)) lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
+                            lastWaypointWorldLocation = thisWaypointWorldLocation;
+                        }
                     }
 
                 }
-                catch (Exception ex)
-                {
-
-                }
+                
             }
+        }
 
+        public bool isVisible(Vector2 location)
+        {
+            if ((location.X > visibleArea.Left) && (location.Y > visibleArea.Top) && (location.X < visibleArea.Right) && (location.Y < visibleArea.Bottom)) return true;
+            else return false;
+        }
 
-            
+        public bool visible(Rectangle box)
+        {
+            if (this.isVisible(new Vector2(box.Left, box.Top))) return true;
+            if (this.isVisible(new Vector2(box.Left, box.Bottom))) return true;
+            if (this.isVisible(new Vector2(box.Right, box.Top))) return true;
+            if (this.isVisible(new Vector2(box.Right, box.Bottom))) return true;
+            return false;
+        }
 
-
+        public Rectangle visibleTileArea
+        {
+            get
+            {
+                // assume tile world starts are 0,0
+                int left = (int)Math.Floor((decimal)this.visibleArea.Left / (decimal)this.world.tileSize);
+                int top = (int)Math.Floor((decimal)this.visibleArea.Top / (decimal)this.world.tileSize);
+                int width = (int)Math.Ceiling(this.visibleArea.Width / (decimal)this.world.tileSize);
+                int height = (int)Math.Ceiling(this.visibleArea.Height / (decimal)this.world.tileSize);
+                return new Rectangle(left, top, width, height);
+            }
         }
     }
 }

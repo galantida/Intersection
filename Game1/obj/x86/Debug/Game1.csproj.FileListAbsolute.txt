@@ -30,6 +30,7 @@ C:\Users\dgalanti\Documents\GitHub\Intersection\Game1\bin\Windows\x86\Debug\Shar
 C:\Users\dgalanti\Documents\GitHub\Intersection\Game1\obj\x86\Debug\Game1.csprojResolveAssemblyReference.cache
 C:\Users\dgalanti\Documents\GitHub\Intersection\Game1\obj\x86\Debug\Game1.exe
 C:\Users\dgalanti\Documents\GitHub\Intersection\Game1\obj\x86\Debug\Game1.pdb
+C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\Content\car.xnb
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\Content\entry.xnb
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\Content\exit.xnb
@@ -43,6 +44,8 @@ C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\Game1.ex
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\Game1.pdb
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\MonoGame.Framework.dll
+C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\physicalWorld.dll
+C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
@@ -51,6 +54,8 @@ C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.Direct2D1.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.XInput.dll
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\gameLogic.pdb
+C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\physicalWorld.pdb
+C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\tileWorld.pdb
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\MonoGame.Framework.xml
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.MediaFoundation.xml
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.xml
@@ -60,11 +65,6 @@ C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\SharpDX.XInput.xml
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.csprojAssemblyReference.cache
-C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.exe
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.pdb
-C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\physicalWorld.dll
-C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\tileWorld.dll
-C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\physicalWorld.pdb
-C:\Users\dave\Documents\Github\Intersection\Game1\bin\Windows\x86\Debug\tileWorld.pdb

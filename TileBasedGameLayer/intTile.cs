@@ -9,13 +9,18 @@ namespace tileWorld
 {
     public interface intTile
     {
+        // visible properties
         string textureName { get; set; }
-        float textureRotation { get; }
+        Vector2 location { get; set; }
         float rotation { get; set; }
+        float textureRotation { get; }
+        Dictionary<Color, Color> colorReplacements { get; set; }
+
+        // processing properties
         bool collisionDetection { get; set; }
         List<intObject> worldObjects { get; set; }
         
 
-        Dictionary<Color, Color> colorReplacements { get; set; }
+        
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using physicalWorld;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 
 namespace tileWorld
@@ -28,13 +29,23 @@ namespace tileWorld
             random = new Random(); // randomize seed the world
             _currentTime.Start(); // start processing clock
 
+            
+
             this.tileSize = tileSize;
         }
 
-        public void update()
+        public void update(float currentTime)
         {
-            processCollisions();
+            //processCollisions();  not used right now
             processTileLocations();
+        }
+
+        public float currentTime
+        {
+            get
+            {
+                return _currentTime.ElapsedMilliseconds;
+            }
         }
 
         /*********************************************************************************
@@ -42,11 +53,14 @@ namespace tileWorld
          *********************************************************************************/
         public void addTile(string textureName, long tilex, long tiley, bool passable)
         {
-            tiles[tilex, tiley] = (intTile)new clsTile(textureName, passable);
+            intTile tile = (intTile)new clsTile(textureName, passable);
+            tile.location = new Vector2(tilex * this.tileSize, tiley * this.tileSize);
+            tiles[tilex, tiley] = tile;
         }
 
         public void addTile(intTile tile, long tilex, long tiley)
         {
+            tile.location = new Vector2(tilex * this.tileSize, tiley * this.tileSize);
             tiles[tilex, tiley] = tile;
         }
 
@@ -149,7 +163,7 @@ namespace tileWorld
             {
                 for (int t=0; t < unprocessedCollisionObjects.Count; t++)
                 {
-                    // objects should compare themselves to themselves
+                    // objects should not compare themselves to themselves
                     if (worldObject != unprocessedCollisionObjects[t])
                     {
                         float distance = (worldObject.location - unprocessedCollisionObjects[t].location).Length();
@@ -172,6 +186,7 @@ namespace tileWorld
        *****************************************/
        public void processTileLocations()
         {
+            // clear all tile contents
             for (int x = 0; x < this.tiles.GetLength(0); x += 1)
             {
                 for (int y = 0; y < this.tiles.GetLength(1); y += 1)
@@ -180,6 +195,7 @@ namespace tileWorld
                 }
             }
 
+            // load tiles with object that are one them
             foreach (intObject worldObject in this.worldObjects)
             {
                 intTile tile = this.getTileFromWorldLocation(worldObject.location);

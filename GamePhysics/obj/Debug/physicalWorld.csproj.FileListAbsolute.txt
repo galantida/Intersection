@@ -1,4 +1,3 @@
-C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\physicalWorld.pdb
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\MonoGame.Framework.dll
@@ -17,6 +16,7 @@ C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\SharpDX.DXGI.x
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\bin\Debug\SharpDX.XInput.xml
+C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.pdb

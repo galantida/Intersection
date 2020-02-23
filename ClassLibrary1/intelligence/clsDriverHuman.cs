@@ -14,13 +14,13 @@ namespace gameLogic
     public class clsDriverHuman : clsActor, intActor
     {
         // inputs and outputs
-        private clsCar car;
+        public clsCar car;
+        private clsInput input;
 
-        KeyboardState lastState;
-
-        public clsDriverHuman(clsCar car)
+        public clsDriverHuman(clsCar car, clsInput input)
         {
             this.car = car;
+            this.input = input;
         }
 
         public void update(float currentTime)
@@ -31,8 +31,7 @@ namespace gameLogic
                 lastUpdated = currentTime; // reset last updated
 
                 // read human input
-                keyboardInput();
-                mouseInput();
+                readUserInput();
 
                 // human car inbounds only
                 float worldSize = 14 * 64;
@@ -43,87 +42,40 @@ namespace gameLogic
             }
         }
 
-        public void mouseInput()
+        public void readUserInput()
         {
-            MouseState state = Mouse.GetState();
-        }
+            // accelerator
+            if (input.isActivated(InputActionName.Accelerate)) car.acceleratorPedal += 0.1f;
+            else if (input.isActivated(InputActionName.Decelerate)) car.acceleratorPedal -= 0.1f;
+            else car.acceleratorPedal = 0.0f;
 
-        public void keyboardInput()
-        {
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            // breaking
+            if (input.isActivated(InputActionName.Break)) car.breakPedal += 0.1f;
+            else car.breakPedal = 0.0f;
+
+            if (input.isActivated(InputActionName.SteerLeft)) car.steeringWheel -= 0.1f;
+            if (input.isActivated(InputActionName.SteerRight)) car.steeringWheel += 0.1f;
+
+            if (input.isActivated(InputActionName.ShiftNeutral)) car.shifter = ShifterPosition.neutral;
+            if (input.isActivated(InputActionName.ShiftDrive)) car.shifter = ShifterPosition.drive;
+            if (input.isActivated(InputActionName.ShiftReverse)) car.shifter = ShifterPosition.reverse;
+
+
+
+            if (input.isActivated(InputActionName.LeftTurnSignal)) car.turnSignal--;
+            if (input.isActivated(InputActionName.RightTurnSignal)) car.turnSignal++;
+
+            if (input.isActivated(InputActionName.HeadLights))
             {
-                if (!lastState.IsKeyDown(Keys.Up)) car.acceleratorPedal += 0.1f;
+                if (this.car.lights == 0) this.car.lights = 3;
+                else this.car.lights = 0;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            if (input.isActivated(InputActionName.Hazzards))
             {
-                if (!lastState.IsKeyDown(Keys.Down)) car.acceleratorPedal -= 0.1f;
+                if (!this.car.hazzard) this.car.hazzard = true;
+                else this.car.hazzard = false;
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                if (!lastState.IsKeyDown(Keys.Right)) car.steeringWheel += 0.1f;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                if (!lastState.IsKeyDown(Keys.Left)) car.steeringWheel -= 0.1f;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.N))
-            {
-                car.shifter = ShifterPosition.neutral;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-            {
-                car.shifter = ShifterPosition.drive;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.R))
-            {
-                car.shifter = ShifterPosition.reverse;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.B))
-            {
-                car.acceleratorPedal = 0;
-                car.breakPedal += 0.1f;
-            }
-            else
-            {
-                car.breakPedal -= 0.1f;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.H))
-            {
-                if (!lastState.IsKeyDown(Keys.H))
-                {
-                    if (this.car.lights == 0) this.car.lights = 3;
-                    else this.car.lights = 0;
-                }
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.OemComma))
-            {
-                if (!lastState.IsKeyDown(Keys.OemComma)) car.turnSignal--;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.OemPeriod))
-            {
-                if (!lastState.IsKeyDown(Keys.OemPeriod)) car.turnSignal++;
-            }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
-            {
-                if (!lastState.IsKeyDown(Keys.E))
-                {
-                    if (!this.car.hazzard) this.car.hazzard = true;
-                    else this.car.hazzard = false;
-                }
-            }
-
-            lastState = Keyboard.GetState();
         }
     }
 }

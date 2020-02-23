@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework;
 using tileWorld;
 using physicalWorld;
 
-namespace tileWorld
+namespace gameLogic
 {
     // route is a collection of square coordinates between two squares
     public class clsRoute
     {
         private clsWorld world;
         public List<Vector2> waypoints; // tile coordinates
-        private int _currentWaypointIndex = 1;
+        private int _currentWaypointIndex = 0;
 
         public int currentWaypointIndex
         {

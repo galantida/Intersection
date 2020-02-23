@@ -44,7 +44,6 @@
     <Compile Include="clsCamera.cs" />
     <Compile Include="clsDisplay.cs" />
     <Compile Include="clsLine.cs" />
-    <Compile Include="clsWaypointLine.cs" />
     <Compile Include="clsWindow.cs" />
     <Compile Include="clsSprite.cs" />
     <Compile Include="clsSpriteTile.cs" />

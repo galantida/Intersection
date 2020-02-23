@@ -1,5 +1,3 @@
-C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csproj.CoreCompileInputs.cache
-C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csprojAssemblyReference.cache
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\tileWorld.pdb
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\MonoGame.Framework.dll
@@ -20,6 +18,8 @@ C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\SharpDX
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\bin\Debug\SharpDX.XInput.xml
+C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csprojAssemblyReference.cache
+C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.pdb

@@ -32,16 +32,16 @@ namespace Game1
 
             // create cameras
             cameras = new List<clsCamera>();
-            clsCamera camera = new clsCamera(world, new Vector2(500,500), new Vector2(400,400));
+            clsCamera camera = new clsCamera(world, new Rectangle(0, 0, 600, 600));
             cameras.Add(camera);
 
             // create displays
             displays = new List<clsDisplay>();
-            clsDisplay display = new clsDisplay(new Vector2(0,0),new Vector2(400,400), camera, textures, fonts);
+            clsDisplay display = new clsDisplay(new Rectangle(25, 25, 600, 600), camera, textures, fonts);
             displays.Add(display);
         }
 
-        public void update()
+        public void update(float currentTime)
         {
             foreach (clsCamera camera in cameras)
             {

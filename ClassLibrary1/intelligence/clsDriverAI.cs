@@ -51,7 +51,9 @@ namespace gameLogic
                 // calculate route every time?
                 if (this.route == null) calculateShortestRoute(car.location, destination);
 
-                float speedLimit = this.world.getRoadWorldTileFromTileCoordinate(this.route.currentWaypoint).speedLimit;
+                // speed limit
+                float speedLimit = 0.0f;
+                if (this.route != null) speedLimit = this.world.getRoadWorldTileFromTileCoordinate(this.route.currentWaypoint).speedLimit;
 
                 // drivers desired speed due to route
                 float driversSpeedLimit = speedLimit;
@@ -108,7 +110,8 @@ namespace gameLogic
 
                 // ********************************************
                 //          steering control
-                Vector2 wayPointWorldLocation = world.tileCoordinateToWorldLocation(this.route.currentWaypoint);
+                Vector2 wayPointWorldLocation = Vector2.Normalize(car.velocity);
+                if (this.route != null) wayPointWorldLocation = world.tileCoordinateToWorldLocation(this.route.currentWaypoint);
                 Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to my waypoint
 
                 // how much are we off
