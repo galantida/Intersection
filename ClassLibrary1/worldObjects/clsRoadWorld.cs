@@ -76,10 +76,10 @@ namespace gameLogic
             worldObjects = new List<intObject>();
 
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 20000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 20000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 20000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 20000);
+            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 15000);
+            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 15000);
+            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 15000);
+            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 15000);
 
             // create exit points
             createExit(new Vector2(7, 0));
@@ -127,7 +127,7 @@ namespace gameLogic
 
         public void addGrass(long tilex, long tiley)
         {
-            clsGrass grass = new clsGrass();
+            clsRoadWorldTile grass = new clsRoadWorldTile(new List<Vector2>(), 0);
             base.addTile(grass, tilex, tiley);
         }
 
@@ -137,25 +137,25 @@ namespace gameLogic
             {
                 case CardinalDirection.East:
                     {
-                        clsLane road = new clsLane(CardinalDirection.East);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(true, false, false, false), 50);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.West:
                     {
-                        clsLane road = new clsLane(CardinalDirection.West);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, true, false, false), 50);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.North:
                     {
-                        clsLane road = new clsLane(CardinalDirection.North);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, true, false), 25);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.South:
                     {
-                        clsLane road = new clsLane(CardinalDirection.South);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, false, true), 25);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
@@ -164,7 +164,7 @@ namespace gameLogic
 
         public void addIntersection(long tilex, long tiley, bool east, bool west, bool north, bool south)
         {
-            clsIntersection intersection = new clsIntersection(east, west, north, south);
+            clsRoadWorldTile intersection = new clsRoadWorldTile(clsRoadWorldTile.getDirections(east, west, north, south), 35);
             base.addTile(intersection, tilex, tiley);
         }
 
@@ -227,6 +227,10 @@ namespace gameLogic
             return AI;
         }
 
+        public intRoadWorldTile getRoadWorldTileFromTileCoordinate(Vector2 tileCoordinate)
+        {
+            return (intRoadWorldTile)this.getTileFromTileCoordinate(tileCoordinate);
+        }
 
 
         /*****************************************
@@ -264,7 +268,7 @@ namespace gameLogic
 
             // set the current square to the starting location
             Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count() - 1];
-            intRoad currentSquare = (intRoad)this.getTileFromTileCoordinate(currentWaypoint);
+            intRoadWorldTile currentSquare = (intRoadWorldTile)this.getRoadWorldTileFromTileCoordinate(currentWaypoint);
 
             // get all posible directions off of the current square
             foreach (Vector2 currentDirection in currentSquare.directions)

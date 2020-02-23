@@ -31,14 +31,5 @@ namespace Game1
 
             this.texture = textures[this.tile.textureName];
         }
-
-        public void draw(clsDisplay display, SpriteBatch spriteBatch)
-        {
-            // adjusted rotation
-            Vector2 adjustedLocation = new Vector2(this.location.X + 32, this.location.Y + 32);
-
-            //this.location = display.screenLocation + (new Vector2(x * 64, y * 64)) * display.scale;
-            spriteBatch.Draw(texture, adjustedLocation, null, Color.White, tile.textureRotation, origin, display.scale, SpriteEffects.None, 1);
-        }
     }
 }

@@ -7,16 +7,20 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using gameLogic;
 using tileWorld;
+using physicalWorld;
 
 namespace Game1
 {
     public class clsDisplay
     {
-        public clsCamera camera;
-        public Rectangle displayArea;
-        public float scale;
+        // display is a portlet used to display the contents of one or more cameras
 
-        // camera views
+        public clsCamera camera;
+        public Vector2 location { get; set; }
+        public Vector2 size { get; set; }
+        public float scale { get; set; }
+
+        // display Objects
         List<clsSprite> sprites = new List<clsSprite>();
         clsSpriteTile[,] spriteTiles = new clsSpriteTile[0,0];
 
@@ -24,16 +28,18 @@ namespace Game1
         public Dictionary<string, Texture2D> textures;
         public Dictionary<string, SpriteFont> fonts;
 
-        public clsDisplay(clsCamera camera, Rectangle displayArea, Dictionary<string, Texture2D> textures, Dictionary<string, SpriteFont> fonts)
+        public clsDisplay(Vector2 location, Vector2 size, clsCamera camera, Dictionary<string, Texture2D> textures, Dictionary<string, SpriteFont> fonts)
         {
+            this.location = location;
+            this.size = size;
             this.camera = camera;
-            this.displayArea = displayArea;
+            
             this.textures = textures;
             this.fonts = fonts;
 
-            // determine scale up or down of camera content
-            if (this.displayArea.Width > camera.visibleArea.Width) this.scale = this.displayArea.Width / camera.visibleArea.Width;
-            else this.scale = camera.visibleArea.Width / this.displayArea.Width;
+            // determine display scale up or down of camera content
+            if (this.size.X > camera.visibleArea.Width) this.scale = camera.visibleArea.Width / this.size.X;
+            else this.scale = this.size.X / camera.visibleArea.Width;
         }
 
         public void update()
@@ -44,7 +50,6 @@ namespace Game1
 
         public void staticSpriteManagement()
         {
-            Vector2 displayLocation = new Vector2(this.displayArea.Left, this.displayArea.Top);
             float spacing = 64.0f * this.scale;
 
             spriteTiles = new clsSpriteTile[camera.viewableTiles.GetLength(0), camera.viewableTiles.GetLength(1)];
@@ -53,7 +58,7 @@ namespace Game1
                 for (int y = 0; y < camera.viewableTiles.GetLength(0); y++)
                 {
                     spriteTiles[x, y] = new clsSpriteTile(camera.viewableTiles[x, y], textures);
-                    spriteTiles[x, y].location = displayLocation + new Vector2(x * spacing, y * spacing);
+                    spriteTiles[x, y].location = this.location + new Vector2(x * spacing, y * spacing);
                 }
             }
         }
@@ -107,11 +112,11 @@ namespace Game1
 
         public void draw(SpriteBatch spriteBatch)
         {
-            drawBorder(spriteBatch, textures["pixel"], displayArea, 1, Color.Gold);
             drawStaticSprites(spriteBatch);
             drawSprites(spriteBatch);
             drawLines(spriteBatch);
             drawOverlay(spriteBatch);
+            drawBorder(spriteBatch, textures["pixel"], new Rectangle((int)this.location.X, (int)this.location.Y, (int)this.size.X, (int)this.size.Y), 2, Color.Black);
         }
 
         
@@ -126,9 +131,12 @@ namespace Game1
         }
         private void drawStaticSprites(SpriteBatch spriteBatch)
         {
+            float halfTile = 32 * this.scale;
             foreach (clsSpriteTile spriteTile in spriteTiles)
             {
-                spriteTile.draw(this, spriteBatch);
+                // get adjusted location
+                Vector2 adjustedLocation = new Vector2(spriteTile.location.X + halfTile, spriteTile.location.Y + halfTile);
+                spriteBatch.Draw(spriteTile.texture, adjustedLocation, null, Color.White, spriteTile.tile.textureRotation, spriteTile.origin, this.scale, SpriteEffects.None, 1);
             }
         }
 
@@ -137,7 +145,20 @@ namespace Game1
         {
             for (int s = 0; s < sprites.Count; s++)
             {
-                sprites[s].draw(this, spriteBatch);
+                // get top left of display
+                Vector2 displayLocation = new Vector2(this.location.X, this.location.Y);
+
+                // manipulate sprite to represent world object properties
+                sprites[s].location = (displayLocation + sprites[s].worldObject.location) * this.scale;
+                sprites[s].rotation = clsGameMath.toRotation(sprites[s].worldObject.direction);
+                float scale = this.scale * sprites[s].scale;
+
+                // update custom colors
+                if (sprites[s].worldObject.colorsUpdated) sprites[s].updateSpriteTexture();
+
+                // draw
+                spriteBatch.Draw(sprites[s].spriteTexture, sprites[s].location, new Rectangle(0, 0, sprites[s].spriteTexture.Width, sprites[s].spriteTexture.Height), Color.White, sprites[s].rotation, sprites[s].origin, scale, SpriteEffects.None, 1);
+
             }
         }
 
@@ -145,7 +166,7 @@ namespace Game1
         {
             foreach (clsLine line in this.camera.lines)
             {
-                DrawLine(spriteBatch, new Vector2(displayArea.Left + line.point1.X, displayArea.Top + line.point1.Y), new Vector2(displayArea.Left + line.point2.X, displayArea.Top + line.point2.Y), line.color, line.thickness);
+                DrawLine(spriteBatch, new Vector2(this.location.X + line.point1.X * this.scale, this.location.Y + line.point1.Y * this.scale), new Vector2(this.location.X + line.point2.X * this.scale, this.location.Y + line.point2.Y * this.scale), line.color, line.thickness);
             }
         }
 

@@ -42,8 +42,15 @@ namespace gameLogic
                 switch (this.spawnTypeName)
                 {
                     case "car":
-                        clsExit exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
                         Vector2 spawnLocation = randomizeVector(worldToSpawnIn, this.location); // randomizes car location slightly
+
+                        clsExit exit = null;
+                        while (exit == null)
+                        {
+                            exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
+                            if ((spawnLocation - exit.location).Length() < 300) exit = null;
+                        }
+                        
                         clsDriverAI driver = worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
                         driver.car.color = new Color(worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255));
                         break;

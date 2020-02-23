@@ -54,12 +54,12 @@ namespace gameLogic
             base.kineticFrictionCoefficient.baseValue = 0.002f; // drag while moving
             base.staticFrictionCoefficient.baseValue = 0.001f; // drag on starting to move
             base.surfaceArea = 0.02f; // surface area facing wind
-            base.dragCoefficient.baseValue = 0.25f; // wind resistance
+            base.dragCoefficient.baseValue = 0.25f; // wind resistance - faster the more is applied
             base.collisionDetection = CollisionType.Spherical;
 
             // Car properties
             this.acceleration = 0.02f; // force to add in the direction of the transmissions
-            this.breaking = 0.001f; // creates additional kinetic friction coefficient
+            this.breaking = 0.01f; // creates additional kinetic friction coefficient
             this.handling = 1.0f; // im pact of steering
 
             // mechanical status

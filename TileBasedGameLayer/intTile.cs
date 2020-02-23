@@ -9,7 +9,6 @@ namespace tileWorld
 {
     public interface intTile
     {
-        string typeName { get; set; }
         string textureName { get; set; }
         float textureRotation { get; }
         float rotation { get; set; }

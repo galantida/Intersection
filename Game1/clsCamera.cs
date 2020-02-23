@@ -13,28 +13,44 @@ namespace Game1
 {
     public class clsCamera
     {
+        // a camera is using to define a displayable area
+        // and act as a container to hold all of those objects.
+
+        // properties
+        public Vector2 target { get; set; }// world corrdinates of top left corner of visible map.
+        public Vector2 size { get; set; }// world corrdinates of top left corner of visible map.
+
+        // camera captured objects
+        public List<intObject> viewableObjects { get; set; }
+        public intTile[,] viewableTiles { get; set; }
+        public List<clsLine> lines { get; set; }
+        public List<string> text { get; set; }
+
+        // privates
         private clsRoadWorld world;
-        public Rectangle visibleArea;
 
-        public Vector2 topLeft; // world corrdinates of top left corner of visible map.
-
-        // display elements
-        public List<intObject> viewableObjects;
-        public intTile[,] viewableTiles;
-        public List<clsLine> lines = new List<clsLine>();
-        public List<string> text;
-
-
-        public clsCamera(clsRoadWorld world, Rectangle visibleArea)
+        public clsCamera(clsRoadWorld world, Vector2 target, Vector2 size)
         {
             this.world = world;
-            this.visibleArea = visibleArea;
+            this.target = target;
+            this.size = size;
+
+            // init objects
+            this.lines = new List<clsLine>();
+        }
+
+        public Rectangle visibleArea
+        {
+            get
+            {
+                int topLeftX = (int)target.X - (int)(size.X / 2);
+                int topLeftY = (int)target.Y - (int)(size.Y / 2);
+                return new Rectangle(topLeftX, topLeftY, (int)size.X, (int)size.Y);
+            }
         }
 
         public void update()
         {
-            topLeft = new Vector2(0, 0);
-
             // filter game pieces and tiles down to viewable items 
             viewableObjects  = this.world.worldObjects;
 

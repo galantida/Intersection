@@ -7,8 +7,10 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    interface intRoad
+    public interface intRoadWorldTile
     {
         List<Vector2> directions { get; set; }
+
+        float speedLimit { get; set; }
     }
 }

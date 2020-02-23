@@ -30,13 +30,14 @@ namespace Game1
             this.graphics.PreferredBackBufferHeight = (int)size.Y;   // set this value to the desired height of your window
             this.graphics.ApplyChanges();
 
+            // create cameras
             cameras = new List<clsCamera>();
-            clsCamera camera = new clsCamera(world, new Rectangle(0,0,1000,1000));
+            clsCamera camera = new clsCamera(world, new Vector2(500,500), new Vector2(400,400));
             cameras.Add(camera);
 
+            // create displays
             displays = new List<clsDisplay>();
-            //clsDisplay display = new clsDisplay(camera, new Rectangle(50, 50, (int)this.size.X-50, (int)this.size.Y-50), 2.0f, textures, fonts);
-            clsDisplay display = new clsDisplay(camera, new Rectangle(0, 0, (int)this.size.X, (int)this.size.Y), textures, fonts);
+            clsDisplay display = new clsDisplay(new Vector2(0,0),new Vector2(400,400), camera, textures, fonts);
             displays.Add(display);
         }
 

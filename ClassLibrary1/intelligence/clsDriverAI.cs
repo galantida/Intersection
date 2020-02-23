@@ -18,7 +18,6 @@ namespace gameLogic
         public clsCar car { get; set; }
         public Vector2 destination { get; set; }
         public clsRoute route { get; set; }
-        public float speedLimit { get; set; }
 
         public clsRoadWorld world;
 
@@ -32,7 +31,6 @@ namespace gameLogic
             this.car = car;
             this.destination = destination;
             this.route = null;
-            speedLimit = 35f;
             this.world = world;
 
             // driver differences
@@ -50,11 +48,14 @@ namespace gameLogic
             {
                 lastUpdated = world.currentTime; // reset last updated
 
+                // calculate route every time?
                 if (this.route == null) calculateShortestRoute(car.location, destination);
+
+                float speedLimit = this.world.getRoadWorldTileFromTileCoordinate(this.route.currentWaypoint).speedLimit;
 
                 // drivers desired speed due to route
                 float driversSpeedLimit = speedLimit;
-                if (this.route.distanceToNextTurn < 3) driversSpeedLimit = speedLimit * 0.1f;
+                if (this.route.distanceToNextTurn < 2) driversSpeedLimit = speedLimit * 0.5f;
 
                 // drivers desired speed due to obstructions
                 if (this.route.distanceToNextObstruction < 4) driversSpeedLimit = speedLimit * 0.75f;
@@ -84,7 +85,7 @@ namespace gameLogic
                 {
                     // hard braking
                     car.acceleratorPedal = 0.0f;
-                    car.breakPedal = 1000f;
+                    car.breakPedal = 1.0f;
                 }
                 else if (car.mph > driversSpeedLimit * 1.4f)
                 {

@@ -54,10 +54,8 @@
     <Compile Include="worldObjects\clsRoadWorld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="worldObjects\clsEntry.cs" />
-    <Compile Include="worldTiles\clsGrass.cs" />
-    <Compile Include="worldTiles\clsIntersection.cs" />
-    <Compile Include="worldTiles\clsLane.cs" />
-    <Compile Include="worldTiles\intRoad.cs" />
+    <Compile Include="worldTiles\clsRoadWorldTile.cs" />
+    <Compile Include="worldTiles\intRoadWorldTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GamePhysics\physicalWorld.csproj">

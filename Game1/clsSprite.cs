@@ -13,14 +13,16 @@ namespace Game1
 {
     public class clsSprite
     {
+        public Vector2 location = new Vector2(0, 0);
+        public float rotation = 0;
+        public float scale = 1;
+        public Vector2 origin = new Vector2(32, 32);
+
         public intObject worldObject;
         public Texture2D baseTexture;
         public Texture2D spriteTexture;
         public Rectangle sourceTileArea;
-        public Vector2 location = new Vector2(0, 0);
-        public float rotation = 0;
-        public float scale = 1;
-        public Vector2 origin = new Vector2(32,32);
+        
 
         public clsSprite(intObject worldObject, Texture2D texture)
         {
@@ -31,23 +33,6 @@ namespace Game1
 
             // calculated
             this.sourceTileArea = new Rectangle(0, 0, this.baseTexture.Width, this.baseTexture.Height);
-        }
-
-        public void draw(clsDisplay display, SpriteBatch spriteBatch)
-        {
-            // mimic game piece
-            Vector2 displayLocation = new Vector2(display.displayArea.X, display.displayArea.Y);
-
-            location = (displayLocation + worldObject.location) * display.scale;
-            rotation = clsGameMath.toRotation(worldObject.direction);
-            float scale = display.scale * this.scale;
-
-            // update custom colors
-            if (worldObject.colorsUpdated) updateSpriteTexture();
-
-
-            // draw
-            spriteBatch.Draw(this.spriteTexture, this.location, new Rectangle(0 , 0, this.spriteTexture.Width, this.spriteTexture.Height), Color.White, this.rotation, this.origin, scale, SpriteEffects.None, 1);
         }
 
         public void updateSpriteTexture()

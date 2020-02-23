@@ -40,9 +40,9 @@ namespace tileWorld
         /*********************************************************************************
          * Tile Functions
          *********************************************************************************/
-        public void addTile(string typeName, string textureName, long tilex, long tiley, bool passable)
+        public void addTile(string textureName, long tilex, long tiley, bool passable)
         {
-            tiles[tilex, tiley] = (intTile)new clsTile(typeName, textureName, passable);
+            tiles[tilex, tiley] = (intTile)new clsTile(textureName, passable);
         }
 
         public void addTile(intTile tile, long tilex, long tiley)
