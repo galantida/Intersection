@@ -21,9 +21,8 @@ namespace Game1
 
         // camera captured objects in order of display depth
         public List<string> text { get; set; } // camera over lay text
-        public List<intObject> visableObjects { get; set; }
+        public List<intObject> visibleObjects { get; set; }
         public List<clsLine> lines { get; set; } // lines above the tiles but below the objects
-        
 
         // privates
         public clsRoadWorld world { get; }
@@ -39,13 +38,27 @@ namespace Game1
 
         public void update()
         {
+
+            if (world.input.isActivated(InputActionNames.ZoomIn))
+            {
+                int v = 64;
+                visibleArea = new Rectangle(visibleArea.X, visibleArea.Y, visibleArea.Width - v, visibleArea.Height - v);
+            }
+
+            if (world.input.isActivated(InputActionNames.ZoomOut))
+            {
+                int v = 64;
+                visibleArea = new Rectangle(visibleArea.X, visibleArea.Y, visibleArea.Width + v, visibleArea.Height + v);
+            }
+
+
             // filter world objects to viewable items 
-            visableObjects = new List<intObject>();
+            visibleObjects = new List<intObject>();
             foreach (intObject o in this.world.worldObjects)
             {
                 if (this.isVisible(o.location))
                 {
-                    visableObjects.Add(o);
+                    visibleObjects.Add(o);
                 }
             }
 
@@ -123,11 +136,11 @@ namespace Game1
         {
             get
             {
-                // assume tile world starts are 0,0
+                // assume tile world starts at 0,0 but the camera may not
                 int left = (int)Math.Floor((decimal)this.visibleArea.Left / (decimal)this.world.tileSize);
                 int top = (int)Math.Floor((decimal)this.visibleArea.Top / (decimal)this.world.tileSize);
-                int width = (int)Math.Ceiling(this.visibleArea.Width / (decimal)this.world.tileSize);
-                int height = (int)Math.Ceiling(this.visibleArea.Height / (decimal)this.world.tileSize);
+                int width = (int)Math.Floor(this.visibleArea.Width / (decimal)this.world.tileSize);
+                int height = (int)Math.Floor(this.visibleArea.Height / (decimal)this.world.tileSize);
                 return new Rectangle(left, top, width, height);
             }
         }

@@ -13,7 +13,7 @@ namespace Game1
 {
     public class clsSprite
     {
-        public Vector2 screenLocation = new Vector2(0, 0);
+        public Vector2 displayLocation = new Vector2(0, 0);
         public float rotation = 0;
         public float scale = 1;
         public Vector2 origin = new Vector2(32, 32);

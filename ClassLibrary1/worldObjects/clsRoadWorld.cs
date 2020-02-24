@@ -14,7 +14,7 @@ namespace gameLogic
 
     public class clsRoadWorld : clsWorld
     {
-        private clsInput input;
+        public clsInput input;
 
         public clsRoadWorld(long tilesWide, float tileSize): base(tileSize)
         {

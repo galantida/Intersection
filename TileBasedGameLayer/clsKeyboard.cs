@@ -9,21 +9,23 @@ namespace tileWorld
 {
     public class clsKeyboard
     {
+        private KeyboardState currentState;
         private KeyboardState lastState;
 
         public clsKeyboard()
         {
-            // this will have to read from settings file
+            
         }
 
-        public void update()
+        public void reset()
         {
-            lastState = Keyboard.GetState();
+            lastState = currentState;
+            currentState = Keyboard.GetState();
         }
 
         public bool isPressed(Keys key)
         {
-            if (Keyboard.GetState().IsKeyDown(key))
+            if (currentState.IsKeyDown(key))
             {
                 if (!lastState.IsKeyDown(key)) return true;
             }

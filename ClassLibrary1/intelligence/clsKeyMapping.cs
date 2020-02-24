@@ -5,18 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using gameLogic;
+using tileWorld;
 
 namespace gameLogic
 {
-    public class clsKeyMapping
-    {
-        public Keys key { get; }
-        public InputActionName actionName { get; }
+    public enum ControlTypes { Keyboard, Mouse }
 
-        public clsKeyMapping(Keys key, InputActionName actionName)
+    public class clsControlMapping
+    {
+        public ControlTypes controlType { get; }
+        public InputActionNames actionName { get; }
+        public Keys key { get; }
+        public MouseButtons button {get; }
+
+        public clsControlMapping(Keys key, InputActionNames actionName) // swap these at some point. Action should be first
         {
-            this.key = key;
             this.actionName = actionName;
+            this.controlType = ControlTypes.Keyboard;
+            this.key = key;
+        }
+
+        public clsControlMapping(InputActionNames actionName, MouseButtons button)
+        {
+            this.actionName = actionName;
+            this.controlType = ControlTypes.Mouse;
+            this.button = button;
         }
     }
 }

@@ -45,33 +45,33 @@ namespace gameLogic
         public void readUserInput()
         {
             // accelerator
-            if (input.isActivated(InputActionName.Accelerate)) car.acceleratorPedal += 0.1f;
-            else if (input.isActivated(InputActionName.Decelerate)) car.acceleratorPedal -= 0.1f;
+            if (input.isActivated(InputActionNames.Accelerate)) car.acceleratorPedal += 0.1f;
+            else if (input.isActivated(InputActionNames.Decelerate)) car.acceleratorPedal -= 0.1f;
             else car.acceleratorPedal = 0.0f;
 
             // breaking
-            if (input.isActivated(InputActionName.Break)) car.breakPedal += 0.1f;
+            if (input.isActivated(InputActionNames.Break)) car.breakPedal += 0.1f;
             else car.breakPedal = 0.0f;
 
-            if (input.isActivated(InputActionName.SteerLeft)) car.steeringWheel -= 0.1f;
-            if (input.isActivated(InputActionName.SteerRight)) car.steeringWheel += 0.1f;
+            if (input.isActivated(InputActionNames.SteerLeft)) car.steeringWheel -= 0.1f;
+            if (input.isActivated(InputActionNames.SteerRight)) car.steeringWheel += 0.1f;
 
-            if (input.isActivated(InputActionName.ShiftNeutral)) car.shifter = ShifterPosition.neutral;
-            if (input.isActivated(InputActionName.ShiftDrive)) car.shifter = ShifterPosition.drive;
-            if (input.isActivated(InputActionName.ShiftReverse)) car.shifter = ShifterPosition.reverse;
+            if (input.isActivated(InputActionNames.ShiftNeutral)) car.shifter = ShifterPosition.neutral;
+            if (input.isActivated(InputActionNames.ShiftDrive)) car.shifter = ShifterPosition.drive;
+            if (input.isActivated(InputActionNames.ShiftReverse)) car.shifter = ShifterPosition.reverse;
 
 
 
-            if (input.isActivated(InputActionName.LeftTurnSignal)) car.turnSignal--;
-            if (input.isActivated(InputActionName.RightTurnSignal)) car.turnSignal++;
+            if (input.isActivated(InputActionNames.LeftTurnSignal)) car.turnSignal--;
+            if (input.isActivated(InputActionNames.RightTurnSignal)) car.turnSignal++;
 
-            if (input.isActivated(InputActionName.HeadLights))
+            if (input.isActivated(InputActionNames.HeadLights))
             {
                 if (this.car.lights == 0) this.car.lights = 3;
                 else this.car.lights = 0;
             }
 
-            if (input.isActivated(InputActionName.Hazzards))
+            if (input.isActivated(InputActionNames.Hazzards))
             {
                 if (!this.car.hazzard) this.car.hazzard = true;
                 else this.car.hazzard = false;

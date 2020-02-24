@@ -8,25 +8,27 @@ using tileWorld;
 
 namespace gameLogic
 {
-    public enum InputActionName { ShiftDrive, ShiftReverse, ShiftNeutral, Accelerate, Decelerate, Break, SteerLeft, SteerRight, HeadLights, LeftTurnSignal, RightTurnSignal, Hazzards };
+    public enum InputActionNames { ZoomIn, ZoomOut, ShiftDrive, ShiftReverse, ShiftNeutral, Accelerate, Decelerate, Break, SteerLeft, SteerRight, HeadLights, LeftTurnSignal, RightTurnSignal, Hazzards };
 
     // needs to convert keyboard input to
     // the aprropriate predefined commands
     public class clsInput
     {
-        public List<InputActionName> inputActions;
+        public List<InputActionNames> inputActions;
 
-        private List<clsKeyMapping> keyMappings;
+        private List<clsControlMapping> keyMappings;
         private clsKeyboard keyboard;
+        private clsMouse mouse;
 
         private float lastUpdated { get; set; }
 
         public clsInput()
         {
-            inputActions = new List<InputActionName>();
+            inputActions = new List<InputActionNames>();
 
             this.loadKeyMappings();
             keyboard = new clsKeyboard();
+            mouse = new clsMouse();
         }
 
         public void update(float currentTime)
@@ -37,21 +39,33 @@ namespace gameLogic
                 lastUpdated = currentTime; // reset last updated
 
                 // read inputs
-                keyboard.update();
-                inputActions = new List<InputActionName>();
-                foreach (clsKeyMapping keyMapping in this.keyMappings)
+                inputActions = new List<InputActionNames>();
+
+                // keyboard inputs
+                foreach (clsControlMapping keyMapping in this.keyMappings)
                 {
-                    if (keyboard.isPressed(keyMapping.key))
+                    if (keyMapping.controlType == ControlTypes.Mouse)
                     {
-                        inputActions.Add(keyMapping.actionName);
+                        // mouse mapping
+                        if (mouse.isPressed(keyMapping.button))
+                        {
+                            inputActions.Add(keyMapping.actionName);
+                        }
+                    }
+                    else
+                    {
+                        // keyboard mapping
+                        if (keyboard.isPressed(keyMapping.key)) inputActions.Add(keyMapping.actionName);
                     }
                 }
+                keyboard.reset();
+                mouse.reset();
             }
         }
 
-        public bool isActivated(InputActionName action)
+        public bool isActivated(InputActionNames action)
         {
-            foreach (InputActionName a in inputActions)
+            foreach (InputActionNames a in inputActions)
             {
                 if (action == a) return true;
             }
@@ -61,23 +75,27 @@ namespace gameLogic
         public void loadKeyMappings()
         {
             // key mappings
-            keyMappings = new List<clsKeyMapping>();
+            keyMappings = new List<clsControlMapping>();
 
             // controls
-            keyMappings.Add(new clsKeyMapping(Keys.Up, InputActionName.Accelerate));
-            keyMappings.Add(new clsKeyMapping(Keys.Down, InputActionName.Decelerate));
-            keyMappings.Add(new clsKeyMapping(Keys.Left, InputActionName.SteerLeft));
-            keyMappings.Add(new clsKeyMapping(Keys.Right, InputActionName.SteerRight));
-            keyMappings.Add(new clsKeyMapping(Keys.B, InputActionName.Break));
-            keyMappings.Add(new clsKeyMapping(Keys.D, InputActionName.ShiftDrive));
-            keyMappings.Add(new clsKeyMapping(Keys.R, InputActionName.ShiftReverse));
-            keyMappings.Add(new clsKeyMapping(Keys.N, InputActionName.ShiftNeutral));
+            keyMappings.Add(new clsControlMapping(Keys.Up, InputActionNames.Accelerate));
+            keyMappings.Add(new clsControlMapping(Keys.Down, InputActionNames.Decelerate));
+            keyMappings.Add(new clsControlMapping(Keys.Left, InputActionNames.SteerLeft));
+            keyMappings.Add(new clsControlMapping(Keys.Right, InputActionNames.SteerRight));
+            keyMappings.Add(new clsControlMapping(Keys.B, InputActionNames.Break));
+            keyMappings.Add(new clsControlMapping(Keys.D, InputActionNames.ShiftDrive));
+            keyMappings.Add(new clsControlMapping(Keys.R, InputActionNames.ShiftReverse));
+            keyMappings.Add(new clsControlMapping(Keys.N, InputActionNames.ShiftNeutral));
 
             // lights
-            keyMappings.Add(new clsKeyMapping(Keys.H, InputActionName.HeadLights));
-            keyMappings.Add(new clsKeyMapping(Keys.E, InputActionName.Hazzards));
-            keyMappings.Add(new clsKeyMapping(Keys.OemComma, InputActionName.LeftTurnSignal));
-            keyMappings.Add(new clsKeyMapping(Keys.OemPeriod, InputActionName.RightTurnSignal));
+            keyMappings.Add(new clsControlMapping(Keys.H, InputActionNames.HeadLights));
+            keyMappings.Add(new clsControlMapping(Keys.E, InputActionNames.Hazzards));
+            keyMappings.Add(new clsControlMapping(Keys.OemComma, InputActionNames.LeftTurnSignal));
+            keyMappings.Add(new clsControlMapping(Keys.OemPeriod, InputActionNames.RightTurnSignal));
+
+            // controls
+            keyMappings.Add(new clsControlMapping(InputActionNames.ZoomIn, MouseButtons.ScrollUp));
+            keyMappings.Add(new clsControlMapping(InputActionNames.ZoomOut, MouseButtons.ScrollDown));
         }
 
     }
