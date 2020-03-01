@@ -45,6 +45,12 @@ namespace Game1
 
         }
 
+        public Vector2 getDisplayCoordinate(Vector2 worldCoordinate)
+        {
+            Vector2 cameraCoordinate = this.camera.getCameraCoordinate(worldCoordinate);
+            return cameraCoordinate * this.scale;
+        }
+
         public float scale
         {
             get
@@ -91,7 +97,6 @@ namespace Game1
             List<intObject> displayedWorldObjects = new List<intObject>();
             foreach (intObject gp in camera.visibleObjects)
             {
-                // could be logic here to determine what is in the displayable area
                 displayedWorldObjects.Add(gp);
             }
 
@@ -146,7 +151,10 @@ namespace Game1
                         for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
                         {
                             Vector2 thisWaypointWorldLocation = this.camera.world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
-                            if (this.camera.isVisible(thisWaypointWorldLocation)) lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
+                            if (this.camera.isVisible(thisWaypointWorldLocation))
+                            {
+                                lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
+                            }
                             lastWaypointWorldLocation = thisWaypointWorldLocation;
                         }
                     }
@@ -167,18 +175,17 @@ namespace Game1
         
         private void drawStaticSprites(SpriteBatch spriteBatch)
         {
-            float halfTile = 32.0f * this.scale;
+            Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
+            float adjustment = 32.0f * this.scale;
+            Vector2 halfTile = new Vector2(adjustment, adjustment);
             foreach (clsSpriteTile spriteTile in spriteTiles)
             {
-                if (spriteTile != null) // we shouldn't need this if we loaded the array correctly
+                if (spriteTile != null) // tile array is created based on camera coverage even if there is no world tile to see
                 {
                     // get adjusted location
-                    Vector2 adjustedLocation = new Vector2(spriteTile.displayLocation.X + halfTile, spriteTile.displayLocation.Y + halfTile);
-                    spriteBatch.Draw(spriteTile.texture, adjustedLocation, null, Color.White, spriteTile.tile.textureRotation, spriteTile.origin, this.scale, SpriteEffects.None, 1);
-                } else
-                {
-                    int e = 2;
-                }
+                    spriteTile.displayLocation = this.getDisplayCoordinate(spriteTile.tile.location) + halfTile;
+                    spriteBatch.Draw(spriteTile.texture, displayLocation + spriteTile.displayLocation, null, Color.White, spriteTile.tile.textureRotation, spriteTile.origin, this.scale, SpriteEffects.None, 1);
+                } 
             }
         }
 
@@ -191,7 +198,7 @@ namespace Game1
             for (int s = 0; s < sprites.Count; s++)
             {
                 // manipulate sprite to represent world object properties
-                sprites[s].displayLocation = (displayLocation + (sprites[s].worldObject.location - new Vector2(camera.visibleArea.Left, camera.visibleArea.Top))) * this.scale;
+                sprites[s].displayLocation = this.getDisplayCoordinate(sprites[s].worldObject.location);
                 sprites[s].rotation = clsGameMath.toRotation(sprites[s].worldObject.direction);
                 float scale = this.scale * sprites[s].scale;
 
@@ -199,7 +206,7 @@ namespace Game1
                 if (sprites[s].worldObject.colorsUpdated) sprites[s].updateSpriteTexture();
 
                 // draw
-                spriteBatch.Draw(sprites[s].spriteTexture, sprites[s].displayLocation, new Rectangle(0, 0, sprites[s].spriteTexture.Width, sprites[s].spriteTexture.Height), Color.White, sprites[s].rotation, sprites[s].origin, scale, SpriteEffects.None, 1);
+                spriteBatch.Draw(sprites[s].spriteTexture, displayLocation + sprites[s].displayLocation, new Rectangle(0, 0, sprites[s].spriteTexture.Width, sprites[s].spriteTexture.Height), Color.White, sprites[s].rotation, sprites[s].origin, scale, SpriteEffects.None, 1);
 
             }
         }
@@ -210,15 +217,10 @@ namespace Game1
         {
             // get top left of display
             Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
-
             foreach (clsLine line in this.lines)
             {
-                float x1 = this.screenArea.X + (line.point1.X * this.scale);
-                float y1 = this.screenArea.Y + (line.point1.Y * this.scale);
-                float x2 = this.screenArea.X + (line.point2.X * this.scale);
-                float y2 = this.screenArea.Y + (line.point2.Y * this.scale);
-
-                DrawLine(spriteBatch, new Vector2(x1, y1), new Vector2(x2,y2), line.color, line.thickness);
+                // transform line from world coordinates to screen coordinates
+                DrawLine(spriteBatch, displayLocation + this.getDisplayCoordinate(line.point1), displayLocation + this.getDisplayCoordinate(line.point2), line.color, line.thickness);
             }
         }
 

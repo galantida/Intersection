@@ -15,7 +15,7 @@ namespace Game1
     {
         public intTile tile;
         public Texture2D texture;
-        public Vector2 displayLocation; // screen location
+        public Vector2 displayLocation; // display location
         public Vector2 origin; // origin of texture rotation
 
 

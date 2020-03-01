@@ -12,7 +12,7 @@ namespace tileWorld
     {
         // visible properties
         public string textureName { get; set; }
-        public Vector2 location { get; set;  }
+        public Vector2 location { get; set;  } // world location
         public float rotation { get; set; } // actual rotation of the tile from its default
         public Dictionary<Color, Color> colorReplacements { get; set; }
 

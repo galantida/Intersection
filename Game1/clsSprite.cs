@@ -13,16 +13,15 @@ namespace Game1
 {
     public class clsSprite
     {
-        public Vector2 displayLocation = new Vector2(0, 0);
-        public float rotation = 0;
-        public float scale = 1;
-        public Vector2 origin = new Vector2(32, 32);
+        public Vector2 displayLocation { get; set; }
+        public float rotation { get; set; }
+        public float scale { get; set; }
+        public Vector2 origin { get; set; } 
 
-        public intObject worldObject;
-        public Texture2D baseTexture;
-        public Texture2D spriteTexture;
-        public Rectangle sourceTileArea;
-        
+        public intObject worldObject { get; set; }
+        public Texture2D baseTexture { get; set; }
+        public Texture2D spriteTexture { get; set; }
+        public Rectangle sourceTileArea { get; set; }
 
         public clsSprite(intObject worldObject, Texture2D texture)
         {
@@ -30,6 +29,12 @@ namespace Game1
             this.worldObject = worldObject;
             this.baseTexture = texture;
             this.spriteTexture = new Texture2D(this.baseTexture.GraphicsDevice, this.baseTexture.Width, this.baseTexture.Height);
+
+            // initialized
+            this.displayLocation = new Vector2(0, 0);
+            this.scale = 1;
+            this.origin = new Vector2(32, 32);
+            this.rotation = 0;
 
             // calculated
             this.sourceTileArea = new Rectangle(0, 0, this.baseTexture.Width, this.baseTexture.Height);

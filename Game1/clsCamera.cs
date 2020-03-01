@@ -101,6 +101,11 @@ namespace Game1
             }
         }
 
+        public Vector2 getCameraCoordinate(Vector2 worldCoordinate)
+        {
+            return worldCoordinate - new Vector2(this.visibleArea.Location.X, this.visibleArea.Location.Y);
+        }
+
         public Rectangle visibleArea {
             // world coordinates of top left corner of visible map.
             get
@@ -135,5 +140,7 @@ namespace Game1
             if ((location.X >= tmpVisibleArea.Left) && (location.Y >= tmpVisibleArea.Top) && (location.X <= tmpVisibleArea.Right) && (location.Y <= tmpVisibleArea.Bottom)) return true;
             else return false;
         }
+
+        
     }
 }
