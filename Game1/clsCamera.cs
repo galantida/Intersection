@@ -17,38 +17,35 @@ namespace Game1
         // It can be used as a container tha hold the tiles and objects that are viewable in that area
 
         // properties
-        public Rectangle visibleArea { get; set; }// world coordinates of top left corner of visible map.
+        public Vector2 target { get; set; } // world target
+        public Vector2 size { get; set; } // world screen size
 
         // camera captured objects in order of display depth
         public List<string> text { get; set; } // camera over lay text
         public List<intObject> visibleObjects { get; set; }
-        public List<clsLine> lines { get; set; } // lines above the tiles but below the objects
+
 
         // privates
         public clsRoadWorld world { get; }
-
-        public clsCamera(clsRoadWorld world, Rectangle visibleArea)
+        
+        public clsCamera(clsRoadWorld world, Vector2 target, Vector2 size)
         {
             this.world = world;
-            this.visibleArea = visibleArea;
-
-            // init objects
-            this.lines = new List<clsLine>();
+            this.target = target;
+            this.size = size;
         }
 
         public void update()
         {
-
+            int zoomScale = 64;
             if (world.input.isActivated(InputActionNames.ZoomIn))
             {
-                int v = 64;
-                visibleArea = new Rectangle(visibleArea.X, visibleArea.Y, visibleArea.Width - v, visibleArea.Height - v);
+                this.size = new Vector2(this.size.X - zoomScale, this.size.Y - zoomScale);
             }
 
             if (world.input.isActivated(InputActionNames.ZoomOut))
             {
-                int v = 64;
-                visibleArea = new Rectangle(visibleArea.X, visibleArea.Y, visibleArea.Width + v, visibleArea.Height + v);
+                this.size = new Vector2(this.size.X + zoomScale, this.size.Y + zoomScale);
             }
 
 
@@ -64,7 +61,6 @@ namespace Game1
 
 
             // camera overlay
-            lines = new List<clsLine>();
             text = new List<string>();
             foreach (intActor driver in world.actors)
             {
@@ -100,49 +96,44 @@ namespace Game1
                     //text.Add("Shifter : " + c.shifter.ToString().ToUpper());
                     //text.Add("Acceleerator Pedal : " + c.acceleratorPedal);
                     //text.Add("Break Pedal : " + c.breakPedal);
-
-                    if (driverAI.route != null)
-                    {
-                        Vector2 lastWaypointWorldLocation = driverAI.car.location;
-                        for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
-                        {
-                            Vector2 thisWaypointWorldLocation = world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
-                            if (this.isVisible(thisWaypointWorldLocation)) lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
-                            lastWaypointWorldLocation = thisWaypointWorldLocation;
-                        }
-                    }
-
                 }
                 
             }
         }
 
-        public bool isVisible(Vector2 location)
-        {
-            if ((location.X > visibleArea.Left) && (location.Y > visibleArea.Top) && (location.X < visibleArea.Right) && (location.Y < visibleArea.Bottom)) return true;
-            else return false;
-        }
-
-        public bool visible(Rectangle box)
-        {
-            if (this.isVisible(new Vector2(box.Left, box.Top))) return true;
-            if (this.isVisible(new Vector2(box.Left, box.Bottom))) return true;
-            if (this.isVisible(new Vector2(box.Right, box.Top))) return true;
-            if (this.isVisible(new Vector2(box.Right, box.Bottom))) return true;
-            return false;
+        public Rectangle visibleArea {
+            // world coordinates of top left corner of visible map.
+            get
+            {
+                int top = (int)(this.target.Y - (this.size.Y / 2.0f));
+                int left = (int)(this.target.X - (this.size.X / 2.0f));
+                return new Rectangle(left, top, (int)this.size.X, (int)this.size.Y);
+            }
         }
 
         public Rectangle visibleTileArea
         {
             get
             {
+                Rectangle tmpVisibleArea = this.visibleArea; // cache for speed
                 // assume tile world starts at 0,0 but the camera may not
-                int left = (int)Math.Floor((decimal)this.visibleArea.Left / (decimal)this.world.tileSize);
-                int top = (int)Math.Floor((decimal)this.visibleArea.Top / (decimal)this.world.tileSize);
-                int width = (int)Math.Floor(this.visibleArea.Width / (decimal)this.world.tileSize);
-                int height = (int)Math.Floor(this.visibleArea.Height / (decimal)this.world.tileSize);
+                int left = (int)Math.Floor((decimal)tmpVisibleArea.Left / (decimal)this.world.tileSize);
+                //if (left < 0) left = 0;
+
+                int top = (int)Math.Floor((decimal)tmpVisibleArea.Top / (decimal)this.world.tileSize);
+                //if (top < 0) top = 0;
+
+                int width = (int)Math.Floor(tmpVisibleArea.Width / (decimal)this.world.tileSize);
+                int height = (int)Math.Floor(tmpVisibleArea.Height / (decimal)this.world.tileSize);
                 return new Rectangle(left, top, width, height);
             }
+        }
+
+        public bool isVisible(Vector2 location)
+        {
+            Rectangle tmpVisibleArea = this.visibleArea; // cache for speed
+            if ((location.X >= tmpVisibleArea.Left) && (location.Y >= tmpVisibleArea.Top) && (location.X <= tmpVisibleArea.Right) && (location.Y <= tmpVisibleArea.Bottom)) return true;
+            else return false;
         }
     }
 }

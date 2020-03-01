@@ -98,15 +98,15 @@ namespace gameLogic
         {
             float localTime = base.currentTime;
 
-            input.update(localTime);
+            input.update(localTime); // (this could go in base)
 
-            // process each actor
+            // process each actor (this could go in base)
             for (int t = 0; t < actors.Count; t++)
             {
                 actors[t].update(localTime);
             }
 
-            // process each object
+            // process each object (this could go in base)
             for (int t = 0; t < worldObjects.Count; t++)
             {
                 // update all objects
@@ -121,8 +121,6 @@ namespace gameLogic
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-
-        // tiles[(tilesWide / 2) - 1, (tilesWide / 2)] = new clsTile("intersection", true, false, false, true); // southwest
 
         public void addGrass(long tilex, long tiley)
         {

@@ -21,19 +21,12 @@ namespace Game1
         // display Objects
         List<clsSprite> sprites = new List<clsSprite>();
         clsSpriteTile[,] spriteTiles = new clsSpriteTile[0,0];
-        
+        public List<clsLine> lines { get; set; } // lines above the tiles but below the objects
+
 
         // content
         public Dictionary<string, Texture2D> textures;
         public Dictionary<string, SpriteFont> fonts;
-
-        public float scale
-        {
-            get
-            {
-                return (float)this.screenArea.Width / camera.visibleArea.Width;
-            }
-        }
 
         public clsDisplay(Rectangle screenArea, clsCamera camera, Dictionary<string, Texture2D> textures, Dictionary<string, SpriteFont> fonts)
         {
@@ -48,6 +41,16 @@ namespace Game1
         {
             spriteManagement();
             spriteTileManagement();
+            lineManagement();
+
+        }
+
+        public float scale
+        {
+            get
+            {
+                return (float)this.screenArea.Width / (float)camera.visibleArea.Width;
+            }
         }
 
         // **********************************************************************
@@ -56,28 +59,27 @@ namespace Game1
         {
             float spacing = this.camera.world.tileSize * this.scale;
 
+            // cache and not calculate everytime
             Rectangle visibleTileArea = camera.visibleTileArea;
 
+            // define array size for visible tiles
             spriteTiles = new clsSpriteTile[visibleTileArea.Right - visibleTileArea.Left, visibleTileArea.Bottom - visibleTileArea.Top];
 
-            // loop through world tile coordinates
+            // loop through world tiles
             for (int x = visibleTileArea.Left; x < visibleTileArea.Right; x++)
             {
                 for (int y = visibleTileArea.Top; y < visibleTileArea.Bottom; y++)
                 {
-                    try
+                    // make sure camera is point in the generated world
+                    if ((x>=0) && (x < camera.world.tiles.GetUpperBound(0)) && (y >= 0) && (y < camera.world.tiles.GetUpperBound(1)))
                     {
                         // convert world tile coordinates to zero index display coordinates
                         int spriteTileX = x - visibleTileArea.Left;
                         int spriteTileY = y - visibleTileArea.Top;
 
-                        // populate display sprites from camera visible tiles
+                        // populate display sprites from camera visible tiles in the world
                         spriteTiles[spriteTileX, spriteTileY] = new clsSpriteTile(camera.world.tiles[x, y], textures);
                         spriteTiles[spriteTileX, spriteTileY].displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y) + new Vector2(spriteTileX * spacing, spriteTileY * spacing);
-                    }
-                    catch (Exception ex)
-                    {
-                        ex = ex;
                     }
                 }
             }
@@ -130,6 +132,28 @@ namespace Game1
             }
         }
 
+        public void lineManagement()
+        {
+            lines = new List<clsLine>();
+            foreach (intActor driver in this.camera.world.actors)
+            {
+                clsDriverAI driverAI = driver as clsDriverAI;   // Here is where I get typeof(AI)
+                if (driverAI != null)
+                {
+                    if (driverAI.route != null)
+                    {
+                        Vector2 lastWaypointWorldLocation = driverAI.car.location;
+                        for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
+                        {
+                            Vector2 thisWaypointWorldLocation = this.camera.world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
+                            if (this.camera.isVisible(thisWaypointWorldLocation)) lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
+                            lastWaypointWorldLocation = thisWaypointWorldLocation;
+                        }
+                    }
+                }
+            }
+        }
+
         // **********************************************************************
         // complex drawing methods
         public void draw(SpriteBatch spriteBatch)
@@ -161,11 +185,11 @@ namespace Game1
 
         private void drawSprites(SpriteBatch spriteBatch)
         {
+            // get top left of display
+            Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
+
             for (int s = 0; s < sprites.Count; s++)
             {
-                // get top left of display
-                Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
-
                 // manipulate sprite to represent world object properties
                 sprites[s].displayLocation = (displayLocation + (sprites[s].worldObject.location - new Vector2(camera.visibleArea.Left, camera.visibleArea.Top))) * this.scale;
                 sprites[s].rotation = clsGameMath.toRotation(sprites[s].worldObject.direction);
@@ -180,11 +204,21 @@ namespace Game1
             }
         }
 
+        
+
         private void drawLines(SpriteBatch spriteBatch)
         {
-            foreach (clsLine line in this.camera.lines)
+            // get top left of display
+            Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
+
+            foreach (clsLine line in this.lines)
             {
-                DrawLine(spriteBatch, new Vector2(this.screenArea.X + line.point1.X * this.scale, this.screenArea.Y + line.point1.Y * this.scale), new Vector2(this.screenArea.X + line.point2.X * this.scale, this.screenArea.Y + line.point2.Y * this.scale), line.color, line.thickness);
+                float x1 = this.screenArea.X + (line.point1.X * this.scale);
+                float y1 = this.screenArea.Y + (line.point1.Y * this.scale);
+                float x2 = this.screenArea.X + (line.point2.X * this.scale);
+                float y2 = this.screenArea.Y + (line.point2.Y * this.scale);
+
+                DrawLine(spriteBatch, new Vector2(x1, y1), new Vector2(x2,y2), line.color, line.thickness);
             }
         }
 

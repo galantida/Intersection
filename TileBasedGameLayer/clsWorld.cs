@@ -21,6 +21,7 @@ namespace tileWorld
         public intTile[,] tiles;
         public List<intObject> worldObjects;
         public List<intActor> actors;
+        
 
         public float tileSize { get; set; }
 
