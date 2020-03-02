@@ -24,28 +24,34 @@ namespace Game1
         public List<string> text { get; set; } // camera over lay text
         public List<intObject> visibleObjects { get; set; }
 
+        bool inputControled;
+
 
         // privates
         public clsRoadWorld world { get; }
-        
-        public clsCamera(clsRoadWorld world, Vector2 target, Vector2 size)
+
+        public clsCamera(clsRoadWorld world, Vector2 target, Vector2 size, bool inputControled = false)
         {
             this.world = world;
             this.target = target;
             this.size = size;
+            this.inputControled = inputControled;
         }
 
         public void update()
         {
-            int zoomScale = 64;
-            if (world.input.isActivated(InputActionNames.ZoomIn))
+            if (inputControled)
             {
-                this.size = new Vector2(this.size.X - zoomScale, this.size.Y - zoomScale);
-            }
+                float zoomScale = 1.25f;
+                if (world.input.isActivated(InputActionNames.ZoomIn))
+                {
+                    this.size = new Vector2(this.size.X / zoomScale, this.size.Y / zoomScale);
+                }
 
-            if (world.input.isActivated(InputActionNames.ZoomOut))
-            {
-                this.size = new Vector2(this.size.X + zoomScale, this.size.Y + zoomScale);
+                if (world.input.isActivated(InputActionNames.ZoomOut))
+                {
+                    this.size = new Vector2(this.size.X * zoomScale, this.size.Y * zoomScale);
+                }
             }
 
 
@@ -53,7 +59,7 @@ namespace Game1
             visibleObjects = new List<intObject>();
             foreach (intObject o in this.world.worldObjects)
             {
-                if (this.isVisible(o.location))
+                if (this.isInVisibleArea(o.location))
                 {
                     visibleObjects.Add(o);
                 }
@@ -101,11 +107,6 @@ namespace Game1
             }
         }
 
-        public Vector2 getCameraCoordinate(Vector2 worldCoordinate)
-        {
-            return worldCoordinate - new Vector2(this.visibleArea.Location.X, this.visibleArea.Location.Y);
-        }
-
         public Rectangle visibleArea {
             // world coordinates of top left corner of visible map.
             get
@@ -123,24 +124,30 @@ namespace Game1
                 Rectangle tmpVisibleArea = this.visibleArea; // cache for speed
                 // assume tile world starts at 0,0 but the camera may not
                 int left = (int)Math.Floor((decimal)tmpVisibleArea.Left / (decimal)this.world.tileSize);
-                //if (left < 0) left = 0;
-
                 int top = (int)Math.Floor((decimal)tmpVisibleArea.Top / (decimal)this.world.tileSize);
-                //if (top < 0) top = 0;
-
-                int width = (int)Math.Floor(tmpVisibleArea.Width / (decimal)this.world.tileSize);
-                int height = (int)Math.Floor(tmpVisibleArea.Height / (decimal)this.world.tileSize);
+                int width = (int)Math.Ceiling(tmpVisibleArea.Width / (decimal)this.world.tileSize);
+                int height = (int)Math.Ceiling(tmpVisibleArea.Height / (decimal)this.world.tileSize);
                 return new Rectangle(left, top, width, height);
             }
         }
 
-        public bool isVisible(Vector2 location)
+        public bool isInVisibleArea(Vector2 worldLocation)
         {
             Rectangle tmpVisibleArea = this.visibleArea; // cache for speed
-            if ((location.X >= tmpVisibleArea.Left) && (location.Y >= tmpVisibleArea.Top) && (location.X <= tmpVisibleArea.Right) && (location.Y <= tmpVisibleArea.Bottom)) return true;
+            if ((worldLocation.X >= tmpVisibleArea.Left) && (worldLocation.Y >= tmpVisibleArea.Top) && (worldLocation.X <= tmpVisibleArea.Right) && (worldLocation.Y <= tmpVisibleArea.Bottom)) return true;
             else return false;
         }
 
-        
+        public bool isInVisibleTileArea(Vector2 tileLocation)
+        {
+            Rectangle tmpVisibleTileArea = this.visibleTileArea; // cache for speed
+            if ((tileLocation.X >= tmpVisibleTileArea.Left) && (tileLocation.Y >= tmpVisibleTileArea.Top) && (tileLocation.X <= tmpVisibleTileArea.Right) && (tileLocation.Y <= tmpVisibleTileArea.Bottom)) return true;
+            else return false;
+        }
+
+        public Vector2 getCameraCoordinate(Vector2 worldCoordinate)
+        {
+            return worldCoordinate - new Vector2(this.visibleArea.Location.X, this.visibleArea.Location.Y);
+        }
     }
 }

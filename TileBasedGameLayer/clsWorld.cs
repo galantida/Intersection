@@ -30,8 +30,6 @@ namespace tileWorld
             random = new Random(); // randomize seed the world
             _currentTime.Start(); // start processing clock
 
-            
-
             this.tileSize = tileSize;
         }
 

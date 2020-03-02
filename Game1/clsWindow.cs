@@ -21,7 +21,7 @@ namespace Game1
         public Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
         public Dictionary<string, SpriteFont> fonts = new Dictionary<string, SpriteFont>();
 
-        public clsWindow(GraphicsDeviceManager graphics, Vector2 size, int tileSize, clsRoadWorld world)
+        public clsWindow(GraphicsDeviceManager graphics, Vector2 size, clsRoadWorld world)
         {
             this.graphics = graphics;
             this.size = size;
@@ -32,12 +32,19 @@ namespace Game1
 
             // create cameras
             cameras = new List<clsCamera>();
-            clsCamera camera = new clsCamera(world, new Vector2(640,640), new Vector2(320,320));
-            cameras.Add(camera);
+            clsCamera screenCamera = new clsCamera(world, new Vector2(896,896), new Vector2(640,640), true);
+            cameras.Add(screenCamera);
+
+            clsCamera birdsEyeCamera = new clsCamera(world, new Vector2(896, 896), new Vector2(1000, 1000));
+            cameras.Add(birdsEyeCamera);
 
             // create displays
             displays = new List<clsDisplay>();
-            clsDisplay display = new clsDisplay(new Rectangle(25, 25, 600, 600), camera, textures, fonts);
+
+            clsDisplay display = new clsDisplay(new Rectangle(200, 25, 800, 800), screenCamera, textures, fonts);
+            displays.Add(display);
+
+            display = new clsDisplay(new Rectangle(1100, 30, 250, 250), birdsEyeCamera, textures, fonts);
             displays.Add(display);
         }
 

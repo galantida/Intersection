@@ -72,20 +72,24 @@ namespace Game1
             spriteTiles = new clsSpriteTile[visibleTileArea.Right - visibleTileArea.Left, visibleTileArea.Bottom - visibleTileArea.Top];
 
             // loop through world tiles
-            for (int x = visibleTileArea.Left; x < visibleTileArea.Right; x++)
+            for (int x = visibleTileArea.Left; x <= visibleTileArea.Right; x++)
             {
-                for (int y = visibleTileArea.Top; y < visibleTileArea.Bottom; y++)
+                for (int y = visibleTileArea.Top; y <= visibleTileArea.Bottom; y++)
                 {
-                    // make sure camera is point in the generated world
+                    // make sure this tile is in the generated world
                     if ((x>=0) && (x < camera.world.tiles.GetUpperBound(0)) && (y >= 0) && (y < camera.world.tiles.GetUpperBound(1)))
                     {
                         // convert world tile coordinates to zero index display coordinates
                         int spriteTileX = x - visibleTileArea.Left;
                         int spriteTileY = y - visibleTileArea.Top;
 
-                        // populate display sprites from camera visible tiles in the world
-                        spriteTiles[spriteTileX, spriteTileY] = new clsSpriteTile(camera.world.tiles[x, y], textures);
-                        spriteTiles[spriteTileX, spriteTileY].displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y) + new Vector2(spriteTileX * spacing, spriteTileY * spacing);
+                        // make sure we are inside the array defined above
+                        if ((spriteTileX < spriteTiles.GetUpperBound(0)) && spriteTileY < spriteTiles.GetUpperBound(1))
+                        {
+                            // populate display sprites from camera visible tiles in the world
+                            spriteTiles[spriteTileX, spriteTileY] = new clsSpriteTile(camera.world.tiles[x, y], textures);
+                            spriteTiles[spriteTileX, spriteTileY].displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y) + new Vector2(spriteTileX * spacing, spriteTileY * spacing);
+                        }
                     }
                 }
             }
@@ -151,7 +155,7 @@ namespace Game1
                         for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
                         {
                             Vector2 thisWaypointWorldLocation = this.camera.world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
-                            if (this.camera.isVisible(thisWaypointWorldLocation))
+                            if (this.camera.isInVisibleArea(thisWaypointWorldLocation))
                             {
                                 lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));
                             }
@@ -166,14 +170,14 @@ namespace Game1
         // complex drawing methods
         public void draw(SpriteBatch spriteBatch)
         {
-            drawStaticSprites(spriteBatch);
+            drawSpriteTiles(spriteBatch);
             drawLines(spriteBatch);
             drawSprites(spriteBatch);
             drawOverlay(spriteBatch);
             drawBorder(spriteBatch, textures["pixel"], new Rectangle((int)this.screenArea.X, (int)this.screenArea.Y, (int)this.screenArea.Width, (int)this.screenArea.Height), 4, Color.White);
         }
         
-        private void drawStaticSprites(SpriteBatch spriteBatch)
+        private void drawSpriteTiles(SpriteBatch spriteBatch)
         {
             Vector2 displayLocation = new Vector2(this.screenArea.X, this.screenArea.Y);
             float adjustment = 32.0f * this.scale;
@@ -220,7 +224,7 @@ namespace Game1
             foreach (clsLine line in this.lines)
             {
                 // transform line from world coordinates to screen coordinates
-                DrawLine(spriteBatch, displayLocation + this.getDisplayCoordinate(line.point1), displayLocation + this.getDisplayCoordinate(line.point2), line.color, line.thickness);
+                DrawLine(spriteBatch, displayLocation + this.getDisplayCoordinate(line.point1), displayLocation + this.getDisplayCoordinate(line.point2), line.color, line.thickness * this.scale);
             }
         }
 

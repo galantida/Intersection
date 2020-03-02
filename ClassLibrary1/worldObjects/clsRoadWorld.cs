@@ -20,7 +20,7 @@ namespace gameLogic
         {
             input = new clsInput();
             loadTiles(tilesWide);
-            loadObjects();
+            loadObjects(tilesWide);
             loadActors();
         }
 
@@ -66,21 +66,24 @@ namespace gameLogic
             addIntersection(center, center, true, false, true, false);
         }
 
-        public void loadObjects()
+        public void loadObjects(long tilesWide)
         {
             worldObjects = new List<intObject>();
 
+            float roadx = tilesWide / 2;
+            float roady = tilesWide / 2;
+
             // create entry points
-            createEntry(new Vector2(6, 0), new Vector2(0, 1), "car", 15000);
-            createEntry(new Vector2(7, 13), new Vector2(0, -1), "car", 15000);
-            createEntry(new Vector2(13, 6), new Vector2(-1, 0), "car", 15000);
-            createEntry(new Vector2(0, 7), new Vector2(1, 0), "car", 15000);
+            createEntry(new Vector2(roadx - 1, 0), new Vector2(0, 1), "car", 15000);
+            createEntry(new Vector2(roadx, tilesWide-1), new Vector2(0, -1), "car", 15000);
+            createEntry(new Vector2(tilesWide - 1, roady-1), new Vector2(-1, 0), "car", 15000);
+            createEntry(new Vector2(0, roady), new Vector2(1, 0), "car", 15000);
 
             // create exit points
-            createExit(new Vector2(7, 0));
-            createExit(new Vector2(6, 13));
-            createExit(new Vector2(13, 7));
-            createExit(new Vector2(0, 6));
+            createExit(new Vector2(roadx, 0));
+            createExit(new Vector2(roadx-1, tilesWide - 1));
+            createExit(new Vector2(tilesWide - 1, roady));
+            createExit(new Vector2(0, roady-1));
         }
 
         public void loadActors()
