@@ -33,12 +33,14 @@ namespace gameLogic
                 // read human input
                 readUserInput();
 
+                /*
                 // human car inbounds only
                 float worldSize = 14 * 64;
                 while (car.location.X < 0) car.location = new Vector2(car.location.X + worldSize, car.location.Y);
                 while (car.location.X > worldSize) car.location = new Vector2(car.location.X - worldSize, car.location.Y);
                 while (car.location.Y < 0) car.location = new Vector2(car.location.X, car.location.Y + worldSize);
                 while (car.location.Y > worldSize) car.location = new Vector2(car.location.X, car.location.Y - worldSize);
+                */
             }
         }
 
@@ -47,7 +49,7 @@ namespace gameLogic
             // accelerator
             if (input.isActivated(InputActionNames.Accelerate)) car.acceleratorPedal += 0.1f;
             else if (input.isActivated(InputActionNames.Decelerate)) car.acceleratorPedal -= 0.1f;
-            else car.acceleratorPedal = 0.0f;
+            //else car.acceleratorPedal = 0.0f;
 
             // breaking
             if (input.isActivated(InputActionNames.Break)) car.breakPedal += 0.1f;

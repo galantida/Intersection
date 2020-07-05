@@ -15,12 +15,12 @@ namespace Game1
     {
         // display is a portlet used to display the contents of one or more cameras
 
-        public clsCamera camera;
-        public Rectangle screenArea { get; set; }
+        public clsCamera camera; // source input
+        public Rectangle screenArea { get; set; } // output area on the screen
 
         // display Objects
-        List<clsSprite> sprites = new List<clsSprite>();
-        clsSpriteTile[,] spriteTiles = new clsSpriteTile[0,0];
+        List<clsSprite> sprites = new List<clsSprite>(); // sprite representing object. Object may appear on more than one display
+        clsSpriteTile[,] spriteTiles = new clsSpriteTile[0,0]; // tile are the ground tiles.
         public List<clsLine> lines { get; set; } // lines above the tiles but below the objects
 
 
@@ -104,9 +104,10 @@ namespace Game1
                 displayedWorldObjects.Add(gp);
             }
 
-            // remove sprites that represent gamepieces nolonger in the display area
+            // remove sprites that represent objects nolonger in the display area
             for (int s = 0; s < sprites.Count; s++)
             {
+                // is this object still in visible area?
                 bool found = false;
                 foreach (intObject worldObject in camera.visibleObjects)
                 {
@@ -117,7 +118,7 @@ namespace Game1
                     }
                 }
 
-                // remove sprites whos pair world object is nolonger in the display area
+                // remove sprites if out of display area
                 if (!found)
                 {
                     sprites[s].dispose();
@@ -126,7 +127,7 @@ namespace Game1
             }
 
 
-            // remove world objects already pair with sprites
+            // remove world objects already pair with existing sprites
             foreach (clsSprite sprite in sprites)
             {
                 displayedWorldObjects.Remove(sprite.worldObject);
@@ -143,6 +144,8 @@ namespace Game1
 
         public void lineManagement()
         {
+            // lots of driver stuff in here that probably shouldn't be. Needs to be more generic line drawing
+
             lines = new List<clsLine>();
             foreach (intActor driver in this.camera.world.actors)
             {

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game1", "Game1\Game1.csproj", "{33DE67A8-E680-4287-ACDC-352757DC086C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "renderer", "Game1\renderer.csproj", "{33DE67A8-E680-4287-ACDC-352757DC086C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gameLogic", "ClassLibrary1\gameLogic.csproj", "{D11D54BA-E80B-4D36-9678-9EE7360BBF43}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intersection", "ClassLibrary1\Intersection.csproj", "{D11D54BA-E80B-4D36-9678-9EE7360BBF43}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "physicalWorld", "GamePhysics\physicalWorld.csproj", "{2A87DF12-FB92-4288-AFFC-34D44919FA05}"
 EndProject

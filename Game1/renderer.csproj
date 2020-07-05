@@ -70,9 +70,9 @@
     <None Include="Content\File.spritefont" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\gameLogic.csproj">
+    <ProjectReference Include="..\ClassLibrary1\Intersection.csproj">
       <Project>{d11d54ba-e80b-4d36-9678-9ee7360bbf43}</Project>
-      <Name>gameLogic</Name>
+      <Name>Intersection</Name>
     </ProjectReference>
     <ProjectReference Include="..\GamePhysics\physicalWorld.csproj">
       <Project>{2a87df12-fb92-4288-affc-34d44919fa05}</Project>

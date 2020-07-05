@@ -51,20 +51,20 @@ namespace gameLogic
                 // calculate route every time?
                 if (this.route == null) calculateShortestRoute(car.location, destination);
 
-                // speed limit
+                // route speed limit
                 float speedLimit = 0.0f;
                 if (this.route != null) speedLimit = this.world.getRoadWorldTileFromTileCoordinate(this.route.currentWaypoint).speedLimit;
 
-                // drivers desired speed due to route
+                // drivers desired speed due to route conditions
                 float driversSpeedLimit = speedLimit;
-                if (this.route.distanceToNextTurn < 2) driversSpeedLimit = speedLimit * 0.5f;
+                if (this.route.distanceToNextTurn < 2) driversSpeedLimit = speedLimit * 0.5f; // half speed on turns. Shoudl be a driver setting
 
                 // drivers desired speed due to obstructions
                 if (this.route.distanceToNextObstruction < 4) driversSpeedLimit = speedLimit * 0.75f;
                 if (this.route.distanceToNextObstruction < 3) driversSpeedLimit = speedLimit * 0.50f;
                 if (this.route.distanceToNextObstruction < 2) 
                 {
-                    driversSpeedLimit = 0.0f;
+                    driversSpeedLimit = 0.0f; // stop to avoid collisions
                 }
 
 
