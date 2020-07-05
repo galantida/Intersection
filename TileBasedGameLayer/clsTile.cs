@@ -15,6 +15,7 @@ namespace tileWorld
         public Vector2 location { get; set;  } // world location
         public float rotation { get; set; } // actual rotation of the tile from its default
         public Dictionary<Color, Color> colorReplacements { get; set; }
+        public List<Vector2> directions { get; set; }
 
         // processing properties
         public bool collisionDetection { get; set; } // will store a reference to objects that are on this tile

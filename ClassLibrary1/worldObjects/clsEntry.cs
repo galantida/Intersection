@@ -37,25 +37,30 @@ namespace gameLogic
         {
             if (currentTime > nextSpawnTime) 
             {
-                nextSpawnTime = currentTime + worldToSpawnIn.random.Next(maxSpawnTime);
-
-                switch (this.spawnTypeName)
+                // is it clear to spawn?
+                if (this.worldToSpawnIn.getTileFromWorldLocation(this.location).worldObjects.Count <= 1)
                 {
-                    case "car":
-                        Vector2 spawnLocation = randomizeVector(worldToSpawnIn, this.location); // randomizes car location slightly
+                    // get the next spawn time
+                    nextSpawnTime = currentTime + worldToSpawnIn.random.Next(maxSpawnTime);
 
-                        clsExit exit = null;
-                        while (exit == null)
-                        {
-                            exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
-                            if ((spawnLocation - exit.location).Length() < 300) exit = null;
-                        }
-                        
-                        clsDriverAI driver = worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
-                        driver.car.color = new Color(worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255));
-                        break;
+                    switch (this.spawnTypeName)
+                    {
+                        case "car":
+                            Vector2 spawnLocation = randomizeVector(worldToSpawnIn, this.location); // randomizes car location slightly
+
+                            clsExit exit = null;
+                            while (exit == null)
+                            {
+                                exit = (clsExit)worldToSpawnIn.getRandomWorldObject("exit");
+                                if ((spawnLocation - exit.location).Length() < 300) exit = null;
+                            }
+
+                            clsDriverAI driver = worldToSpawnIn.spawnCarAI(spawnLocation, this.direction, new Vector2(0, 0), exit.location);
+                            driver.car.color = new Color(worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255), worldToSpawnIn.random.Next(0, 255));
+                            break;
+                    }
+                    base.addForce(new Vector2(0, 0)); // not sure why we add no force
                 }
-                base.addForce(new Vector2(0, 0)); // not sure why we add no force
 
             }
 

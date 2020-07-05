@@ -10,7 +10,6 @@ namespace gameLogic
 {
     public class clsRoadWorldTile : clsTile, intTile, intRoadWorldTile
     {
-        public List<Vector2> directions { get; set; }
         public float speedLimit { get; set; }
 
         public clsRoadWorldTile(List<Vector2>directions, int speedLimit) : base(null, true)

@@ -17,7 +17,7 @@ namespace gameLogic
         public clsCar car;
         private clsInput input;
 
-        public clsDriverHuman(clsCar car, clsInput input)
+        public clsDriverHuman(clsWorld world, clsCar car, clsInput input) : base(world, car)
         {
             this.car = car;
             this.input = input;
@@ -41,6 +41,8 @@ namespace gameLogic
                 while (car.location.Y < 0) car.location = new Vector2(car.location.X, car.location.Y + worldSize);
                 while (car.location.Y > worldSize) car.location = new Vector2(car.location.X, car.location.Y - worldSize);
                 */
+
+                base.update();
             }
         }
 

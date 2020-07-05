@@ -27,6 +27,7 @@ namespace tileWorld
 
         public clsWorld(float tileSize)
         {
+            List<intObject> worldObjects = new List<intObject>();
             random = new Random(); // randomize seed the world
             _currentTime.Start(); // start processing clock
 
@@ -185,7 +186,7 @@ namespace tileWorld
        *****************************************/
        public void processTileLocations()
         {
-            // clear all tile contents
+            // clear all tile object contents
             for (int x = 0; x < this.tiles.GetLength(0); x += 1)
             {
                 for (int y = 0; y < this.tiles.GetLength(1); y += 1)
@@ -194,11 +195,11 @@ namespace tileWorld
                 }
             }
 
-            // load tiles with object that are one them
+            // loop through each object
             foreach (intObject worldObject in this.worldObjects)
             {
-                intTile tile = this.getTileFromWorldLocation(worldObject.location);
-                tile.worldObjects.Add(worldObject);
+                intTile tile = this.getTileFromWorldLocation(worldObject.location); // get the tile this object is on
+                tile.worldObjects.Add(worldObject); // add this object to that tile
             }
         }
     }

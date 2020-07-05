@@ -20,3 +20,4 @@ C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.pdb
+C:\Users\dave\Documents\Github\Intersection\GamePhysics\obj\Debug\physicalWorld.csprojAssemblyReference.cache

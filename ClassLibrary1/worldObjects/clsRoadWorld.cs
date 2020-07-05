@@ -10,8 +10,6 @@ using Microsoft.Xna.Framework;
 
 namespace gameLogic
 {
-    public enum CardinalDirection { East, Southeast, South, Southhwest, West, Northwest, North, Northeast }
-
     public class clsRoadWorld : clsWorld
     {
         public clsInput input;
@@ -73,17 +71,17 @@ namespace gameLogic
             float roadx = tilesWide / 2;
             float roady = tilesWide / 2;
 
+            // create exit points
+            createExit(new Vector2(roadx, 0));
+            createExit(new Vector2(roadx - 1, tilesWide - 1));
+            createExit(new Vector2(tilesWide - 1, roady));
+            createExit(new Vector2(0, roady - 1));
+
             // create entry points
             createEntry(new Vector2(roadx - 1, 0), new Vector2(0, 1), "car", 15000);
             createEntry(new Vector2(roadx, tilesWide-1), new Vector2(0, -1), "car", 15000);
-            createEntry(new Vector2(tilesWide - 1, roady-1), new Vector2(-1, 0), "car", 15000);
-            createEntry(new Vector2(0, roady), new Vector2(1, 0), "car", 15000);
-
-            // create exit points
-            createExit(new Vector2(roadx, 0));
-            createExit(new Vector2(roadx-1, tilesWide - 1));
-            createExit(new Vector2(tilesWide - 1, roady));
-            createExit(new Vector2(0, roady-1));
+            createEntry(new Vector2(tilesWide - 1, roady-1), new Vector2(-1, 0), "car", 10000);
+            createEntry(new Vector2(0, roady), new Vector2(1, 0), "car", 10000);
         }
 
         public void loadActors()
@@ -91,7 +89,7 @@ namespace gameLogic
             actors = new List<intActor>();
 
             // spawn a human car
-            actors.Add(spawnCarHuman(new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
+            actors.Add(spawnCarHuman(this, new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
         }
 
         /*****************************************
@@ -137,25 +135,25 @@ namespace gameLogic
             {
                 case CardinalDirection.East:
                     {
-                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(true, false, false, false), 50);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(true, false, false, false), 55);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.West:
                     {
-                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, true, false, false), 50);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, true, false, false), 55);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.North:
                     {
-                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, true, false), 25);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, true, false), 35);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
                 case CardinalDirection.South:
                     {
-                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, false, true), 25);
+                        clsRoadWorldTile road = new clsRoadWorldTile(clsRoadWorldTile.getDirections(false, false, false, true), 35);
                         base.addTile(road, tilex, tiley);
                         break;
                     }
@@ -171,16 +169,16 @@ namespace gameLogic
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-        public clsEntry createEntry(Vector2 squareCoordinate, Vector2 direction, string typeName, int maxSpawnTime)
+        public clsEntry createEntry(Vector2 tileCoordinate, Vector2 direction, string typeName, int maxSpawnTime)
         {
-            clsEntry entry = new clsEntry("entry", tileCoordinateToWorldLocation(squareCoordinate), direction, this, typeName, maxSpawnTime);
+            clsEntry entry = new clsEntry("entry", tileCoordinateToWorldLocation(tileCoordinate), direction, this, typeName, maxSpawnTime);
             worldObjects.Add((intObject)entry);
             return entry;
         }
 
-        public clsExit createExit(Vector2 squareCoordinate)
+        public clsExit createExit(Vector2 tileCoordinate)
         {
-            clsExit exit = new clsExit("exit", tileCoordinateToWorldLocation(squareCoordinate), new Vector2(0, 1));
+            clsExit exit = new clsExit("exit", tileCoordinateToWorldLocation(tileCoordinate), new Vector2(0, 1));
             worldObjects.Add((intObject)exit);
             return exit;
         }
@@ -195,9 +193,9 @@ namespace gameLogic
         /*****************************************
                 Instance Game Intelegence hooks
          *****************************************/
-        public clsDriverHuman createDriverHuman(clsCar car, clsInput input)
+        public clsDriverHuman createDriverHuman(clsWorld world, clsCar car, clsInput input)
         {
-            clsDriverHuman human = new clsDriverHuman(car, input); // assign human to it
+            clsDriverHuman human = new clsDriverHuman(world, car, input); // assign human to it
             actors.Add((intActor)human);
             return human;
         }
@@ -213,10 +211,10 @@ namespace gameLogic
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-        public clsDriverHuman spawnCarHuman(Vector2 worldLocation, Vector2 direction, Vector2 velocity)
+        public clsDriverHuman spawnCarHuman(clsWorld world, Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
-            clsDriverHuman human = createDriverHuman(car, this.input); // create human for the car
+            clsDriverHuman human = createDriverHuman(world, car, this.input); // create human for the car
             return human;
         }
 
@@ -230,111 +228,6 @@ namespace gameLogic
         public intRoadWorldTile getRoadWorldTileFromTileCoordinate(Vector2 tileCoordinate)
         {
             return (intRoadWorldTile)this.getTileFromTileCoordinate(tileCoordinate);
-        }
-
-
-        /*****************************************
-         *              Path Finding (Tiles)
-         *****************************************/
-        public List<Vector2> findShortestPath(Vector2 fromWaypoint, Vector2 toWaypoint)
-        {
-            // create a new path with the start point as the first way point
-            List<Vector2> startPath = new List<Vector2>();
-            startPath.Add(fromWaypoint);
-
-            // get all paths to destination
-            List<List<Vector2>> allPaths = this.getAllPaths(startPath, toWaypoint);
-
-            // get shorts path from that list
-            List<Vector2> shortestPath = null;
-            foreach (List<Vector2> path in allPaths)
-            {
-                if ((shortestPath == null) || (path.Count() < shortestPath.Count()))
-                {
-                    shortestPath = path;
-                }
-            }
-            return shortestPath;
-        }
-
-
-        // get all the valid routes between two points
-        // the only rule is that they can not overlap themselves
-        public List<List<Vector2>> getAllPaths(List<Vector2> previousWaypoints, Vector2 destinationSquareCoordinate)
-        {
-            // collection of all possible paths
-            List<List<Vector2>> paths = new List<List<Vector2>>();
-
-
-            // set the current square to the starting location
-            Vector2 currentWaypoint = previousWaypoints[previousWaypoints.Count() - 1];
-            intRoadWorldTile currentSquare = (intRoadWorldTile)this.getRoadWorldTileFromTileCoordinate(currentWaypoint);
-
-            // get all posible directions off of the current square
-            foreach (Vector2 currentDirection in currentSquare.directions)
-            {
-                // get way point for this direction
-                Vector2 newWaypoint = new Vector2(currentWaypoint.X, currentWaypoint.Y) + currentDirection;
-
-                // is this a valid new waypoint
-                if (this.inTileCoordinateBounds(newWaypoint)) // is it on the map
-                {
-                    if (!containsWaypoint(previousWaypoints, newWaypoint)) // is it not an infinite loop
-                    {
-                        // fully copy existing path to a new path and add the new waypoint direction
-                        List<Vector2> newPath = copyWaypoints(previousWaypoints);
-                        newPath.Add(newWaypoint);
-
-                        // does this new path reach our destination?
-                        if ((newWaypoint.X == destinationSquareCoordinate.X) && (newWaypoint.Y == destinationSquareCoordinate.Y))
-                        {
-                            // add the now completed path to the collection of paths
-                            paths.Add(newPath);
-                        }
-                        else
-                        {
-                            // do further exploration of this path and all its possibilities
-                            List<List<Vector2>> newPaths = getAllPaths(newPath, destinationSquareCoordinate);
-                            foreach (List<Vector2> newSubPath in newPaths)
-                            {
-                                paths.Add(newSubPath);
-                            }
-                        }
-                    }
-                }
-            }
-
-            // all processing is done
-            return paths;
-        }
-
-
-
-        public static List<Vector2> copyWaypoints(List<Vector2> waypoints)
-        {
-            List<Vector2> newWaypoints = new List<Vector2>();
-            foreach (Vector2 waypoint in waypoints)
-            {
-                newWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
-            }
-            return newWaypoints;
-        }
-
-        public static void appendWaypoints(List<Vector2> originalWaypoints, List<Vector2> waypointsToAppend)
-        {
-            foreach (Vector2 waypoint in waypointsToAppend)
-            {
-                originalWaypoints.Add(new Vector2(waypoint.X, waypoint.Y));
-            }
-        }
-
-        public static bool containsWaypoint(List<Vector2> waypoints, Vector2 waypoint)
-        {
-            foreach (Vector2 existingWaypoint in waypoints)
-            {
-                if ((existingWaypoint.X == waypoint.X) && (existingWaypoint.Y == waypoint.Y)) return true;
-            }
-            return false;
         }
     }
     

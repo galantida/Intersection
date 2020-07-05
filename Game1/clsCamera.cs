@@ -93,8 +93,9 @@ namespace Game1
                     text.Add("--------------------");
                     text.Add("Name : " + driverAI.car.name);
                     text.Add("Speed : " + Math.Floor(driverAI.car.mph) + " MPH");
-                    //text.Add("Collisions : " + c.collisions.Count);
-                    //if (driverAI.route != null) text.Add("DistanceToNextObstruction : " + driverAI.route.distanceToNextObstruction);
+                    text.Add("Obstruction : " + driverAI.route.distanceToNextObstruction);
+                    text.Add("Collision : " + driverAI.route.distanceToNextCollision);
+                    text.Add("Yield : " + driverAI.yield);
                     //text.Add("Direction : " + c.cardinalDirection.ToString());
                     //text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
                     //text.Add("velocity : " + c.velocity.Length());

@@ -10,5 +10,10 @@ namespace tileWorld
     public interface intActor
     {
         void update(float currentTime);
+        clsRoute route { get; set; }
+        clsObject worldObject { get; set; }
+        bool yield { get; set; }
+
+
     }
 }

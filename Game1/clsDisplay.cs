@@ -155,9 +155,9 @@ namespace Game1
                     if (driverAI.route != null)
                     {
                         Vector2 lastWaypointWorldLocation = driverAI.car.location;
-                        for (int t = driverAI.route.currentWaypointIndex; t < driverAI.route.waypoints.Count; t++)
+                        for (int t = 0; t < driverAI.route.waypoints; t++)
                         {
-                            Vector2 thisWaypointWorldLocation = this.camera.world.tileCoordinateToWorldLocation(driverAI.route.waypoints[t]);
+                            Vector2 thisWaypointWorldLocation = this.camera.world.tileCoordinateToWorldLocation((Vector2)driverAI.route.getWaypoint(t));
                             if (this.camera.isInVisibleArea(thisWaypointWorldLocation))
                             {
                                 lines.Add(new clsLine(lastWaypointWorldLocation, thisWaypointWorldLocation, driverAI.car.color, 4));

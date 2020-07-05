@@ -59,7 +59,7 @@ namespace gameLogic
 
             // Car properties
             this.acceleration = 0.02f; // force to add in the direction of the transmissions
-            this.breaking = 0.01f; // creates additional kinetic friction coefficient
+            this.breaking = 0.05f; // creates additional kinetic friction coefficient
             this.handling = 1.5f; // im pact of steering was 1
 
             // mechanical status
@@ -255,14 +255,7 @@ namespace gameLogic
             }
             set
             {
-                if (value)
-                {
-                    _hazzard = true;
-                }
-                else
-                {
-                    _hazzard = false;
-                }
+                _hazzard = value;
             }
         }
         #endregion
@@ -288,16 +281,6 @@ namespace gameLogic
                 float mph = pixelsPerHour / 11264;
 
                 return mph; // (pixels in a mile / pixels per miliseond) / (60 * 1000)
-            }
-        }
-
-        public CardinalDirection cardinalDirection
-        {
-            get
-            {
-                double angle = Math.Atan2(direction.Y, direction.X);
-                int octant = (int)Math.Round(8 * angle / (2 * Math.PI) + 8) % 8;
-                return (CardinalDirection)octant;
             }
         }
 

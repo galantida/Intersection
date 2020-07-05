@@ -15,6 +15,7 @@ namespace tileWorld
         float rotation { get; set; }
         float textureRotation { get; }
         Dictionary<Color, Color> colorReplacements { get; set; }
+        List<Vector2> directions { get; set; }
 
         // processing properties
         bool collisionDetection { get; set; }

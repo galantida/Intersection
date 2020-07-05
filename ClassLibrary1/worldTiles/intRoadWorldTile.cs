@@ -9,8 +9,6 @@ namespace gameLogic
 {
     public interface intRoadWorldTile
     {
-        List<Vector2> directions { get; set; }
-
         float speedLimit { get; set; }
     }
 }

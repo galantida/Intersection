@@ -32,10 +32,10 @@ namespace Game1
 
             // create cameras
             cameras = new List<clsCamera>();
-            clsCamera screenCamera = new clsCamera(world, new Vector2(896,896), new Vector2(640,640), true);
+            clsCamera screenCamera = new clsCamera(world, new Vector2(896,896), new Vector2(800,800), true);
             cameras.Add(screenCamera);
 
-            clsCamera birdsEyeCamera = new clsCamera(world, new Vector2(896, 896), new Vector2(1000, 1000));
+            clsCamera birdsEyeCamera = new clsCamera(world, new Vector2(896, 896), new Vector2(1700, 1700));
             cameras.Add(birdsEyeCamera);
 
             // create displays

@@ -71,5 +71,15 @@ namespace tileWorld
                 return _colorReplacements;
             }
         }
+
+        public CardinalDirection cardinalDirection
+        {
+            get
+            {
+                double angle = Math.Atan2(direction.Y, direction.X);
+                int octant = (int)Math.Round(8 * angle / (2 * Math.PI) + 8) % 8;
+                return (CardinalDirection)octant;
+            }
+        }
     }
 }
