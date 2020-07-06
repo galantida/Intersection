@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/car.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/entry.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/exit.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/File.spritefont</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/gear.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/grass.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/intersection.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/road.png</File>
+    <File>C:/Users/dave/Documents/Github/Intersection/renderer/Content/shoulder.png</File>
+  </SourceFiles>
+  <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+  </DestFiles>
+</SourceFileCollection>
