@@ -12,8 +12,6 @@ namespace gameLogic
 {
     public class clsRoadWorld : clsWorld
     {
-        public clsInput input;
-
         public clsRoadWorld(long tilesWide, float tileSize): base(tileSize)
         {
             input = new clsInput();
@@ -95,28 +93,9 @@ namespace gameLogic
         /*****************************************
                 Running the world
          *****************************************/
-        public new void update(float currentTime)
+        public new void update()
         {
-            float localTime = base.currentTime;
-
-            input.update(localTime); // (this could go in base)
-
-            // process each actor (this could go in base)
-            for (int t = 0; t < actors.Count; t++)
-            {
-                actors[t].update(localTime);
-            }
-
-            // process each object (this could go in base)
-            for (int t = 0; t < worldObjects.Count; t++)
-            {
-                // update all objects
-                worldObjects[t].update(localTime);
-            }
-
-            // tiles are activated and read they are not processed
-
-            base.update(localTime);
+            base.update();
         }
 
         /*****************************************

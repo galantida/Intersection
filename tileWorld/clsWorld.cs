@@ -18,6 +18,8 @@ namespace tileWorld
         public Random random;
         protected Stopwatch _currentTime = new Stopwatch();
 
+        public clsInput input;
+
         public intTile[,] tiles;
         public List<intObject> worldObjects;
         public List<intActor> actors;
@@ -34,8 +36,23 @@ namespace tileWorld
             this.tileSize = tileSize;
         }
 
-        public void update(float currentTime)
+        public void update()
         {
+            input.update(this.currentTime); // (this could go in base)
+
+            // process each actor (this could go in base)
+            for (int t = 0; t < actors.Count; t++)
+            {
+                actors[t].update(this.currentTime);
+            }
+
+            // process each object (this could go in base)
+            for (int t = 0; t < worldObjects.Count; t++)
+            {
+                // update all objects
+                worldObjects[t].update(this.currentTime);
+            }
+
             //processCollisions();  not used right now
             processTileLocations();
         }

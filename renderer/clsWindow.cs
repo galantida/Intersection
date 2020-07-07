@@ -48,7 +48,7 @@ namespace renderer
             displays.Add(display);
         }
 
-        public void update(float currentTime)
+        public void update()
         {
             foreach (clsCamera camera in cameras)
             {

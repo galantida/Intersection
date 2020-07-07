@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
 using tileWorld;
 
-namespace gameLogic
+namespace tileWorld
 {
     public enum InputActionNames { ZoomIn, ZoomOut, ShiftDrive, ShiftReverse, ShiftNeutral, Accelerate, Decelerate, Break, SteerLeft, SteerRight, HeadLights, LeftTurnSignal, RightTurnSignal, Hazzards };
 

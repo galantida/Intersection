@@ -77,10 +77,10 @@ namespace renderer
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape)) Exit();
 
-            float currentTime = gameTime.ElapsedGameTime.Milliseconds;
+            float currentTime = gameTime.ElapsedGameTime.Milliseconds; // this time is shit. The real timer is in the clsWorld file
 
-            roadWorld.update(currentTime); // base these updates on game time
-            window.update(currentTime); // base these updates on game time
+            roadWorld.update(); // base these updates on game time
+            window.update(); // base these updates on game time
 
             base.Update(gameTime);
         }

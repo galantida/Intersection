@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Input;
-using gameLogic;
 using tileWorld;
 
-namespace gameLogic
+namespace tileWorld
 {
     public enum ControlTypes { Keyboard, Mouse }
 

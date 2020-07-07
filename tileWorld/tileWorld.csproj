@@ -48,7 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsActor.cs" />
+    <Compile Include="clsInput.cs" />
     <Compile Include="clsKeyboard.cs" />
+    <Compile Include="clsKeyMapping.cs" />
     <Compile Include="clsMouse.cs" />
     <Compile Include="clsRoute.cs" />
     <Compile Include="clsWorld.cs" />
