@@ -17,6 +17,7 @@ namespace gameLogic
         // AI instructions
         public clsCar car { get; set; }
         public Vector2 destination { get; set; }
+        public float yieldStartTime { get; set; }
 
         // driver speed differences
         float speedRangePercentage; // top and bottom speeds, when to give more gas or break. (e.g. 5% under target or 5 over target)
@@ -27,7 +28,7 @@ namespace gameLogic
             // inputs
             this.car = car;
             this.destination = destination;
-            this.yield = false;
+            this.yieldStartTime = 0;
 
             // calculate route
             calculateShortestRoute(car.location, destination);
@@ -69,7 +70,11 @@ namespace gameLogic
                     float driversSpeedLimit = speedLimit;
 
                     // yielding to another object
-                    if (this.yield) driversSpeedLimit = 0.0f;
+                    if (this.yielding) 
+                    {
+                        driversSpeedLimit = 0.0f;
+                        this.yield(currentTime);
+                    }
 
                     // scale driver caution based on car speed
                     float caution = 10.0f + (this.car.mph / 50); // @10mph is 2 and @50 is 10
@@ -93,12 +98,6 @@ namespace gameLogic
                         // caution
                         driversSpeedLimit = speedLimit * 0.75f;
                     }
-                    else
-                    {
-                        driversSpeedLimit = speedLimit;
-                    }
-                    
-                    
 
 
                     // ********************************************
@@ -153,14 +152,9 @@ namespace gameLogic
                         car.breakPedal = 1.0f;
                     }
 
-                    // ********************************************
-                    //          signaling control
-
-
-
 
                     // ********************************************
-                    //          steering & Signaling control
+                    //          steering
                     Vector2 wayPointWorldLocation = Vector2.Normalize(car.velocity); // this is the current vector
                     float nextTurn = 0;
                     if (this.route != null)
@@ -182,10 +176,8 @@ namespace gameLogic
                         
                     }
 
-                    // signal
-                    if (nextTurn > 1) car.turnSignal = -1;
-                    else if (nextTurn < -1) car.turnSignal = 1;
-                    else car.turnSignal = 0;
+                    // turn signals
+                    if (this.route.distanceToNextTurn < 5) car.turnSignal = (int)this.route.relativeAngleArea;
 
                     Vector2 desiredDirection = getDirection(car, wayPointWorldLocation); // this is the correct vector to the next waypoint
 
@@ -231,6 +223,18 @@ namespace gameLogic
             Vector2 destinationDirection = new Vector2(b.X, b.Y);
             destinationDirection.Normalize();
             return destinationDirection;
+        }
+
+        public void yield(float currentTime)
+        {
+            if (this.yieldStartTime == 0) this.yieldStartTime = currentTime;
+            float yieldTime = currentTime - this.yieldStartTime;
+            if (yieldTime < 200) this.car.lights = 3; // first flash
+            else if (yieldTime < 400) this.car.lights = 0; // dark between
+            else if (yieldTime < 600) this.car.lights = 3; // second flash
+            else this.car.lights = 0; // off when done
+
+            if (yieldTime > 2000) this.yielding = false;
         }
 
         

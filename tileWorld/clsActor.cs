@@ -12,7 +12,7 @@ namespace tileWorld
         public clsRoute route { get; set; }
         public clsObject worldObject { get; set; }
         protected clsWorld world { get; set; }
-        public bool yield { get; set; }
+        public bool yielding { get; set; }
 
         public float lastUpdated { get; set; }
 
@@ -20,6 +20,7 @@ namespace tileWorld
         {
             this.world = world;
             this.worldObject = worldObject;
+            this.yielding = false;
         }
 
         public void update()
@@ -29,10 +30,10 @@ namespace tileWorld
                 route.update(); // not all actors have planned routes
 
                 // yeild to other AI based on conflict resolution
-                if (this.yield)
+                if (this.yielding)
                 {
                     // yielding to another object on the right
-                    if (this.route.distanceToNextCollision > 1) this.yield = false; // if collision has clear remove yield
+                    //if (this.route.distanceToNextCollision > 1) this.yielding = false; // if collision has clear remove yield
                 }
                 else if (this.route.distanceToNextCollision <= 1)
                 {
@@ -54,11 +55,13 @@ namespace tileWorld
         public void conflictResolution(clsObject conflictingObject)
         {
             // yeild to cars on the right
-            this.yield = false;
-            int cardinalDistance = (this.worldObject.cardinalDirection - conflictingObject.cardinalDirection) + 4;
-            if (cardinalDistance >= 2)
+            if (!this.yielding)
             {
-                this.yield = true;
+                int cardinalDistance = (this.worldObject.cardinalDirection - conflictingObject.cardinalDirection) + 4;
+                if (cardinalDistance >= 2)
+                {
+                    this.yielding = true;
+                }
             }
         }
     }

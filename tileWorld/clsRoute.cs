@@ -22,7 +22,9 @@ namespace tileWorld
         public int distanceToNextObstruction = 1000;
         public clsObject nextCollision;
         public int distanceToNextCollision = 1000;
-        
+        public float relativeAngleArea;
+        public int distanceToNextTurn = 1000;
+
 
         private float lastUpdated { get; set; }
 
@@ -76,59 +78,9 @@ namespace tileWorld
 
         public void update()
         {
-            this.distanceToNextObstruction = 1000;
-            this.distanceToNextCollision = 1000;
-
-
-            // calculate next obstruction & future collsisions
-            for (int t = 0; t < _waypoints.Count; t++)
-            {
-                // get the tile in questions
-                intTile tile = world.getTileFromTileCoordinate(_waypoints[t]);
-
-                // look for next obstruction
-                if (this.distanceToNextObstruction == 1000)
-                {
-                    foreach (intObject worldObject in tile.worldObjects)
-                    {
-                        if (worldObject.collisionDetection != CollisionType.None) // make sure collision detection is on
-                        {
-                            // we have to add check it it has collision with self
-                            this.nextObstruction = (clsObject)worldObject;
-                            this.distanceToNextObstruction = t;
-                            break;
-                        }
-
-                    }
-                }
-
-                // look for next future collision
-                if (this.distanceToNextCollision == 1000)
-                {
-                    foreach (intActor worldActor in this.world.actors)
-                    {
-                        if (worldActor.worldObject.collisionDetection != CollisionType.None) // only process where collsisions are on
-                        {
-                            if (worldActor.yield == false) // are they already yielding to us
-                            {
-                                if (worldActor.route != null) // make sure its not null
-                                {
-                                    if (worldActor.route != this) // don't compare to your self.
-                                    {
-                                        Vector2? waypoint = worldActor.route.getWaypoint(t); // get the same route waypoint for this world actor as we are checking for ours
-                                        if ((waypoint != null) && (waypoint.Equals(_waypoints[t])))
-                                        {
-                                            this.nextCollision = worldActor.worldObject;
-                                            this.distanceToNextCollision = t;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            calcNextObstruction();
+            calcNextCollision();
+            this.calcDistanceToNextTurn();
         }
 
         /*****************************************
@@ -233,37 +185,82 @@ namespace tileWorld
             return false;
         }
 
-        public int distanceToNextTurn
+        public void calcDistanceToNextTurn()
         {
-            get
+            if (_waypoints.Count > 3)
             {
-                // this can be used for breaking or turn signaling
-                int distance = 0;
-                Vector2[] testPoints = new Vector2[3];
-
-                for (int t = 0; t < _waypoints.Count; t++)
+                for (int t = 0; t < (_waypoints.Count-2); t++)
                 {
-                    for (int l = 0; l <= 2; l++)
+                    float areaOfTriangle = clsGameMath.areaOfTriangle(_waypoints[0 + t], _waypoints[t + 1], _waypoints[t + 2]);
+                    if (areaOfTriangle != 0)
                     {
-                        int index = t + l;
-                        if (index >= _waypoints.Count) index = _waypoints.Count - 1;
-                        if (index < 0) index = 0;
-                        testPoints[l] = _waypoints[index];
+                        // found a turn
+                        // set internal values
+                        this.distanceToNextTurn = t;
+                        this.relativeAngleArea = areaOfTriangle;
+                        return; // early exit on turn
+                    }
+                }
+            }
+            this.distanceToNextTurn = 1000;
+        }
+
+        public void calcNextObstruction()
+        {
+            this.distanceToNextObstruction = 1000;
+
+            // calculate next obstruction & future collsisions
+            for (int t = 0; t < _waypoints.Count; t++)
+            {
+                // get the tile in questions
+                intTile tile = world.getTileFromTileCoordinate(_waypoints[t]);
+
+                // look for next obstruction
+                foreach (intObject worldObject in tile.worldObjects)
+                {
+                    if (worldObject.collisionDetection != CollisionType.None) // make sure collision detection is on
+                    {
+                        // we have to add check it it has collision with self
+                        this.nextObstruction = (clsObject)worldObject;
+                        this.distanceToNextObstruction = t;
+                        break;
                     }
 
-                    if (clsGameMath.areaOfTriangle(testPoints[0], testPoints[1], testPoints[2]) != 0)
-                    {
-                        return distance; // early exit on turn
-                    }
-                    distance++;
                 }
-                return distance; // no turns. Maybe should return -1?
             }
         }
 
-        
+        public void calcNextCollision()
+        {
+            this.distanceToNextCollision = 1000;
 
-        
+            // calculate next obstruction & future collsisions
+            for (int t = 0; t < _waypoints.Count; t++)
+            {
+                foreach (intActor worldActor in this.world.actors)
+                {
+                    if (worldActor.worldObject.collisionDetection != CollisionType.None) // only process where collsisions are on
+                    {
+                        if (worldActor.yielding == false) // if they are not already yielding
+                        {
+                            if (worldActor.route != null) // make sure its has an route its following
+                            {
+                                if (worldActor.route != this) // don't compare to yourself.
+                                {
+                                    Vector2? waypoint = worldActor.route.getWaypoint(t); // get the same route waypoint for this world actor as we are checking for ours
+                                    if ((waypoint != null) && (waypoint.Equals(_waypoints[t])))
+                                    {
+                                        this.nextCollision = worldActor.worldObject;
+                                        this.distanceToNextCollision = t;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
         
 }

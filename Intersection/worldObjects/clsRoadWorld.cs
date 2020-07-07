@@ -80,8 +80,8 @@ namespace gameLogic
             // create entry points
             createEntry(new Vector2(roadx - 1, 0), new Vector2(0, 1), "car", 15000);
             createEntry(new Vector2(roadx, tilesWide-1), new Vector2(0, -1), "car", 15000);
-            createEntry(new Vector2(tilesWide - 1, roady-1), new Vector2(-1, 0), "car", 10000);
-            createEntry(new Vector2(0, roady), new Vector2(1, 0), "car", 10000);
+            createEntry(new Vector2(tilesWide - 1, roady-1), new Vector2(-1, 0), "car", 15000);
+            createEntry(new Vector2(0, roady), new Vector2(1, 0), "car", 15000);
         }
 
         public void loadActors()
@@ -89,7 +89,7 @@ namespace gameLogic
             actors = new List<intActor>();
 
             // spawn a human car
-            actors.Add(spawnCarHuman(this, new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0)));
+            spawnCarHuman(this, new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0));
         }
 
         /*****************************************

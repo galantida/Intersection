@@ -68,13 +68,15 @@ namespace renderer
 
             // camera overlay
             text = new List<string>();
-            foreach (intActor driver in world.actors)
+            for (int a=0; a<world.actors.Count; a++)
             {
+                intActor driver = world.actors[a];
+
                 clsDriverHuman driverHuman = driver as clsDriverHuman;   // Here is where I get typeof(IA)
                 if (driverHuman != null)
                 {
                     text.Add("--------------------");
-                    text.Add("Name : " + driverHuman.car.name);
+                    text.Add("Name : " + driverHuman.car.name + " (" + a + ")");
                     text.Add("Speed : " + Math.Floor(driverHuman.car.mph) + " MPH");
                     //text.Add("Collisions : " + c.collisions.Count);
                     //text.Add("Direction : " + c.cardinalDirection.ToString());
@@ -91,11 +93,12 @@ namespace renderer
                 if (driverAI != null)
                 {
                     text.Add("--------------------");
-                    text.Add("Name : " + driverAI.car.name);
+                    text.Add("Name : " + driverAI.car.name + " (" + a + ")");
                     text.Add("Speed : " + Math.Floor(driverAI.car.mph) + " MPH");
                     text.Add("Obstruction : " + driverAI.route.distanceToNextObstruction);
                     text.Add("Collision : " + driverAI.route.distanceToNextCollision);
-                    text.Add("Yield : " + driverAI.yield);
+                    text.Add("Turn : " + driverAI.route.distanceToNextCollision);
+                    text.Add("Yield : " + driverAI.yielding);
                     //text.Add("Direction : " + c.cardinalDirection.ToString());
                     //text.Add("Coordinates : ( " + c.location.X + " , " + c.location.Y + " )");
                     //text.Add("velocity : " + c.velocity.Length());

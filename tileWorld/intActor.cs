@@ -12,7 +12,7 @@ namespace tileWorld
         void update(float currentTime);
         clsRoute route { get; set; }
         clsObject worldObject { get; set; }
-        bool yield { get; set; }
+        bool yielding { get; set; }
 
 
     }

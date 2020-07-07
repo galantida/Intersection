@@ -43,4 +43,3 @@ C:\Users\dave\Documents\Github\Intersection\physicalWorld\obj\Debug\physicalWorl
 C:\Users\dave\Documents\Github\Intersection\physicalWorld\obj\Debug\physicalWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\physicalWorld\obj\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\physicalWorld\obj\Debug\physicalWorld.pdb
-C:\Users\dave\Documents\Github\Intersection\physicalWorld\obj\Debug\physicalWorld.csprojAssemblyReference.cache
