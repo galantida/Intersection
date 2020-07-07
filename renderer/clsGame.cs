@@ -14,12 +14,12 @@ namespace renderer
     {
         // global graphic opbjects
         clsWindow window;
-        clsRoadWorld world;
+        clsRoadWorld roadWorld;
 
         public clsGame()
         {
-            world = new clsRoadWorld(28, 64); // 64 pixels is 15 feet
-            window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(1536, 1024), world);
+            roadWorld = new clsRoadWorld(28, 64); // 64 pixels is 15 feet
+            window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(1536, 1024), roadWorld);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace renderer
 
             float currentTime = gameTime.ElapsedGameTime.Milliseconds;
 
-            world.update(currentTime); // base these updates on game time
+            roadWorld.update(currentTime); // base these updates on game time
             window.update(currentTime); // base these updates on game time
 
             base.Update(gameTime);

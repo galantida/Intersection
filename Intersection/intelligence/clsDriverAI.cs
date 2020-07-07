@@ -203,7 +203,7 @@ namespace gameLogic
 
                     // distance to way point
                     float distance = Vector2.Distance(car.location, wayPointWorldLocation);
-                    if (distance < 32) // was 75
+                    if (distance < 45) // was 75
                     {
                         // comming up to way point target the next one
                         this.route.advanceWaypoint();
