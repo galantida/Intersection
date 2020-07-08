@@ -23,9 +23,12 @@ C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWor
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\TileBasedGameLayer\obj\Debug\tileWorld.pdb
+C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.csprojAssemblyReference.cache
+C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\tileWorld.pdb
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\MonoGame.Framework.dll
+C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\Newtonsoft.Json.dll
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.MediaFoundation.dll
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.dll
@@ -43,8 +46,6 @@ C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.DXGI.xml
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\tileWorld\bin\Debug\SharpDX.XInput.xml
-C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.csprojAssemblyReference.cache
-C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.dll
 C:\Users\dave\Documents\Github\Intersection\tileWorld\obj\Debug\tileWorld.pdb

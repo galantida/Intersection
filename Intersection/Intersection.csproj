@@ -47,7 +47,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="intelligence\clsActionMapping.cs" />
     <Compile Include="intelligence\clsDriverAI.cs" />
+    <Compile Include="intelligence\clsInput.cs" />
     <Compile Include="worldObjects\clsCar.cs" />
     <Compile Include="worldObjects\clsExit.cs" />
     <Compile Include="intelligence\clsDriverHuman.cs" />

@@ -15,7 +15,9 @@ namespace renderer
         static void Main()
         {
             using (var game = new clsGame())
+            {
                 game.Run();
+            }
         }
     }
 #endif

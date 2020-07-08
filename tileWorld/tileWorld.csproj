@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>references\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,9 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="clsActor.cs" />
-    <Compile Include="clsInput.cs" />
     <Compile Include="clsKeyboard.cs" />
-    <Compile Include="clsKeyMapping.cs" />
     <Compile Include="clsMouse.cs" />
     <Compile Include="clsRoute.cs" />
     <Compile Include="clsWorld.cs" />

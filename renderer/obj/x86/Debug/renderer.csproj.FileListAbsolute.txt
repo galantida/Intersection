@@ -36,6 +36,8 @@ C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Renderer.csproj.
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Renderer.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.exe
 C:\Users\dave\Documents\Github\Intersection\Game1\obj\x86\Debug\Game1.pdb
+C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.csproj.CoreCompileInputs.cache
+C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.csprojAssemblyReference.cache
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\Content\car.xnb
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\Content\entry.xnb
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\Content\exit.xnb
@@ -51,6 +53,7 @@ C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\gameL
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\MonoGame.Framework.dll
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\tileWorld.dll
+C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\Newtonsoft.Json.dll
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.MediaFoundation.dll
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.dll
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.XAudio2.dll
@@ -69,8 +72,7 @@ C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\Sharp
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\SharpDX.XInput.xml
-C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.csprojAssemblyReference.cache
-C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.exe
 C:\Users\dave\Documents\Github\Intersection\renderer\obj\x86\Debug\renderer.pdb
+C:\Users\dave\Documents\Github\Intersection\renderer\bin\Windows\x86\Debug\configuration\inputBindings.json

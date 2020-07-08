@@ -18,6 +18,7 @@ namespace renderer
 
         public clsGame()
         {
+            this.IsMouseVisible = true;
             roadWorld = new clsRoadWorld(28, 64); // 64 pixels is 15 feet
             window = new clsWindow(new GraphicsDeviceManager(this), new Vector2(1536, 1024), roadWorld);
         }

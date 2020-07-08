@@ -12,9 +12,11 @@ namespace gameLogic
 {
     public class clsRoadWorld : clsWorld
     {
+        public clsInput input; // input for wordl actions like scroll in and out
+
         public clsRoadWorld(long tilesWide, float tileSize): base(tileSize)
         {
-            input = new clsInput();
+            this.input = new clsInput(); // input devices
             loadTiles(tilesWide);
             loadObjects(tilesWide);
             loadActors();
@@ -87,7 +89,7 @@ namespace gameLogic
             actors = new List<intActor>();
 
             // spawn a human car
-            spawnCarHuman(this, new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0));
+            spawnCarLocalHuman(this, new Vector2(256, 256), new Vector2(1, 0), new Vector2(0, 0));
         }
 
         /*****************************************
@@ -190,7 +192,7 @@ namespace gameLogic
         /*****************************************
                 Instance Objects in the world
          *****************************************/
-        public clsDriverHuman spawnCarHuman(clsWorld world, Vector2 worldLocation, Vector2 direction, Vector2 velocity)
+        public clsDriverHuman spawnCarLocalHuman(clsWorld world, Vector2 worldLocation, Vector2 direction, Vector2 velocity)
         {
             clsCar car = createCar(worldLocation, direction, velocity); // spanw car
             clsDriverHuman human = createDriverHuman(world, car, this.input); // create human for the car

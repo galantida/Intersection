@@ -1,0 +1,19 @@
+{
+  "Keyboard": {
+    "Up": "Accelerate",
+    "Down": "Decelerate",
+    "Left": "SteerLeft",
+    "Right": "SteerRight",
+    "B": "Break",
+    "D": "ShiftDrive",
+    "R": "ShiftReverse",
+    "N": "ShiftNeutral",
+    "H": "HeadLights",
+    "OemComma": "LeftTurnSignal",
+    "OemPeriod": "RightTurnSignal"
+  },
+  "Mouse": {
+    "ScrollUp": "ZoomIn",
+    "ScrollDown": "ZoomOut"
+  }
+}

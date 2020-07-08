@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace gameLogic
 {
-
     // ussed to convert humnan input into car input
     public class clsDriverHuman : clsActor, intActor
     {
@@ -19,6 +18,7 @@ namespace gameLogic
 
         public clsDriverHuman(clsWorld world, clsCar car, clsInput input) : base(world, car)
         {
+            // could have an input that is network at some point
             this.car = car;
             this.input = input;
         }
@@ -29,6 +29,8 @@ namespace gameLogic
             if (deltaTime > 10)
             {
                 lastUpdated = currentTime; // reset last updated
+
+                input.update(currentTime); // (this could go in base)
 
                 // read human input
                 readUserInput();
@@ -45,37 +47,36 @@ namespace gameLogic
                 base.update();
             }
         }
+        
 
-        public void readUserInput()
+       public void readUserInput()
         {
             // accelerator
-            if (input.isActivated(InputActionNames.Accelerate)) car.acceleratorPedal += 0.1f;
-            else if (input.isActivated(InputActionNames.Decelerate)) car.acceleratorPedal -= 0.1f;
+            if (input.isActivated(InputActions.Accelerate)) car.acceleratorPedal += 0.1f;
+            else if (input.isActivated(InputActions.Decelerate)) car.acceleratorPedal -= 0.1f;
             //else car.acceleratorPedal = 0.0f;
 
             // breaking
-            if (input.isActivated(InputActionNames.Break)) car.breakPedal += 0.1f;
+            if (input.isActivated(InputActions.Break)) car.breakPedal += 0.1f;
             else car.breakPedal = 0.0f;
 
-            if (input.isActivated(InputActionNames.SteerLeft)) car.steeringWheel -= 0.1f;
-            if (input.isActivated(InputActionNames.SteerRight)) car.steeringWheel += 0.1f;
+            if (input.isActivated(InputActions.SteerLeft)) car.steeringWheel -= 0.1f;
+            if (input.isActivated(InputActions.SteerRight)) car.steeringWheel += 0.1f;
 
-            if (input.isActivated(InputActionNames.ShiftNeutral)) car.shifter = ShifterPosition.neutral;
-            if (input.isActivated(InputActionNames.ShiftDrive)) car.shifter = ShifterPosition.drive;
-            if (input.isActivated(InputActionNames.ShiftReverse)) car.shifter = ShifterPosition.reverse;
+            if (input.isActivated(InputActions.ShiftNeutral)) car.shifter = ShifterPosition.neutral;
+            if (input.isActivated(InputActions.ShiftDrive)) car.shifter = ShifterPosition.drive;
+            if (input.isActivated(InputActions.ShiftReverse)) car.shifter = ShifterPosition.reverse;
 
+            if (input.isActivated(InputActions.LeftTurnSignal)) car.turnSignal--;
+            if (input.isActivated(InputActions.RightTurnSignal)) car.turnSignal++;
 
-
-            if (input.isActivated(InputActionNames.LeftTurnSignal)) car.turnSignal--;
-            if (input.isActivated(InputActionNames.RightTurnSignal)) car.turnSignal++;
-
-            if (input.isActivated(InputActionNames.HeadLights))
+            if (input.isActivated(InputActions.HeadLights))
             {
                 if (this.car.lights == 0) this.car.lights = 3;
                 else this.car.lights = 0;
             }
 
-            if (input.isActivated(InputActionNames.Hazzards))
+            if (input.isActivated(InputActions.Hazzards))
             {
                 if (!this.car.hazzard) this.car.hazzard = true;
                 else this.car.hazzard = false;

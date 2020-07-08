@@ -25,11 +25,14 @@ C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\Intersection
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\Intersection.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\ClassLibrary1\obj\Debug\gameLogic.pdb
+C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\Intersection.csproj.CoreCompileInputs.cache
+C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\Intersection.csprojAssemblyReference.cache
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\gameLogic.pdb
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\MonoGame.Framework.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\physicalWorld.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\tileWorld.dll
+C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\Newtonsoft.Json.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.MediaFoundation.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.XAudio2.dll
@@ -47,8 +50,6 @@ C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.DXGI.
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.Direct3D11.xml
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\dave\Documents\Github\Intersection\Intersection\bin\Debug\SharpDX.XInput.xml
-C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\Intersection.csprojAssemblyReference.cache
-C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\Intersection.csproj.CoreCompileInputs.cache
 C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\Intersection.csproj.CopyComplete
 C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\gameLogic.dll
 C:\Users\dave\Documents\Github\Intersection\Intersection\obj\Debug\gameLogic.pdb

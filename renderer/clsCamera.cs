@@ -36,6 +36,7 @@ namespace renderer
             this.target = target;
             this.size = size;
             this.inputControled = inputControled;
+            
         }
 
         public void update()
@@ -43,12 +44,12 @@ namespace renderer
             if (inputControled)
             {
                 float zoomScale = 1.25f;
-                if (world.input.isActivated(InputActionNames.ZoomIn))
+                if (world.input.isActivated(InputActions.ZoomIn))
                 {
                     this.size = new Vector2(this.size.X / zoomScale, this.size.Y / zoomScale);
                 }
 
-                if (world.input.isActivated(InputActionNames.ZoomOut))
+                if (world.input.isActivated(InputActions.ZoomOut))
                 {
                     this.size = new Vector2(this.size.X * zoomScale, this.size.Y * zoomScale);
                 }
